@@ -184,7 +184,7 @@ The thinning parameter is what you used with BGC, and the plot will be saved in 
 
 Here are some examples that plot_lnl makes:
 
-![LnL plot: Good Example.](vignettes/LnL_convergence.png)
+<img sc="vignettes/LnL_convergence.png" width=50%>
 
 Here we aggregated five BGC runs with 2,000 samples each. You can see that all five converged.
 
