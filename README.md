@@ -7,7 +7,7 @@ The package allows you to make several plots.
 
 ## Phi ~ Hybrid Index Plots
 
-First, the \Phi plot that Gompert et al. made in some of their papers. In this plot, \Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - \Phi. \Phi is plotted on the Y-axis and hybrid index on the X-axis.
+First, the &Phi plot that Gompert et al. made in some of their papers. In this plot, \Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - \Phi. \Phi is plotted on the Y-axis and hybrid index on the X-axis.
 
 Here is an example of a \Phi plot that bgcPlotter can make:
 
