@@ -11,7 +11,7 @@ First, the Phi plot that Gompert et al. made in some of their papers. In this pl
 
 Here is an example of a Phi plot that bgcPlotter can make:
 
-![Phi Plot: Alpha Outliers.](./population1_alphaPhi.png)
+![Phi Plot: Alpha Outliers.](vignettes/population1_alphaPhi.png)
 
 In the above plot, significant BGC alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the Phi plot. A separate plot is automatically made to highlight beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.
 
@@ -184,13 +184,13 @@ The thinning parameter is what you used with BGC, and the plot will be saved in 
 
 Here are some examples that plot_lnl makes:
 
-![LnL plot: Good Example.](./LnL_convergence.png)
+![LnL plot: Good Example.](vignettes/LnL_convergence.png)
 
 Here we aggregated five BGC runs with 2,000 samples each. You can see that all five converged.
 
 Here's an example of LnL that didn't converge among the five runs:
 
-![LnL Plot: Didn't Converge.](./bad_LnL_convergence.png)
+![LnL Plot: Didn't Converge.](vignettes/bad_LnL_convergence.png)
 
 You can tell the five runs started to converge towards the end, but the LnL were still rising until close to the end of the run. This one needed to be re-run with longer burn-in.
 
@@ -259,7 +259,7 @@ If you set both.outlier.tests to TRUE, it will require that outliers meet both c
 
 E.g.,
 
-![Phi Plot: Both Outlier Tests.](./population1_both.outlier.tests.png)
+![Phi Plot: Both Outlier Tests.](vignettes/population1_both.outlier.tests.png)
 
 This is a more conservative outlier test. There will be fewer outliers with both required.
 
@@ -294,7 +294,7 @@ You also will want to save the output as a paf file (default in minimap2).
 6. Next, run PAFScaff. https://github.com/slimsuite/pafscaff
   + PAFScaff cleans up and improves the mapping.
   + Some of the output files from PAFScaff will be required to make the chromosome plot.
-  + **Important**: When running PAFScaff, set refprefix=[whatever prefix you used for ref chromosomes], newprefix=query, and unplaced=unplaced_ and sorted=RefStart
+  + **Important**: When running PAFScaff, set refprefix=ref_chromosome_prefix, newprefix=query, and unplaced=unplaced_ and sorted=RefStart
   
   + Once PAFScaff is done running, you can move on with the chromosome plots.
   
@@ -359,7 +359,7 @@ plot_outlier_ideogram(
 )
 ```
 
-![Ideogram Plot: Alpha and Beta Outliers.](./population1_chromosome.png)
+![Ideogram Plot: Alpha and Beta Outliers.](vignettes/population1_chromosome.png)
 
 This plot gets saved as an SVG file in plotDIR and by default a PDF file (in the current working directory). But you can change the PDF output to PNG or JPG if you want. See ?plot_outlier_ideogram
 
