@@ -101,12 +101,12 @@ If you don't want to make the ideogram, these values can be anything without whi
 
 ### BGC Output Files
 
-* [prefix]_bgc_stat_a0_[runNumber]
-* [prefix]_bgc_stat_b0_[runNumber]
-* [prefix]_bgc_stat_qa_[runNumber]
-* [prefix]_bgc_stat_qb_[runNumber]
-* [prefix]_bgc_stat_hi_[runNumber]
-* [prefix]_bgc_stat_LnL_[runNumber]
+* (prefix)_bgc_stat_a0_(runNumber)
+* (prefix)_bgc_stat_b0_(runNumber)
+* (prefix)_bgc_stat_qa_(runNumber)
+* (prefix)_bgc_stat_qb_(runNumber)
+* (prefix)_bgc_stat_hi_(runNumber)
+* (prefix)_bgc_stat_LnL_(runNumber)
   
 E.g., population1_bgc_stat_a0_1
 
