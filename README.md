@@ -7,25 +7,25 @@ The package allows you to make several plots.
 
 ## Phi ~ Hybrid Index Plots
 
-First, the &Phi plot that Gompert et al. made in some of their papers. In this plot, \Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - \Phi. \Phi is plotted on the Y-axis and hybrid index on the X-axis.
+First, the Phi plot that Gompert et al. made in some of their papers. In this plot, Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - Phi. Phi is plotted on the Y-axis and hybrid index on the X-axis.
 
-Here is an example of a \Phi plot that bgcPlotter can make:
+Here is an example of a Phi plot that bgcPlotter can make:
 
 ![Phi Plot: Alpha Outliers.](./population1_alphaPhi.png)
 
-In the above plot, significant BGC \alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the \Phi plot. A separate plot is automatically made to highlight \beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.
+In the above plot, significant BGC alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the Phi plot. A separate plot is automatically made to highlight beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.
 
-With BGC, positive \alpha outliers indicate excess P1 ancestry compared to the genome-wide average. Negative indicate excess P0 ancestry.
+With BGC, positive alpha outliers indicate excess P1 ancestry compared to the genome-wide average. Negative indicate excess P0 ancestry.
 
-Positive \beta outliers indicate a steeper cline (i.e. a faster rate of transition and selection against introgression), whereas negative \beta indicates hybrid vigor (i.e. higher introgression than expected).
+Positive beta outliers indicate a steeper cline (i.e. a faster rate of transition and selection against introgression), whereas negative beta indicates hybrid vigor (i.e. higher introgression than expected).
 
 ## Chromosome Plots
 
-If you have appropriate data and follow some steps beforehand, our package will also let you plot the \alpha and \beta outliers on a karyotype, like here:
+If you have appropriate data and follow some steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:
 
 ![Ideogram Plot: Alpha and Beta Outliers.](./population1_chromosome.png)
 
-For each chromosome, \alpha outliers are plotted on the left and \beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.
+For each chromosome, alpha outliers are plotted on the left and beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.
 
 Here few things you need to have to make the ideogram:
 
@@ -37,7 +37,7 @@ Here few things you need to have to make the ideogram:
 * A GFF file
 * The transcript and scaffold IDs have to line up wiht the BGC loci
 
-If you don't have all those things, you can still make the \Phi plots.
+If you don't have all those things, you can still make the Phi plots.
 
 
 ## Dependencies
@@ -196,7 +196,7 @@ You can tell the five runs started to converge towards the end, but the LnL were
 
 ## Identify Outlier Loci
 
-Here we identify \alpha and \beta outliers using the get_bgc_outliers() function.
+Here we identify alpha and beta outliers using the get_bgc_outliers() function.
 
 For this you need a population map file. It should be a two-column, tab-separated file with individual IDs as column 1 and population ID as column 2. No header.
 
@@ -221,13 +221,13 @@ gene.outliers <-
 
 get_bgc_outliers records outliers in three ways.
 
-1. If the credible interval for \alpha or \beta do not overlap zero.
+1. If the credible interval for alpha or beta do not overlap zero.
 
-2. If \alpha or \beta falls outside the quantile interval: \frac{qn}{2} and \frac{1 - qn}{2}. This one is more conservative.
+2. If alpha or beta falls outside the quantile interval: qn / 2 and (1 - qn) / 2. This one is more conservative.
 
 3. If both are TRUE. This is the most conservative one.
 
-qn can be adjusted. The default is 0.975 as the upper interval bound. If you set the qn parameter to 0.95, the interval will be \frac{0.95}{2} and \frac{1 - 0.95}{2}.
+qn can be adjusted. The default is 0.975 as the upper interval bound. If you set the qn parameter to 0.95, the interval will be 0.95 / 2 and (1 - 0.95) / 2.
 
 The object returned from this can be input directly into phiPlot(). 
 
@@ -235,7 +235,7 @@ You can save this function's output as an RDS object for later use by setting sa
 
 ## Make the Phi Plot
 
-Now you can make the \Phi plot. The popname can be any string you want here.
+Now you can make the Phi plot. The popname can be any string you want here.
 
 ```
 phiPlot(outlier.list = gene.outliers,
