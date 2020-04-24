@@ -23,7 +23,7 @@ Positive beta outliers indicate a steeper cline (i.e. a faster rate of transitio
 
 If you have appropriate data and follow some steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:
 
-![Ideogram Plot: Alpha and Beta Outliers.](./population1_chromosome.png)
+<img src="vignettes/population1_chromosome.png" width="50%">
 
 For each chromosome, alpha outliers are plotted on the left and beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.
 
@@ -184,7 +184,7 @@ The thinning parameter is what you used with BGC, and the plot will be saved in 
 
 Here are some examples that plot_lnl makes:
 
-<img sc="vignettes/LnL_convergence.png" width=50%>
+<img src="vignettes/LnL_convergence.png" width="50%">
 
 Here we aggregated five BGC runs with 2,000 samples each. You can see that all five converged.
 
