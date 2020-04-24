@@ -28,18 +28,6 @@ join_bgc_gff <- function(prefix,
 
   # Function to join outlier BGC data and gene scaffold info.
 
-  # Print summary of outlier table.
-  cat(paste0("\n\nOutlier data summary: \n\n",
-             summary(outlier.list[[1]]), "\n"))
-
-  # Print summary of popmap file.
-  cat(paste0("\n\nPopmap data summary: \n\n",
-             summary(outlier.list[[2]]), "\n"))
-
-  # Print summary of hybrid index table.
-  cat(paste0("\n\nHybrid Index data summary: \n\n",
-             summary(outlier.list[[3]]), "\n"))
-
   # Get data.frame of outlier snps.
   snps <- outlier.list[[1]]
 
