@@ -11,7 +11,7 @@ First, the Phi plot that Gompert et al. made in some of their papers. In this pl
 
 Here is an example of a Phi plot that bgcPlotter can make:
 
-![Phi Plot: Alpha Outliers.](vignettes/population1_alphaPhi.png)
+![Phi Plot: Alpha Outliers.](vignettes/population1_alphaPhi.png)<img src="image" width="40%">
 
 In the above plot, significant BGC alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the Phi plot. A separate plot is automatically made to highlight beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.
 
