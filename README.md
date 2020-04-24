@@ -23,7 +23,7 @@ Positive beta outliers indicate a steeper cline (i.e. a faster rate of transitio
 
 If you have appropriate data and follow some steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:
 
-<img src="vignettes/population1_chromosome.png" width="50%">
+<img src="vignettes/population1_chromosome.png">
 
 For each chromosome, alpha outliers are plotted on the left and beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.
 
