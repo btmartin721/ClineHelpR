@@ -1,0 +1,40 @@
+Package: bgcPlotter
+Title: Parses and Plots BGC and INTROGRESS Output
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given = "Bradley",
+           family = "Martin",
+           role = c("aut", "cre"),
+           email = "btm002@uark.edu",
+           comment = c(ORCID = "0000-0002-3014-4692")),
+    person(given = "Tyler",
+           family = "Chafin",
+           role = "aut",
+           email = "tkchafin@uark.edu"))
+Description: Aggregates multiple BGC runs, plots LnL traces, and associates 
+    GFF annotations with genomic scaffolds that were also run through BGC.
+    Then, it makes the Hybrid Index X Phi plots from Gompert et al. (2012),
+    and plots trascriptome and scaffold loci onto ideograms. The INTROGRESS
+    functions run INTROGRESS genomic clines then associate environmental
+    raster layers with the INTROGRESS genomic clines. MAXENT is run on
+    a folder of raster layers (e.g., the 19 BIOCLIM layers) and sample
+    localities to determine the most important layers, and genomic
+    cline X environment plots are generated using the most important layers.
+License: `use_mit_license()`
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Imports:
+    data.table,
+    dplyr,
+    bayestestR,
+    scales,
+    reshape2,
+    ggplot2,
+    forcats,
+    gtools,
+    RIdeogram,
+    gdata
+	
+	
