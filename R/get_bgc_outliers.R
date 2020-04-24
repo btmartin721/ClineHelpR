@@ -91,6 +91,12 @@ get_ab_outliers <- function(a.out, b.out, qa.out, qb.out, loci, qn){
   # Contains actual scaffold names.
   snps <- read.delim(loci, sep = " ", stringsAsFactors = FALSE)
 
+  if (nrow(snps) != nrow(a.out)){
+    writeLines(paste0("\n\nError: There are ", nrow(snps), " loci "))
+    writeLines("in the loci.file")
+    stop("loci.file length must equal rows in the BGC output")
+  }
+
   ### Copy the data to snps data.frame.
   # Mean a and b
   snps$alpha <- a.out$mean
