@@ -71,16 +71,11 @@ Now load the library.
 library("bgcPlotter")
 ```
 
-## Aggregate BGC Runs
-
-If you ran multiple BGC runs, bgcPlotter allows you to aggregate them together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_lnl() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see lnl_plot below).
-
-To aggregate the BGC runs, you first need the BGC output in the correct format.
-
-
 You should have the following files to run this package:
 
-### Loci File
+## Necessary Input Files
+
+## Loci File
 
 This file is a two-column whitespace-separated file with locus ID as column 1 and SNP position as column 2.
 
@@ -97,7 +92,7 @@ Each line is one locus.
 
 The first column indicates transcript or scaffold ID. The second indicates the SNP position on the scaffold or mRNA. 
 
-If you don't want to make the ideogram, these values can be anything without whitespace.
+If you don't want to make the ideogram, these values can be made up.
 
 ### BGC Output Files
 
@@ -126,15 +121,33 @@ I.e., use the following options:
 
 This will format them correctly for bgcPlotter.
 
-Once you have the output files, you can run combine_bgc_output()
 
-```{r combine_bgc_runs}
+### Population Map File
 
-prefix <- "population1"
+It should be a two-column, tab-separated file with individual IDs as column 1 and population ID as column 2. No header.
 
+E.g., 
+
+```
+ind1 population1
+ind2 population1
+ind3 population2
+ind4 population2
+```
+
+
+## Aggregate BGC Runs
+
+If you ran multiple BGC runs, bgcPlotter allows you to aggregate them together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_lnl() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL traces below).
+
+To aggregate the BGC runs, you first need the BGC output in the correct format.
+
+First, you need to run combine_bgc_output()
+
+```
 bgc.genes <-
   combine_bgc_output(results.dir = "exampledata/genes/",
-                     prefix = prefix)
+                     prefix = "population1)
 ```
 
 This is with the default options.
@@ -173,7 +186,7 @@ It is **strongly** recommended to inspect the LnL traces if you are aggregating 
 
 ```
 plot_lnl(df.list = bgc.genes,
-         prefix = prefix,
+         prefix = "population1",
          thin = 40,
          plotDIR = "./plots")
 ```
@@ -198,18 +211,9 @@ You can tell the five runs started to converge towards the end, but the LnL were
 
 Here we identify alpha and beta outliers using the get_bgc_outliers() function.
 
-For this you need a population map file. It should be a two-column, tab-separated file with individual IDs as column 1 and population ID as column 2. No header.
-
-E.g., 
+For this you need a population map file (see above).
 
 ```
-ind1 population1
-ind2 population1
-ind3 population2
-ind4 population2
-```
-
-```{r get_bgc_outliers}
 gene.outliers <-
   get_bgc_outliers(
     df.list = bgc.genes,
@@ -265,15 +269,15 @@ This is a more conservative outlier test. There will be fewer outliers with both
 
 ## Chromosome Plots
 
-**Important:** If you want to make the ideogram plots, you will need to run the previous steps for just SNPs aligned to your study organism's transcriptome AND for all genome-wide loci. The transcriptome loci names should have the GenBank Transcript IDs (like found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
+**Important:** If you want to make the ideogram plots, you will need to run the previous steps twice: For just SNPs aligned to your study organism's transcriptome **and** for all genome-wide loci. The transcriptome loci names should have the GenBank Transcript IDs (like found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
 
 For this part, you need a closely related reference genome that is assembled at the chromosome level. Second, your model organisms needs to have at least a scaffold-level genome and a transcriptome. You will also need a GFF file for the annotations.
 
 If you don't have all of those, you won't be able to do the chromosome plot.
 
-If you do, you need to run some a priori analyses first.
-
 ### Align scaffold-level Assembly to a Reference Genome.
+
+You need to run some a priori analyses first.
 
 You need to use minimap2 for this part. https://github.com/lh3/minimap2
 
@@ -281,30 +285,28 @@ You need to use minimap2 for this part. https://github.com/lh3/minimap2
 
 2. Remove unplaced scaffolds from the reference genome's fasta file.
 
-3. Combine the genome-wide and transcriptome fasta files into one file.
+3. Concatenate the genome-wide and transcriptome fasta files into one file.
 
-4. Run minimap2. Tested with minimap2 v2.17.
+4. Run minimap2. Tested with minimap2 v2.17.  
   + Example command: 
-  + ```minimap2 --cs -t 4 -x asm20 -N 100 ref.fasta assembly.fasta > refmap_asm20.paf```
+  + ```minimap2 --cs -t 4 -x asm20 -N 100 ref.fasta assembly.fasta > refmap_asm20.paf```  
   
-5. You will want to adjust asm20 to suit how closely related your reference genome is to your study organism. asm 20 is suitable if the average sequence divergence is ~10%, and it allows up to 20% divergence. asm10 is suitable for 5% average, up to 10%. asm5 is for divergence of a few percent and up to 5%.
+5. You will want to adjust asm20 to suit how closely related your reference genome is to your study organism. asm 20 is suitable if the average sequence divergence is ~10%, and it allows up to 20% divergence. asm10 is suitable for 5% average, allowing up to 10%. asm5 is for divergence of a few percent and up to 5%. 
 
-You also will want to save the output as a paf file (default in minimap2).
+6. You also will want to save the output as a paf file (default in minimap2).  
 
-6. Next, run PAFScaff. https://github.com/slimsuite/pafscaff
+7. Next, run PAFScaff. https://github.com/slimsuite/pafscaff
   + PAFScaff cleans up and improves the mapping.
-  + Some of the output files from PAFScaff will be required to make the chromosome plot.
+  + One of the output files from PAFScaff will be required to make the chromosome plot.
   + **Important**: When running PAFScaff, set refprefix=ref_chromosome_prefix, newprefix=query, and unplaced=unplaced_ and sorted=RefStart
   
   + Once PAFScaff is done running, you can move on with the chromosome plots.
   
 ### Make Chromosome Plots
 
-These steps assume you have run combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide loci. 
+These steps assume you have run combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide loci. E.g., 
 
 ```
-prefix2 <- "full_population1"
-
 # Aggregate the runs
 bgc.full <-
   combine_bgc_output(results.dir = "exampledata/fulldataset",
@@ -316,11 +318,9 @@ full.outliers <-
     df.list = bgc.full,
     admix.pop = "population1",
     popmap = file.path("./exampledata/popmap.txt"),
-    loci.file = file.path("./exampledata/fulldataset/",
-                          paste0(prefix2, "_bgc_loci.txt"))
+    loci.file = file.path("./exampledata/fulldataset/full_population1_bgc_loci.txt"))
   )
 ```
-
 
 Read in the GFF file using the parseGFF function.
 
@@ -332,7 +332,7 @@ Now join the GFF annotations with the transcriptome dataset.
 
 ```{r join_bgc_gff}
 genes.annotated <-
-  join_bgc_gff(prefix = prefix,
+  join_bgc_gff(prefix = "population1",
                outlier.list = gene.outliers,
                gff.data = gff,
                scafInfoDIR = "./scaffold_info")
@@ -349,12 +349,12 @@ If some chromosomes didn't have any outliers on them, they might not get plotted
 
 ```
 plot_outlier_ideogram(
-  prefix = prefix,
+  prefix = "population1",
   outliers.genes = genes.annotated,
   outliers.full.scaffolds = full.outliers,
-  pafInfo = "exampledata/refmap_asm20.scaffolds.tdt",
+  pafInfo = "exampledata/refmap_asm20.scaffolds.tdt", # This is the PAFScaff output file
   plotDIR = "./plots",
-  missing.chrs = c("chr11", "chr21", "chr25"),
+  missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
   miss.chr.length = c(4997863, 1374423, 1060959)
 )
 ```
