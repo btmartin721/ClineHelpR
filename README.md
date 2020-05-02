@@ -320,12 +320,14 @@ You need to use minimap2 for this part. https://github.com/lh3/minimap2
   + PAFScaff cleans up and improves the mapping.
   + One of the output files from PAFScaff will be required to make the chromosome plot.
   + **Important**: When running PAFScaff, set refprefix=ref_chromosome_prefix, newprefix=query, and unplaced=unplaced_ and sorted=RefStart
+  + E.g., 
+  + ```python pafscaff.py pafin=refmap_asm20.paf basefile=refmap_asm20_pafscaff reference=refchr.fasta assembly=assembly.fasta refprefix=chr newprefix=query unplaced=unplaced_ sorted=RefStart forks=16```
   
   + Once PAFScaff is done running, you can move on with the chromosome plots.
   
 #### Make Chromosome Plots
 
-**These steps assume you have run combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide loci.**  
+**These steps assume you have run BGC, combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide (i.e. unplaced scaffolds) loci.**  
 
 * Read in the GFF file using the parseGFF function.
 
