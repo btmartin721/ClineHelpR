@@ -5,41 +5,6 @@ ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran 
 
 The package allows you to make several plots.
 
-## Phi ~ Hybrid Index Plots
-
-First, the Phi plot that Gompert et al. made in some of their papers. In this plot, Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - Phi. Phi is plotted on the Y-axis and hybrid index on the X-axis.
-
-Here is an example of a Phi plot that ClinePlotR can make:
-
-<img src="vignettes/population1_alphaPhi.png" width="60%">
-
-In the above plot, significant BGC alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the Phi plot. A separate plot is automatically made to highlight beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.
-
-With BGC, positive alpha outliers indicate excess P1 ancestry compared to the genome-wide average. Negative indicate excess P0 ancestry.
-
-Positive beta outliers indicate a steeper cline (i.e. a faster rate of transition and selection against introgression), whereas negative beta indicates hybrid vigor (i.e. higher introgression than expected).
-
-## Chromosome Plots
-
-If you have appropriate data and follow some steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:
-
-<img src="vignettes/population1_chromosome.png">
-
-For each chromosome, alpha outliers are plotted on the left and beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.
-
-Here few things you need to have to make the ideogram:
-
-* You need an appropriately close reference genome 
-  + Fully assembled at the chromosome level
-
-* You need a reference transcriptome
-* At least scaffold-level assembly for your study species
-* A GFF file
-* The transcript and scaffold IDs have to line up wiht the BGC loci
-
-If you don't have all those things, you can still make the Phi plots.
-
-
 ## Dependencies
 
 ClinePlotR has several dependencies:
@@ -55,6 +20,15 @@ ClinePlotR has several dependencies:
 * RIdeogram
 * gdata
 
+The environmental functions require:
+
+* ENMeval
+* rJava
+* raster
+* sp
+* dismo
+
+
 ## Installing the Package
 
 To install ClinePlotR, you can do the following:
@@ -66,20 +40,63 @@ install.packages("devtools")
 devtools::install_github("btmartin721/ClinePlotR")
 ``` 
 
-Now load the library.
+Now load the library.  
 ```
 library("ClinePlotR")
 ```
 
-You should have the following files to run this package:
+## bgcPlotR
 
-## Necessary Input Files
+The BGC functions allow you to:  
+1. Plot genomic clines as Phi (Prob. P1 ancestry) on the Y-axis and hybrid index on the X-axis.  
+2. Plot a chromosomal ideogram with BGC outliers shown on chromosomes.    
 
-## Loci File
 
-This file is a two-column whitespace-separated file with locus ID as column 1 and SNP position as column 2.
 
-Here is an example what this should look like:
+
+### Phi ~ Hybrid Index Plots  
+
+First, the Phi plot that Gompert et al. made in some of their papers. In this plot, Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - Phi. Phi is plotted on the Y-axis and hybrid index on the X-axis.  
+
+Here is an example of a Phi plot that ClinePlotR can make:  
+
+<img src="vignettes/population1_alphaPhi.png" width="60%">  
+
+In the above plot, significant BGC alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the Phi plot. A separate plot is automatically made to highlight beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.  
+
+With BGC, positive alpha outliers indicate excess P1 ancestry compared to the genome-wide average. Negative indicate excess P0 ancestry.  
+
+Positive beta outliers indicate a steeper cline (i.e. a faster rate of transition and selection against introgression), whereas negative beta indicates hybrid vigor (i.e. higher introgression than expected).  
+
+### Chromosome Plots  
+
+If you have appropriate data and follow some steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:  
+
+<img src="vignettes/population1_chromosome.png">  
+
+For each chromosome, alpha outliers are plotted on the left and beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.  
+
+Here few things you need to have to make the ideogram:  
+
+* You need an appropriately close reference genome   
+  + Fully assembled at the chromosome level  
+
+* You need a reference transcriptome  
+* At least scaffold-level assembly for your study species  
+* A GFF file  
+* The transcript and scaffold IDs have to line up wiht the BGC loci  
+
+If you don't have all those things, you can still make the Phi plots.   
+
+You should have the following files to run this package:  
+
+### Necessary Phi Input Files
+
+* Loci File
+
+This file is a two-column whitespace-separated file with locus ID as column 1 and SNP position as column 2.  
+
+Here is an example what this should look like: 
 
 ```
 #CHROM POS
@@ -88,41 +105,39 @@ XM_024192520.2 854
 XM_024192520.2 859
 ```
 
-Each line is one locus.
+Each line is one locus.  
 
-The first column indicates transcript or scaffold ID. The second indicates the SNP position on the scaffold or mRNA. 
+The first column indicates transcript or scaffold ID. The second indicates the SNP position on the scaffold or mRNA.   
 
-If you don't want to make the ideogram, these values can be made up.
+If you don't want to make the ideogram, these values can be made up.  
 
-### BGC Output Files
+* BGC Output Files  
 
-* prefix_bgc_stat_a0_runNumber
-* prefix_bgc_stat_b0_runNumber
-* prefix_bgc_stat_qa_runNumber
-* prefix_bgc_stat_qb_runNumber
-* prefix_bgc_stat_hi_runNumber
-* prefix_bgc_stat_LnL_runNumber
+  + prefix_bgc_stat_a0_runNumber
+  + prefix_bgc_stat_b0_runNumber
+  + prefix_bgc_stat_qa_runNumber
+  + prefix_bgc_stat_qb_runNumber
+  + prefix_bgc_stat_hi_runNumber
+  + prefix_bgc_stat_LnL_runNumber
   
-E.g., population1_bgc_stat_a0_1
+E.g., population1_bgc_stat_a0_1  
 
-These suffixes are required for the input files.
+These suffixes are required for the input files.  
 
-The bgc_stat files can be generated with the estpost software included with BGC. estpost can create these files from the HDF5 file that BGC writes to.
+The bgc_stat files can be generated with the estpost software included with BGC. estpost can create these files from the HDF5 file that BGC writes to.  
 
-The qa and qb files are generated by using the gamma-quantile and zeta-quantile options with the -p parameter.
+The qa and qb files are generated by using the gamma-quantile and zeta-quantile options with the -p parameter.  
 
-When using estpost, don't include header lines, and output them to ascii format.
+When using estpost, don't include header lines, and output them to ascii format.  
 
-I.e., use the following options:
+I.e., use the following options:  
 
-```
--s 2 -w 0
-```
+```-s 2 -w 0```  
 
-This will format them correctly for ClinePlotR.
+This will format them correctly for ClinePlotR.  
 
 
-### Population Map File
+* Population Map File
 
 It should be a two-column, tab-separated file with individual IDs as column 1 and population ID as column 2. No header.
 
@@ -136,7 +151,9 @@ ind4 population2
 ```
 
 
-## Aggregate BGC Runs
+### Make Phi Plots
+
+#### Aggregate BGC Runs
 
 If you ran multiple BGC runs, ClinePlotR allows you to aggregate them together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_lnl() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL traces below).
 
@@ -148,9 +165,9 @@ First, you need to run combine_bgc_output()
 bgc.genes <-
   combine_bgc_output(results.dir = "exampledata/genes/",
                      prefix = "population1)
-```
+```  
 
-This is with the default options.
+This is with the default options.  
 
 If you determine that you want to thin the MCMC samples, you can use the thin parameter:
 
@@ -180,7 +197,7 @@ This will discard the first 2500 samples from **each run**. So if like in the ex
 
 One reason to use this is if you notice that the runs converged e.g. 2500 samples post-burnin. In this case you could just discard the non-converged portions of the runs.
 
-## Plot Log-likelihood Traces
+#### Plot Log-likelihood Traces
 
 It is **strongly** recommended to inspect the LnL traces if you are aggregating the runs. You can do this with the plot_lnl() function.
 
@@ -207,7 +224,7 @@ Here's an example of LnL that didn't converge among the five runs:
 
 You can tell the five runs started to converge towards the end, but the LnL were still rising until close to the end of the run. This one needed to be re-run with longer burn-in.
 
-## Identify Outlier Loci
+#### Identify Outlier Loci
 
 Here we identify alpha and beta outliers using the get_bgc_outliers() function.
 
@@ -237,9 +254,9 @@ The object returned from this can be input directly into phiPlot().
 
 You can save this function's output as an RDS object for later use by setting save.obj = TRUE
 
-## Make the Phi Plot
+#### Plot Genomic Clines
 
-Now you can make the Phi plot. The popname can be any string you want here.
+Now you can make the Phi genomic cline plot. The popname can be any string you want here.
 
 ```
 phiPlot(outlier.list = gene.outliers,
@@ -267,15 +284,15 @@ E.g.,
 
 This is a more conservative outlier test. There will be fewer outliers with both required.
 
-## Chromosome Plots
+### Chromosome Plots
 
-**Important:** If you want to make the ideogram plots, you will need to run the previous steps twice: For just SNPs aligned to your study organism's transcriptome **and** for all genome-wide loci. The transcriptome loci names should have the GenBank Transcript IDs (like found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
+**Important:** If you want to make the ideogram plots, you will need to run the previous steps twice: Once for SNPs aligned only to your study organism's transcriptome, and a second time for all genome-wide loci (i.e. unplaced scaffolds). The transcriptome loci names should have the GenBank Transcript IDs (also found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
 
 For this part, you need a closely related reference genome that is assembled at the chromosome level. Second, your model organisms needs to have at least a scaffold-level genome and a transcriptome. You will also need a GFF file for the annotations.
 
-If you don't have all of those, you won't be able to do the chromosome plot.
+**If you don't have all of those, you won't be able to do the chromosome plot.**
 
-### Align scaffold-level Assembly to a Reference Genome.
+#### Align scaffold-level Assembly to a Reference Genome.
 
 You need to run some a priori analyses first.
 
@@ -302,9 +319,29 @@ You need to use minimap2 for this part. https://github.com/lh3/minimap2
   
   + Once PAFScaff is done running, you can move on with the chromosome plots.
   
-### Make Chromosome Plots
+#### Make Chromosome Plots
 
-These steps assume you have run combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide loci. E.g., 
+**These steps assume you have run combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide loci.**  
+
+* Read in the GFF file using the parseGFF function.
+
+```
+gff <- parseGFF(gff.filepath = "./exampledata/genes.gff")
+```
+
+* Now join the GFF annotations with the transcriptome dataset's transcript IDs.
+
+```
+genes.annotated <-
+  join_bgc_gff(prefix = "population1",
+               outlier.list = gene.outliers,
+               gff.data = gff,
+               scafInfoDIR = "./scaffold_info")
+```
+
+The scafInfoDIR parameter allows you to save the annotated output (e.g. with gene names) to this directory.  
+
+* Get outliers for unplaced scaffolds. Needed for chromosome plots.  
 
 ```
 # Aggregate the runs
@@ -322,27 +359,9 @@ full.outliers <-
   )
 ```
 
-Read in the GFF file using the parseGFF function.
+#### Plot Ideograms
 
-```
-gff <- parseGFF(gff.filepath = "./exampledata/genes.gff")
-```
-
-Now join the GFF annotations with the transcriptome dataset.
-
-```{r join_bgc_gff}
-genes.annotated <-
-  join_bgc_gff(prefix = "population1",
-               outlier.list = gene.outliers,
-               gff.data = gff,
-               scafInfoDIR = "./scaffold_info")
-```
-
-The scafInfoDIR parameter allows you to save the annotated output (e.g. with gene names) to this directory.
-
-### Plot It
-
-To plot, you need the genome-wide outliers, the annotated transcriptome data, and the *.scaffolds.tdt output from PAFScaff.
+To plot, you need the genome-wide outliers, the annotated transcriptome data, and the *.scaffolds.tdt output file from PAFScaff.
 
 If some chromosomes didn't have any outliers on them, they might not get plotted. If that's the case, you can use the missing.chrs and miss.chr.length arguments to include them. You just need their names in a vector and a vector of each chromosome's length (in base pairs).
 
@@ -362,5 +381,169 @@ plot_outlier_ideogram(
 ![Ideogram Plot: Alpha and Beta Outliers.](vignettes/population1_chromosome.png)
 
 This plot gets saved as an SVG file in plotDIR and by default a PDF file (in the current working directory). But you can change the PDF output to PNG or JPG if you want. See ?plot_outlier_ideogram
+
+## Finding Important Raster Layers  
+
+We can get a bunch of raster layers and determine which are the most important with regards to species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with environmental features. We will use a wrapper package called ENMeval to run MAXENT for the species distribution modeling. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g. mine was placed here, where my dismo R package is installed:   
+
+```"C:/Users/btm/Documents/R/win-library/3.6/dismo/java/maxent.jar"```  
+
+### Prepare and Load Rasters
+
+You will need all your raster files in one directory, with no other files. E.g., the 19 BioClim layers from https://worldclim.org/. The rasters also all need to be the same extent and resolution. If you got them all from WorldClim, they should all be the same. But if you add layers from other sources you'll need to resample the ones that don't fit. 
+
+See my scripts/prepareRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is the problem and you will need to resample some rasters. 
+
+You will also need a file with sample information. This file should be four comma-delimited columns in a specific order:  
+
+1. IndividualIDs
+2. PopulationIDs
+3. Latitude (in decimal degrees)
+4. Longitude (in decimal degrees)
+
+Then you can run prepare_rasters():  
+
+```
+envList <- 
+  prepare_rasters(
+    raster.dir = "./rasters",
+    sample.file = "sampleinfo.csv",
+    header = TRUE,
+    bb.buffer = 0.5,
+    plotDIR = "./plots"
+    )
+```  
+
+You can change the bb.buffer argument to a larger or smaller value. prepare_rasters() will crop your raster layers to the sampling locality extent, and if bb.buffer = 0.5, a 0.5 degree buffer will be added to the sampling extent.  
+
+If your sample.file has a header line, set header = TRUE. If not, set header = FALSE.  
+
+### Generate Background Points
+
+Then you can run partition_raster_bg(). This will generate a bunch of background points for running MAXENT.  
+
+```
+bg <- 
+  partition_raster_bg(
+    env.list = envList, plotDIR = "./plots")
+```  
+
+This will generate several plots.  
+
+1. All your input rasters with sample localities overlaid as points.  
+2. Background points for several partitioning methods. See the ENMeval vignette for more info on bg partitions.  
+  + The background partition methods that ClinePlotR supports are: block, checkerboard1, and checkerboard2.  
+
+### Run ENMeval
+
+Here, you can subset and remove the envList object to reduce your memory footprint if ENMeval runs out of memory. If you don't want to lose envList you can save it as an RDS object before removing it. That way you don't have to re-run the whole pipeline if you want to re-load it.  
+
+```
+saveRDS(saveRDS(envList, file = "./envList.rds"))
+envs.fg <- envList[[1]]
+coords <- envList[[3]]
+rm(envList) # Removes envList object from global environment
+gc() # This will perform garbage collection to release system memory resources
+```
+
+If you decide you want to reload envList again, just do:  
+
+```envList <- readRDS("./envList.rds")```
+
+You might need to increase the amount of memory that rJava can use if you get an out of memory error:  
+
+```options(java.parameters = "-Xmx16g")```
+
+This sets the amount of memory that rJava can use to 16 GB.  
+
+Now you can run ENMeval.  
+
+```
+eval.par <- runENMeval(envs.fg = envs.fg,
+                       bg = bg, 
+                       parallel = TRUE,
+                       categoricals = 1,
+                       partition.method = "checkerboard1",
+                       coords = coords,
+                       np = 4)
+```
+
+This will run ENMeval with four parallel processes. FYI, if running in parallel it doesn't have a progress bar, and it uses np times the amount of RAM. So if you still run out of memory even after increasing the memory available to rJava, try reducing the number of processes you are running in parallel. 
+
+You can try some other options too: 
+
+```
+eval.par <- runENMeval(envs.fg = envs.fg, # envList[[1]]
+                       bg = bg, # Returned from partition_raster_bg()
+                       parallel = FALSE, # Don't run in parallel
+                       categoricals = c(1, 2), # Specify first two layers as categorical (e.g. land cover)
+                       partition.method = "checkerboard2",
+                       coords = coords, # envList[[3]]
+                       RMvalues = seq(0.5, 5, 0.5), # Runs regularization multipliers from 0.5 to 5 in 0.5 increments
+                       agg.factor = c(3, 3), # Changes aggregation.factor for background partition
+                       feature.classes c("L", "LQ", "LQP") # Specify which feature classes to run with MAXENT
+                       algorithm = "maxnet" # Use maxnet instead of maxent
+                       )
+```
+
+See ?ENMeval and the ENMeval vignette for more info on what you can do with the package.  
+
+### Summarize and Plot ENMeval results
+
+Now you can summarize and plot the ENMeval results. This was all taken from the ENMeval vignette.  
+
+```
+summarize_ENMeval(
+  eval.par = eval.par,
+  plotDIR = "./plots",
+  minLat = 25, # Adjust these to your coordinate frame
+  maxLat = 45,
+  minLon = -100,
+  maxLon = -45
+  )
+```
+
+This will make a bunch of plots and CSV files in plotDIR, including the MAXENT precictions, lambda results, best model based on AICc scores, various plots showing how the regularization multipliers and feature classes affect AICc scores, and a barplot showing raster layer Permutation Importance.  
+
+If your raster filenames are long, they will likely run off the Permutation Importance barplot. You can adjust the margins of the plot using the imp.margins parameter. There are some other plot adjustment parameters you can try as well:  
+
+```
+summarize_ENMeval(
+  eval.par = eval.par,
+  plotDIR = "./plots",
+  minLat = 25, # Adjust to your specific lat/lon extent
+  maxLat = 45,
+  minLon = -100,
+  maxLon = -45,
+  imp.margins = c(15.1, 4.1, 3.1, 2.1), # c(bottom, left, top, right),
+  examine.predictions = c("L", "LQ", "LQP"), # Should be the same as above
+  RMvalues = seq(0.5, 5, 0.5), # Should be the same as above
+  plot.width = 10, # Change plot width (all plots)
+  plot.height = 10, # Change plot height (all plots)
+  niche.overlap = TRUE # If TRUE, runs ENMeval's calc.niche.overlap function; might take a while
+  )
+```
+
+If you want to create the response curves for the best model: 
+
+```
+pdf(file = "./plots/responseCurves.pdf", width = 7, height = 7)
+dismo::response(eval.par@models[[28]])
+dev.off()
+```
+
+You can inspect eval.par@models to find the model with the best delta AICc. In this case, model 28 was the best model, so I ran dismo::response() on eval.par@models[[28]].  
+
+You can then run INTROGRESS and start the next part of this pipeline.  
+
+## INTROGRESS Genomic Clines and Environmental Data
+
+TO-DO: Make INTROGRESS script into part of this R package.
+
+
+
+
+
+
 
 
