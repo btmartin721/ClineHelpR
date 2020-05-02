@@ -78,6 +78,10 @@ For each chromosome, alpha outliers are plotted on the left and beta are on the 
 
 Here few things you need to have to make the ideogram:  
 
+* You need to run BGC twice
+  + Once with transcriptome-aligned SNPs
+  + Another time with all unlinked SNPs with unplaced scaffolds.  
+
 * You need an appropriately close reference genome   
   + Fully assembled at the chromosome level  
 
