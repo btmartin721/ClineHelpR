@@ -274,7 +274,7 @@ If you want to save the plot to a file, just use the saveToFile option. If speci
 
 Most of the plot settings can be adjusted. See ?phiPlot for more info.
 
-You can change the criteria for identifying outlier loci with the overlap.zero, qn.interval, and both.outlier.tests options. By default, it is set to identify outliers using either overlap.zero and qn.interval. I.e. it only has to meet at least one of the criteria. You can turn one or the other off if you want by setting e.g. overlap.zero = FALSE. They can't both be off unless both.outlier.tests = TRUE.
+You can change the criteria for identifying outlier loci with the overlap.zero, qn.interval, and both.outlier.tests options. By default, it is set to identify outliers using either overlap.zero or qn.interval. I.e. it only has to meet at least one of the criteria. You can turn one or the other off if you want by setting e.g. overlap.zero = FALSE. They can't both be off unless both.outlier.tests = TRUE.
 
 If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings.
 
