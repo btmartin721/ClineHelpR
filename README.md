@@ -392,24 +392,24 @@ You can also mess with the colors and the band sizes. The bands by default are s
 
 ```
 plot_outlier_ideogram(
-  prefix = "population1",
-  outliers.genes = genes.annotated,
-  outliers.full.scaffolds = full.outliers,
-  pafInfo = "exampledata/refmap_asm20.scaffolds.tdt", # This is the PAFScaff output file
-  plotDIR = "./plots",
-  missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
-  miss.chr.length = c(4997863, 1374423, 1060959),
-  gene.size = 100000, # adjust size of known gene bands
-  other.size = 50000, # adjust size of unplaced scaffold bands
-  colorset1 = c("green", "white", "blue"), # alpha colors
-  colorset2 = c("red", "yellow", "purple"), # beta colors
-  convert_svg = "png" # save as png instead of pdf
+                      prefix = "population1",
+                      outliers.genes = genes.annotated,
+                      outliers.full.scaffolds = full.outliers,
+                      pafInfo = "exampledata/refmap_asm20.scaffolds.tdt", # This is the PAFScaff output file
+                      plotDIR = "./plots",
+                      missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
+                      miss.chr.length = c(4997863, 1374423, 1060959),
+                      gene.size = 100000, # adjust size of known gene bands
+                      other.size = 50000, # adjust size of unplaced scaffold bands
+                      colorset1 = c("green", "white", "blue"), # alpha colors
+                      colorset2 = c("red", "yellow", "purple"), # beta colors
+                      convert_svg = "png" # save as png instead of pdf
 )
 ```
 
 ## Finding Important Raster Layers  
 
-We can get a bunch of raster layers and determine which are the most important with regards to species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with environmental features. We will use a wrapper package called ENMeval to run MAXENT for the species distribution modeling. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g. mine was placed here, where my dismo R package is installed:   
+We can get a bunch of raster layers and determine which are the most important with regards to species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with the most important environmental features. We will use a wrapper package called ENMeval to run MAXENT for the species distribution modeling. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g. mine was placed here, where my dismo R package is installed:   
 
 ```"C:/Users/btm/Documents/R/win-library/3.6/dismo/java/maxent.jar"```  
 
