@@ -1,7 +1,7 @@
-# bgcPlotter
-Plot BGC genomic cline results
+# ClinePlotR
+Plot BGC and INTROGRESS genomic cline results and correlate with environmental variables.
 
-bgcPlotter allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out.
+ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out.
 
 The package allows you to make several plots.
 
@@ -9,7 +9,7 @@ The package allows you to make several plots.
 
 First, the Phi plot that Gompert et al. made in some of their papers. In this plot, Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - Phi. Phi is plotted on the Y-axis and hybrid index on the X-axis.
 
-Here is an example of a Phi plot that bgcPlotter can make:
+Here is an example of a Phi plot that ClinePlotR can make:
 
 <img src="vignettes/population1_alphaPhi.png" width="60%">
 
@@ -42,7 +42,7 @@ If you don't have all those things, you can still make the Phi plots.
 
 ## Dependencies
 
-bgcPlotter has several dependencies:
+ClinePlotR has several dependencies:
 
 * data.table
 * dplyr
@@ -57,18 +57,18 @@ bgcPlotter has several dependencies:
 
 ## Installing the Package
 
-To install bgcPlotter, you can do the following:
+To install ClinePlotR, you can do the following:
 
 ```
 # If you don't already have devtools installed
 install.packages("devtools")
 
-devtools::install_github("btmartin721/bgcPlotter")
+devtools::install_github("btmartin721/ClinePlotR")
 ``` 
 
 Now load the library.
 ```
-library("bgcPlotter")
+library("ClinePlotR")
 ```
 
 You should have the following files to run this package:
@@ -119,7 +119,7 @@ I.e., use the following options:
 -s 2 -w 0
 ```
 
-This will format them correctly for bgcPlotter.
+This will format them correctly for ClinePlotR.
 
 
 ### Population Map File
@@ -138,7 +138,7 @@ ind4 population2
 
 ## Aggregate BGC Runs
 
-If you ran multiple BGC runs, bgcPlotter allows you to aggregate them together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_lnl() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL traces below).
+If you ran multiple BGC runs, ClinePlotR allows you to aggregate them together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_lnl() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL traces below).
 
 To aggregate the BGC runs, you first need the BGC output in the correct format.
 
