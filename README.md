@@ -84,7 +84,7 @@ Here few things you need to have to make the ideogram:
 * You need a reference transcriptome  
 * At least scaffold-level assembly for your study species  
 * A GFF file  
-* The transcript and scaffold IDs have to line up wiht the BGC loci  
+* The transcript and scaffold IDs have to line up with the BGC loci  
 
 If you don't have all those things, you can still make the Phi plots.   
 
