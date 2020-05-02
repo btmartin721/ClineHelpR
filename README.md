@@ -386,7 +386,26 @@ plot_outlier_ideogram(
 
 ![Ideogram Plot: Alpha and Beta Outliers.](vignettes/population1_chromosome.png)
 
-This plot gets saved as an SVG file in plotDIR and by default a PDF file (in the current working directory). But you can change the PDF output to PNG or JPG if you want. See ?plot_outlier_ideogram
+This plot gets saved as an SVG file in plotDIR and by default a PDF file (saved in the current working directory). But you can change the PDF output to PNG or JPG if you want. See ?plot_outlier_ideogram
+
+You can also mess with the colors and the band sizes. The bands by default are set much larger than the one base pair SNP position for visualization and clarity. If you want to make them larger for the genes and/or the unplaced scaffolds, you can. And you can adjust the colors of the alpha and beta bands separately by specifying a character vector colors (Rcolorbrewer or hex code) to the colorset1 (alpha) and colorset2 (beta) parameters.  E.g., 
+
+```
+plot_outlier_ideogram(
+  prefix = "population1",
+  outliers.genes = genes.annotated,
+  outliers.full.scaffolds = full.outliers,
+  pafInfo = "exampledata/refmap_asm20.scaffolds.tdt", # This is the PAFScaff output file
+  plotDIR = "./plots",
+  missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
+  miss.chr.length = c(4997863, 1374423, 1060959),
+  gene.size = 100000, # adjust size of known gene bands
+  other.size = 50000, # adjust size of unplaced scaffold bands
+  colorset1 = c("green", "white", "blue"), # alpha colors
+  colorset2 = c("red", "yellow", "purple"), # beta colors
+  convert_svg = "png" # save as png instead of pdf
+)
+```
 
 ## Finding Important Raster Layers  
 
