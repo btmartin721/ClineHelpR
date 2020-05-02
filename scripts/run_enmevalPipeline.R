@@ -39,7 +39,7 @@ eval.par <- runENMeval(envs.fg = envs.fg,
                        bg = bg, parallel = FALSE,
                        categoricals = 1,
                        partition.method = "checkerboard1",
-                       coords = coords)
+                       coords = coords )
 
 saveRDS(eval.par, "../../../../Dissertation/BOX/gis/bioclim_R/gis_Routput/enm_eval.rds")
 
