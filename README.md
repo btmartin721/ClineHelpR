@@ -417,14 +417,18 @@ We can get a bunch of raster layers and determine which are the most important w
 
 You will need all your raster files in one directory, with no other files. E.g., the 19 BioClim layers from https://worldclim.org/. The rasters also all need to be the same extent and resolution. If you got them all from WorldClim, they should all be the same. But if you add layers from other sources you'll need to resample the ones that don't fit. 
 
-See my scripts/prepareRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is the problem and you will need to resample some rasters. 
+See my scripts/prepareRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is the problem and you will need to resample some rasters.
 
-You will also need a file with sample information. This file should be four comma-delimited columns in a specific order:  
+Also of note, the raster layers load in alphabetical order of filenames. So if you want to e.g. load a categorical layer first, prepend an earlier letter to the filename. 
+
+You will need a file with sample information. This file should be four comma-delimited columns in a specific order:  
 
 1. IndividualIDs
 2. PopulationIDs
 3. Latitude (in decimal degrees)
 4. Longitude (in decimal degrees)
+
+You will get an error if one or more of your samples falls on an NA value for any of your input rasters. If this happens, just remove the offending individual(s) from the sample.file file and re-run prepare_rasters(). The error message will print out a list of individuals with NA values in each raster layer.
 
 Then you can run prepare_rasters():  
 
@@ -439,13 +443,13 @@ envList <-
     )
 ```  
 
-You can change the bb.buffer argument to a larger or smaller value. prepare_rasters() will crop your raster layers to the sampling locality extent, and if bb.buffer = 0.5, a 0.5 degree buffer will be added to the sampling extent.  
+You can change the bb.buffer argument to a larger or smaller value. prepare_rasters() will crop your raster layers to the sampling locality extent, and if bb.buffer = 0.5, a 0.5 degree buffer will be added to the sampling extent. This is useful for making the background points later.  
 
 If your sample.file has a header line, set header = TRUE. If not, set header = FALSE.  
 
 ### Generate Background Points
 
-Then you can run partition_raster_bg(). This will generate a bunch of background points for running MAXENT.  
+Then you can run partition_raster_bg(). This will generate a bunch of background points for when you run MAXENT.  
 
 ```
 bg <- 
@@ -453,7 +457,7 @@ bg <-
     env.list = envList, plotDIR = "./plots")
 ```  
 
-This will generate several plots.  
+This will also generate two plots.  
 
 1. All your input rasters with sample localities overlaid as points.  
 2. Background points for several partitioning methods. See the ENMeval vignette for more info on bg partitions.  
@@ -461,7 +465,7 @@ This will generate several plots.
 
 ### Run ENMeval
 
-Here, you can subset and remove the envList object to reduce your memory footprint if ENMeval runs out of memory. If you don't want to lose envList you can save it as an RDS object before removing it. That way you don't have to re-run the whole pipeline if you want to re-load it.  
+Here, you can subset and remove the envList object to reduce your memory footprint if ENMeval runs out of memory. If you don't want to lose envList you can save it as an RDS object before removing it. That way you don't have to re-run the whole environmental pipeline if you want to re-load it.  
 
 ```
 saveRDS(saveRDS(envList, file = "./envList.rds"))
