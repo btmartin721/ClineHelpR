@@ -1,5 +1,5 @@
 # ClinePlotR
-Plot BGC and INTROGRESS genomic cline results and correlate with environmental variables.
+Plot BGC and INTROGRESS genomic cline results and correlate INTROGRESS clines with environmental variables.
 
 ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out.
 
