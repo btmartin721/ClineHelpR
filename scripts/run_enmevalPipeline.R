@@ -3,13 +3,15 @@
 # I first prepared the rasters in prepareRasters.R
 # Now I run the ENMeval pipeline
 
+plotDIR <- "../../../../Dissertation/BOX/gis/bioclim_R/plots"
+
 envList <-
   prepare_rasters(
     raster.dir = "../../../../Dissertation/BOX/gis/bioclim_R/layers/maxent_rasters/crop",
     sample.file = "../../../../Dissertation/BOX/gis/bioclim_R/sample_localities_maxent_southeast_noNA.csv",
     header = TRUE,
     bb.buffer = 0.5,
-   plotDIR = "../../../../Dissertation/BOX/gis/bioclim_R/plots"
+   plotDIR = plotDIR
    )
 
 bg <- partition_raster_bg(env.list = envList, plotDIR = "../../../../Dissertation/BOX/gis/bioclim_R/plots/")
@@ -43,8 +45,8 @@ saveRDS(eval.par, "../../../../Dissertation/BOX/gis/bioclim_R/gis_Routput/enm_ev
 
 summarize_ENMeval(
   eval.par = eval.par,
-  plotDIR = "../../../../Dissertation/BOX/gis/bioclim_R/plots/",
-()  minLat = 25,
+  plotDIR = plotDIR,
+  minLat = 25,
   maxLat = 45,
   minLon = -100,
   maxLon = -45,
