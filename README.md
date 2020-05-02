@@ -290,7 +290,7 @@ This is a more conservative outlier test. There will be fewer outliers with both
 
 ### Chromosome Plots
 
-**Important:** If you want to make the ideogram plots, you will need to run the previous steps twice: Once for SNPs aligned only to your study organism's transcriptome, and a second time for all genome-wide loci (i.e. unplaced scaffolds). The transcriptome loci names should have the GenBank Transcript IDs (also found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
+**Important:** If you want to make the ideogram plots, you will need to run BGC and the previous R functions twice: Once for SNPs aligned only to your study organism's transcriptome, and a second time for all genome-wide loci (i.e. unplaced scaffolds). The transcriptome loci names should have the GenBank Transcript IDs (also found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
 
 For this part, you need a closely related reference genome that is assembled at the chromosome level. Second, your model organisms needs to have at least a scaffold-level genome and a transcriptome. You will also need a GFF file for the annotations.
 
