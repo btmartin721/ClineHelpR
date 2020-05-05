@@ -55,7 +55,7 @@ clinesXenvironment(
   clineLabels = c("EA", "Het", "GU"),
   outputDIR = file.path(dataDIR, "outputFiles", "EAGU"),
   clineMethod = "permutation",
-  prefix = "EAGU",
+  prefix = "EAGU"
 )
 
 dir.create(file.path(dataDIR, "rawRoutput"), showWarnings = FALSE)

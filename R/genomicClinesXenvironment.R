@@ -335,21 +335,21 @@ clinesXenvironment <- function(clineList,
     l$h,
     hi$h,
     "Latitude",
-    paste0("Hybrid Index ", clineLabels[1], " X ", clineLabels[3], ")")
+    paste0("Hybrid Index (", clineLabels[1], " X ", clineLabels[3], ")")
   )
 
   plot_lm_clines(
     lon$h,
     clines$Fitted.AA,
     "Longitude",
-    paste0("Genomic Clines ", clineLabels[1], " X ", clineLabels[3], ")")
+    paste0("Genomic Clines (", clineLabels[1], " X ", clineLabels[3], ")")
   )
 
   plot_lm_hindex(
     lon$h,
     hi$h,
     "Longitude",
-    paste0("Hybrid Index ", clineLabels[1], " X ", clineLabels[3], ")")
+    paste0("Hybrid Index (", clineLabels[1], " X ", clineLabels[3], ")")
   )
   dev.off()
 
@@ -397,7 +397,7 @@ clinesXenvironment <- function(clineList,
     append = TRUE
   )
   pdf(
-    file = file.path(outputDIR, paste0(prefix, "clinesXenv.pdf")),
+    file = file.path(outputDIR, paste0(prefix, "_clinesXenv.pdf")),
     width = 11,
     height = 7,
     onefile = TRUE
