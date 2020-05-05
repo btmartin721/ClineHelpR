@@ -565,9 +565,120 @@ You can inspect eval.par@models to find the model with the best delta AICc. In t
 
 You can then run INTROGRESS and start the next part of this pipeline.  
 
-## INTROGRESS Genomic Clines and Environmental Data
+## INTROGRESS Genomic Clines X Environmental Data
 
-TO-DO: Make INTROGRESS script into part of this R package.
+Now that we have the important raster, we can use it to plot INTROGRESS genomic clines ~ environment. First, we need to extract the raster values for each sample point. We have included a function that does this. You just need the envList object generated from the prepare_rasters() function above. If you saved this object for later use, you can just reload it with readRDS().
+
+```
+envList <- readRDS("./envList.rds")
+rasterPoint.list <- extractPointValues(envList)
+```
+
+Now we run INTROGRESS. To do so, we need the INTROGRESS input files (see ?introgress). We have included a wrapper function to run INTROGRESS easier. You can adjust some of the settings. Make sure to remove individuals from the INTROGRESS input files that occurred on NA raster values.
+
+```
+# Run INTROGRESS
+test1 <- runIntrogress(
+  p1.file = file.path(dataDIR, "p1data.txt"),
+  p2.file = file.path(dataDIR, "p2data.txt"),
+  admix.file = file.path(dataDIR, "admix_RemovedNA.txt"),
+  loci.file = file.path(dataDIR, "loci.txt"),
+  clineLabels = c("pop1", "Het", "pop2"),
+  minDelt = 0.8,
+  prefix = "test1",
+  outputDIR = file.path(dataDIR, "outputFiles"),
+  sep = "\t",
+  fixed = FALSE,
+  pop.id = FALSE,
+  ind.id = FALSE
+)
+```  
+
+This will run both the perumtation and parametric INTROGRESSION tests. See ?introgress.
+
+So, you need the P1, P2, admixed, and loci files. See ?introgress.
+You can also change the field separated in the INTROGRESS input files by using sep. E.g.,  
+```sep = ","```  
+
+You can set clineLabels to reflect your population names. It needs to be a character vector of length == 3.  
+
+You can set the minDelt parameter to a different value if you want. This parameter only tests outlier loci that have allele frequency differentials > minDelt. So ideally this should be set high (>0.6). You can try different settings. Default is 0.8. If you don't recover any loci, lower minDelt.  
+
+If your SNPs are fixed between parental populations, set fixed = TRUE and it will also generate a triangle plot of Interspecific Heterozygosity ~ Hybrid Index.  
+
+pop.id and ind.id are used if your input files have these headers.  
+
+Once this finishes running, you can use another of our functions to subset a full list of individuals to just those included in the INTROGRESS analysis. E.g.,
+
+```
+# Subset individuals for only the populations run in INTROGRESS
+rasterPoint.list.subset <-
+  lapply(rasterPoint.list,
+         subsetIndividuals,
+         file.path(dataDIR, "test1_inds.txt"))
+```
+
+This will remove individuals from rasterPoint.list that were not in "test1_inds.txt". So use test1_inds.txt as a list of individuals in your INTROGRESS analysis.  
+
+Then you can generate the plots:  
+
+```
+# Correlate genomic clines/hybrid index with environment/lat/lon
+clinesXenvironment(
+  clineList = test1,
+  rasterPointValues = rasterPoint.list.subset,
+  clineLabels = c("pop1", "Het", "pop2"),
+  outputDIR = file.path(dataDIR, "outputFiles", "test1Plots"),
+  clineMethod = "permutation",
+  prefix = "test1",
+  cor.method = "auto"
+)
+```
+
+Here, you can change the clineMethod to either "permutation" or "parametric". See ?introgress.  
+
+
+This will run for latitude, longitude, and all the raster layers from envList. If you want to run it for only some raster layers, just use the rastersToUse parameter, which is just an integer vector containing the indexes for each raster layer you want to include. You can get which raster is which by inspecting the envList[[1]]@data object.  
+
+```
+# Correlate genomic clines/hybrid index with environment/lat/lon
+clinesXenvironment(
+  clineList = test1,
+  rasterPointValues = rasterPoint.list.subset,
+  clineLabels = c("pop1", "Het", "pop2"),
+  outputDIR = file.path(dataDIR, "outputFiles", "test1Plots"),
+  clineMethod = "permutation",
+  prefix = "test1",
+  cor.method = "auto",
+  rastersToUse = c(1, 5, 7, 19, 23)
+)
+```
+
+You can also change the correlation method parameter (cor.method) to something else supported by cor.test. Possible options include:  
+```c("auto", "pearson", "kendall", "spearman")```
+
+If you use auto, it will test for normally distributed data and, if present, will use Pearson's correlation. If not, it will use Kendall. But if you want to use Spearman's, you need to change the cor.method parameter to "spearman".  
+
+clinesXenvironment will generate three output files:  
+
+1. "prefix_clinesXLatLon.pdf", which contains:  
+  + Genomic Clines ~ Latitude and Longitude
+  + Hybrid Index ~ Latitude and Longitude
+2. "prefix_clinesXenv.pdf", which contains:  
+  + Genomic Clines ~ each raster layer
+  + Hybrid Index ~ each raster layer
+3. "prefix_corrSummary.csv"
+  + This contains correlation tests for all the environmental files plus latitude and longitude.
+  
+Here are some example plots that clinesXenvironment can make:  
+
+
+
+
+
+
+
+
 
 
 
