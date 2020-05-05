@@ -679,7 +679,7 @@ Hybrid Index ~ Longitude
 ![Hybrid Index X Longitude](vignettes/hybridIndexXLongitude.png)    
 
 Genomic Cline ~ Raster Layers (e.g. Here BioClim1)  
-![Genomic Cline X Raster Layer](vignettes/genomicCLineXraster_bioclim1.png)  
+![Genomic Cline X Raster Layer](vignettes/genomicClineXraster_bioclim1.png)  
 
 Hybrid Index ~ Raster Layers (e.g. Here BioClim1)  
 ![Hybrid Index X Raster Layer](vignettes/hybridIndexXraster_bioClim1.png)  
