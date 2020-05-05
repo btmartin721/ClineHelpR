@@ -79,12 +79,12 @@ prepare_rasters <- function(raster.dir,
 
   writeLines("\n\nOrder of raster files: \n")
 
+  # Order alphanumerically.
+  files <- gtools::mixedsort(files)
+
   for (i in 1:length(files)){
     writeLines(paste0(i, ": ", files[i]))
   }
-
-  # Order alphanumerically.
-  gtools::mixedsort(files)
 
   # Put the rasters into a RasterStack.
   envs <- raster::stack(files)
@@ -218,47 +218,6 @@ partition_raster_bg <- function(env.list,
   # you'll get a warning and all pixels will be used for background.
   bg <- dismo::randomPoints(envs.backg[[bg.raster]], n=number.bg.points)
   bg <- raster::as.data.frame(bg)
-
-  raster.points <- list()
-
-  writeLines("\nExtracting raster values at sample points")
-
-  # Extract raster values at each sample point.
-  for (i in 1:raster::nlayers(envs.cropped)){
-    raster.points[[i]] <- raster::extract(envs.cropped[[i]], p)
-  }
-
-  writeLines("\nAdding sampleIDs to raster dataframe")
-
-  # Add sample IDs to point/raster value dataframe.
-  rp.df <- lapply(raster.points,
-                  function(x) {
-                    cbind.data.frame(
-                      inds,
-                      raster::coordinates(p),
-                      x
-                      )
-                  }
-  )
-
-  rm(raster.points)
-  gc(verbose = FALSE)
-
-  # Get which samples are on NA raster values.
-  test4na <- lapply(rp.df, function(x) x[raster::rowSums(is.na(x)) > 0,])
-
-  # If some samples are on NA raster values: Print them and stop with error.
-  allEmpty <- lapply(test4na, function(x) nrow(x) == 0)
-  allEmpty <- unlist(allEmpty)
-
-  if(!all(allEmpty)){
-    writeLines("\n\nThe following samples are located on NA raster values:\n")
-    print(test4na)
-    stop("The above samples have NA raster values. Please remove the them.")
-  }
-
-  rm(test4na)
-  gc(verbose = FALSE)
 
   # Change column names.
   colnames(coords) <- c("lng", "lat")
@@ -605,4 +564,92 @@ summarize_ENMeval <- function(eval.par,
     }
 
   dev.off()
+}
+
+#' Function to extract raster values at each sample point for raster stack
+#' @param env.list List object generated from prepare_rasters()
+#' @return List of data.frames with raster values at each sample locality
+#'         for each raster layer, and list of raster names
+#' @export
+extractPointValues <- function(env.list){
+
+  if (!requireNamespace("raster", quietly = TRUE)){
+    warning("The raster package must be installed to use this functionality")
+    return(NULL)
+  }
+
+  if(!requireNamespace("sp", quietly = TRUE)){
+    warning("The sp package must be installed to use this functionality")
+    return(NULL)
+  }
+
+  if(!requireNamespace("dismo", quietly = TRUE)){
+    warning("The dismo package must be installed to use this functionality")
+    return(NULL)
+  }
+
+  if(!requireNamespace("rJava", quietly = TRUE)){
+    warning("The rJava package must be installed to use this functionality")
+    return(NULL)
+  }
+
+  if(!requireNamespace("ENMeval", quietly = TRUE)){
+    warning("The ENMeval package must be installed to use this functionality")
+    return(NULL)
+  }
+
+
+  envs.cropped <- env.list[[1]]
+  p <- env.list[[4]]
+  inds <- env.list[[6]]
+
+  raster.points <- list()
+
+  writeLines("\nExtracting raster values at sample points")
+
+  # Extract raster values at each sample point.
+  for (i in 1:raster::nlayers(envs.cropped)){
+    raster.points[[i]] <- raster::extract(envs.cropped[[i]], p)
+  }
+
+  writeLines("\nAdding sampleIDs to raster dataframe")
+
+  # Add sample IDs to point/raster value dataframe.
+  rp.df <- lapply(raster.points,
+                  function(x) {
+                    cbind.data.frame(
+                      inds,
+                      raster::coordinates(p),
+                      x
+                    )
+                  }
+  )
+
+  rasterNames <- env.list[[1]]@data@names
+
+  # Use raster name as x colname
+  for (i in 1:length(rasterNames)){
+    colnames(rp.df[[i]]) <- c("inds", "lng", "lat", rasterNames[i])
+  }
+
+  rm(raster.points)
+  gc(verbose = FALSE)
+
+  # Get which samples are on NA raster values.
+  test4na <- lapply(rp.df, function(x) x[raster::rowSums(is.na(x)) > 0,])
+
+  # If some samples are on NA raster values: Print them and stop with error.
+  allEmpty <- lapply(test4na, function(x) nrow(x) == 0)
+  allEmpty <- unlist(allEmpty)
+
+  if(!all(allEmpty)){
+    writeLines("\n\nThe following samples are located on NA raster values:\n")
+    print(test4na)
+    stop("The above samples have NA raster values. Please remove the them.")
+  }
+
+  rm(test4na)
+  gc(verbose = FALSE)
+
+  return(rp.df)
 }
