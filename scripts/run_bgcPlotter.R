@@ -14,11 +14,10 @@ admixPop <- args[2]
 bgc.genes <-
   combine_bgc_output(results.dir = "../../bgc_results_genes/",
                                      prefix = prefix,
-                                     discard = 2500)
+                                     discard = 3000)
 
-plot_lnl(df.list = bgc.genes,
+plot_traces(df.list = bgc.genes,
          prefix = prefix,
-         thin = 40,
          plotDIR = "../../plots")
 
 gene.outliers <-
@@ -34,11 +33,10 @@ gc()
 
 bgc.full <-
   combine_bgc_output(results.dir = "../../bgc_results_full/",
-                     prefix = prefix, discard = 2500)
+                     prefix = prefix, discard = 3000)
 
-plot_lnl(df.list = bgc.full,
+plot_traces(df.list = bgc.full,
          prefix = paste0(prefix, "_full"),
-         thin = 40,
          plotDIR = "../../plots")
 
 full.outliers <-
