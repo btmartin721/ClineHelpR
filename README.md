@@ -224,7 +224,10 @@ The plot will be saved in plotDIR.
 
 Here are some examples that plot_traces() makes:
 
-<img src="vignettes/LnL_convergence.png" width="50%">
+<img src="vignettes/LnL_convergence.png" width="50%">  
+
+<img src="vignettes/alphaTrace.png", width=50%>
+
 
 Here we aggregated five BGC runs with 2,000 samples each. You can see that all five converged.
 
