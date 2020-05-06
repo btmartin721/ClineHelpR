@@ -7,7 +7,9 @@ The package allows you to make several plots.
 
 ## Dependencies
 
-ClinePlotR has several dependencies:
+ClinePlotR has several dependencies. 
+
+The bgcPlotter functions require:
 
 * data.table
 * dplyr
@@ -28,6 +30,11 @@ The environmental functions require:
 * sp
 * dismo
 
+The INTROGRESS functions require:  
+* introgress
+* ggplot2
+* dplyr
+* scales
 
 ## Installing the Package
 
@@ -201,22 +208,21 @@ This will discard the first 2500 samples from **each run**. So if like in the ex
 
 One reason to use this is if you notice that the runs converged e.g. 2500 samples post-burnin. In this case you could just discard the non-converged portions of the runs.
 
-#### Plot Log-likelihood Traces
+#### Plot BGC Parameter Traces
 
-It is **strongly** recommended to inspect the LnL traces if you are aggregating the runs. You can do this with the plot_lnl() function.
+It is **strongly** recommended to inspect the traces if you are aggregating the runs. You can do this with the plot_traces() function.
 
 ```
-plot_lnl(df.list = bgc.genes,
+plot_traces(df.list = bgc.genes,
          prefix = "population1",
-         thin = 40,
          plotDIR = "./plots")
 ```
 
 This function uses the object created with combine_bgc_output().
 
-The thinning parameter is what you used with BGC, and the plot will be saved in plotDIR.
+The plot will be saved in plotDIR.
 
-Here are some examples that plot_lnl makes:
+Here are some examples that plot_traces() makes:
 
 <img src="vignettes/LnL_convergence.png" width="50%">
 
