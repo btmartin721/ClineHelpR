@@ -35,6 +35,12 @@
 #'                                This must be loci aligned to full scaffolds
 #' @param pafInfo Path to *.scaffolds.tdt file output from PAFScaff
 #' @param plotDIR Directory to save output plots
+#' @param both.outlier.tests Boolean; If TRUE, outliers must meet both the
+#'                           overlap.zero and qn.interval criteria
+#' @param overlap.zero Boolean; If TRUE, outliers are SNPs whose credible
+#'                     interval does not contain zero
+#' @param qn.interval Boolean; If TRUE, outliers fall outside the quantile
+#'                    interval qn/2 and 1-qn/2
 #' @param missing.chrs If specified, must be character vector of missing
 #'                     chromosome names. Chromosome numbers should be prefixed
 #'                     with "chr". I.e., c("chr3", "chr6"). If some chromosomes
@@ -61,7 +67,8 @@
 #'                       outliers.genes.annotated = outliers.genes.annotated,
 #'                       outliers.full.scaffolds = outliers.full.scaffolds,
 #'                       pafInfo = "./population1.scaffolds.tdt",
-#'                       plotDIR = "./plots")
+#'                       plotDIR = "./plots",
+#'                       both.outlier.tests = TRUE,
 #'                       missing.chrs = c("chr11", "chr21", "chr25"),
 #'                       miss.chr.length = c(4997863, 1374423, 1060959),
 #'                       gene.size = 1e6,
@@ -74,6 +81,9 @@ plot_outlier_ideogram <- function(prefix,
                                   outliers.full.scaffolds,
                                   pafInfo,
                                   plotDIR = "./plots",
+                                  both.outlier.tests = FALSE,
+                                  overlap.zero = TRUE,
+                                  qn.interval = TRUE,
                                   missing.chrs = NULL,
                                   miss.chr.length = NULL,
                                   gene.size = 5e5,
@@ -216,7 +226,7 @@ plot_outlier_ideogram <- function(prefix,
   # Make input objects for RIdeogram.
   # This one is for genes only.
   # Made the genes bigger than the genomic loci for clarity.
-  # Added 5e5 length to each SNP.
+  # Added gene.size length to each SNP.
   # Do both alpha and beta outliers.
   heatmap.alpha <-
       data.frame(
@@ -250,10 +260,52 @@ plot_outlier_ideogram <- function(prefix,
   # Get positions of actual SNPs.
   ref.merged$snpPOS <- ref.merged$RefStart + ref.merged$POS
 
-  # Subset extreme outliers
-  # (had both alpha excess AND was alpha outlier. Likewise for beta)
-  ref.merged.alpha <- ref.merged[ref.merged$crazy.a == TRUE,]
-  ref.merged.beta <- ref.merged[ref.merged$crazy.b == TRUE,]
+  if (both.outlier.tests){
+
+    overlap.zero = FALSE
+    qn.interval = FALSE
+
+    writeLines("\n\nboth.outlier.tests is TRUE.")
+    writeLines("Ignoring overlap.zero qn.interval settings\n")
+
+    # Subset extreme outliers
+    # (had both alpha excess AND was alpha outlier. Likewise for beta)
+    ref.merged.alpha <- ref.merged[ref.merged$crazy.a == TRUE,]
+    ref.merged.beta <- ref.merged[ref.merged$crazy.b == TRUE,]
+
+    if (nrow(ref.merged.alpha) == 0){
+      stop("No alpha outliers in full dataset. Set both.outlier.tests = FALSE")
+    }
+
+    if (nrow(ref.merged.beta) == 0){
+      stop("No beta outliers in full dataset. Set both.outlier.tests = FALSE.")
+    }
+  }
+
+  # TRUE if alpha/beta excess/outliers.
+  if (overlap.zero & qn.interval){
+    ref.merged.alpha <-
+      ref.merged[(!is.na(ref.merged$alpha.excess) |
+                   !is.na(ref.merged$alpha.outlier)),]
+    ref.merged.beta <-
+      ref.merged[(!is.na(ref.merged$beta.excess) |
+                    !is.na(ref.merged$beta.outlier)),]
+
+  } else if (overlap.zero & !qn.interval){
+      ref.merged.alpha <- ref.merged[!is.na(ref.merged$alpha.excess),]
+      ref.merged.beta <- ref.merged[!is.na(ref.merged$beta.excess),]
+
+  } else if (!overlap.zero & qn.interval){
+      ref.merged.alpha <- ref.merged[!is.na(ref.merged$alpha.outlier),]
+      ref.merged.beta <- ref.merged[!is.na(ref.merged$beta.outlier),]
+  } else if (!overlap.zero & !qn.interval & !both.outlier.tests){
+    writeLines("Warning: overlap.zero, qn.interval, and both.outlier.tests")
+    writeLines("were all FALSE. Setting both.outlier.tests to TRUE")
+    # Subset extreme outliers
+    # (had both alpha excess AND was alpha outlier. Likewise for beta)
+    ref.merged.alpha <- ref.merged[ref.merged$crazy.a == TRUE,]
+    ref.merged.beta <- ref.merged[ref.merged$crazy.b == TRUE,]
+  }
 
   # Remove rows with NA in snpPOS. NAs caused issues with RIdeogram.
   ref.merged.alpha <- ref.merged.alpha[!is.na(ref.merged.alpha$snpPOS),]

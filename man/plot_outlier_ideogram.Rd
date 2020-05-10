@@ -10,6 +10,9 @@ plot_outlier_ideogram(
   outliers.full.scaffolds,
   pafInfo,
   plotDIR = "./plots",
+  both.outlier.tests = FALSE,
+  overlap.zero = TRUE,
+  qn.interval = TRUE,
   missing.chrs = NULL,
   miss.chr.length = NULL,
   gene.size = 5e+05,
@@ -29,6 +32,15 @@ This must be loci aligned to full scaffolds}
 \item{pafInfo}{Path to *.scaffolds.tdt file output from PAFScaff}
 
 \item{plotDIR}{Directory to save output plots}
+
+\item{both.outlier.tests}{Boolean; If TRUE, outliers must meet both the
+overlap.zero and qn.interval criteria}
+
+\item{overlap.zero}{Boolean; If TRUE, outliers are SNPs whose credible
+interval does not contain zero}
+
+\item{qn.interval}{Boolean; If TRUE, outliers fall outside the quantile
+interval qn/2 and 1-qn/2}
 
 \item{missing.chrs}{If specified, must be character vector of missing
 chromosome names. Chromosome numbers should be prefixed
@@ -93,7 +105,8 @@ plot_outlier_ideogram(prefix = "population1",
                       outliers.genes.annotated = outliers.genes.annotated,
                       outliers.full.scaffolds = outliers.full.scaffolds,
                       pafInfo = "./population1.scaffolds.tdt",
-                      plotDIR = "./plots")
+                      plotDIR = "./plots",
+                      both.outlier.tests = TRUE,
                       missing.chrs = c("chr11", "chr21", "chr25"),
                       miss.chr.length = c(4997863, 1374423, 1060959),
                       gene.size = 1e6,

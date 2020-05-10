@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+library("ClinePlotR")
+
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) != 2) {
@@ -10,15 +12,19 @@ if (length(args) != 2) {
 
 prefix <- args[1]
 admixPop <- args[2]
+plotDIR <- "../../plots_final"
+genesDIR <- "../../bgc_results_genes"
+fullDIR <-
+  "D:/Dissertation/BOX/bgc_annotations/full_dataset/bgc_results_full/"
 
 bgc.genes <-
-  combine_bgc_output(results.dir = "../../bgc_results_genes/",
+  combine_bgc_output(results.dir = genesDIR,
                                      prefix = prefix,
-                                     discard = 3000)
+                                     discard = 2500)
 
 plot_traces(df.list = bgc.genes,
          prefix = prefix,
-         plotDIR = "../../plots")
+         plotDIR = plotDIR)
 
 gene.outliers <-
   get_bgc_outliers(
@@ -32,19 +38,19 @@ rm(bgc.genes)
 gc()
 
 bgc.full <-
-  combine_bgc_output(results.dir = "../../bgc_results_full/",
-                     prefix = prefix, discard = 3000)
+  combine_bgc_output(results.dir = fullDIR,
+                     prefix = prefix, discard = 2500)
 
 plot_traces(df.list = bgc.full,
          prefix = paste0(prefix, "_full"),
-         plotDIR = "../../plots")
+         plotDIR = plotDIR)
 
 full.outliers <-
   get_bgc_outliers(
     df.list = bgc.full,
     admix.pop = admixPop,
     popmap = file.path("../../popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
-    loci.file = file.path("../../bgc_results_full/",
+    loci.file = file.path(fullDIR,
                           paste0(prefix, "_bgc_loci.txt"))
   )
 
@@ -55,8 +61,8 @@ phiPlot(outlier.list = gene.outliers,
         popname = paste0(admixPop, " Genes"),
         line.size = 0.25,
         saveToFile = paste0(prefix, "_genes"),
-        plotDIR = "../../plots/",
-        both.outlier.tests = TRUE,
+        plotDIR = plotDIR,
+        both.outlier.tests = FALSE,
         hist.y.origin = 1.2,
         hist.height = 1.8,
         margins = c(160.0, 5.5, 5.5, 5.5),
@@ -68,8 +74,8 @@ phiPlot(outlier.list = full.outliers,
         popname = paste0(admixPop, " All"),
         line.size = 0.25,
         saveToFile = paste0(prefix, "_genome"),
-        plotDIR = "../../plots/",
-        both.outlier.tests = TRUE,
+        plotDIR = plotDIR,
+        both.outlier.tests = FALSE,
         hist.y.origin = 1.2,
         hist.height = 1.8,
         margins = c(160.0, 5.5, 5.5, 5.5),
@@ -91,7 +97,18 @@ plot_outlier_ideogram(
   outliers.genes = genes.annotated,
   outliers.full.scaffolds = full.outliers,
   pafInfo = "../../pafscaff/refmap_asm20_scafTrans_pafscaff.scaffolds.tdt",
-  plotDIR = "../../plots",
+  plotDIR = plotDIR,
   missing.chrs = c("chr11", "chr21", "chr25"),
-  miss.chr.length = c(4997863, 1374423, 1060959)
+  miss.chr.length = c(4997863, 1374423, 1060959),
+  gene.size = 1e6,
+  both.outlier.tests = FALSE
+)
+
+write.table(
+  genes.annotated,
+  file = file.path(plotDIR, paste0(prefix, "_genesAnnotated.csv")),
+  quote = FALSE,
+  row.names = FALSE,
+  col.names = TRUE,
+  sep = ","
 )
