@@ -34,6 +34,9 @@ genind2introgress <- function(
 	subset=NULL,
 	drop=TRUE
 ){
+	
+	ret<-list()
+	
 	all_pops<-c(popA, popB, admix)
 	
 	#drop individuals not in selected pops
@@ -50,6 +53,14 @@ genind2introgress <- function(
 	if (!is.null(subset)){
 		sub<-filter_randomSubsetLoci(sub, sample=subset)
 	}
+	
+	#begin parsing remaining data to create inputs for introgress 
+	#set up loci information table ()
+	loci.data<-data.frame(cbind(c(names(genind$loc.n.all)), genind$type), stringsAsFactors = FALSE)
+	colnames(loci.data)<-c("locus", "type")
+	loci.data[loci.data["type"]=="codom", "type"]<-"C"
+	loci.data[loci.data["type"]=="dom", "type"]<-"D"
+	#print(loci.data)
 }
 
 ###############################################
