@@ -26,8 +26,8 @@
 #'                                         discard = 2000)
 genind2introgress <- function(
 	genind,
-	popA,
-	popB,
+	p1,
+	p2,
 	admix,
 	missingPerLoc=0.5,
 	missingPerInd=0.5,
@@ -37,7 +37,7 @@ genind2introgress <- function(
 	
 	ret<-list()
 	
-	all_pops<-c(popA, popB, admix)
+	all_pops<-c(p1, p2, admix)
 	
 	#drop individuals not in selected pops
 	sub<-genind[pop(genind) %in% all_pops,]
@@ -60,7 +60,19 @@ genind2introgress <- function(
 	colnames(loci.data)<-c("locus", "type")
 	loci.data[loci.data["type"]=="codom", "type"]<-"C"
 	loci.data[loci.data["type"]=="dom", "type"]<-"D"
-	#print(loci.data)
+	
+	#genotype tables for p1
+	p1_genind<-sub[pop(sub) %in% p1,]
+	p1.data<-adegenet::genind2df(p1_genind, sep="/")
+	p1.data<-subset(p1.data, select=-c(pop))
+	p1.data[is.na(p1.data)] <- "NA/NA"
+	
+	#genotype tables for p2
+	p2_genind<-sub[pop(sub) %in% p2,]
+	p2.data<-adegenet::genind2df(p2_genind, sep="/")
+	p2.data<-subset(p2.data, select=-c(pop))
+	p2.data[is.na(p2.data)] <- "NA/NA"
+	
 }
 
 ###############################################
@@ -86,8 +98,8 @@ filter_randomSubsetLoci<-function(genind, sample){
 
 library(adegenet)
 data(nancycats)
-dat<-genind2introgress(nancycats, popA=c("P01", "P02", "P03"), 
-                      popB=c("P15", "P14", "P13"), 
+dat<-genind2introgress(nancycats, p1=c("P01", "P02", "P03"), 
+                      p2=c("P15", "P14", "P13"), 
                       admix=c("P10", "P11", "P09"),
                       missingPerInd=0.5, missingPerLoc=0.5,
                       subset=5)
