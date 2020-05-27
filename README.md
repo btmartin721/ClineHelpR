@@ -21,6 +21,7 @@ The bgcPlotter functions require:
 * gtools
 * RIdeogram
 * gdata
+* adegenet
 
 The environmental functions require:
 
