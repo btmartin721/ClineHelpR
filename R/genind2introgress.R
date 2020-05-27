@@ -92,28 +92,22 @@ genind2introgress <- function(
 ###############################################
 #Utility functions
 filter_missingByLoc<-function(gen, prop=0.5){
-	missing<-propTyped(gen, by="loc")
+	missing<-adegenet::propTyped(gen, by="loc")
 	#print(genind[loc=c(missing>prop)])
 	return(gen[loc=c(missing>prop)])
 }
 
 filter_missingByInd<-function(gen, prop=0.5, drop=TRUE){
-	missing<-propTyped(gen, by="ind")
+	missing<-adegenet::propTyped(gen, by="ind")
 	#print(missing>prop)
 	return(gen[c(missing>prop), drop=drop])
 }
 
 filter_randomSubsetLoci<-function(gen, sample){
-	if (sample < nLoc(gen)){
-		locs <- sort(sample(1:nLoc(gen), sample, replace=FALSE))
+	loc<-adegenet::nLoc(gen)
+	if (sample < loc){
+		locs <- sort(sample(1:loc, sample, replace=FALSE))
 		return(gen[loc=c(locs)])
 	}
 }
 
-library(adegenet)
-data(nancycats)
-dat<-genind2introgress(nancycats, p1=c("P01", "P02", "P03"), 
-                      p2=c("P15", "P14", "P13"), 
-                      admix=c("P10", "P11", "P09"),
-                      missingPerInd=0.5, missingPerLoc=0.5,
-                      subset=5)
