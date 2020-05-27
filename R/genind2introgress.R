@@ -76,6 +76,17 @@ genind2introgress <- function(
 	p2.data[is.na(p2.data)] <- "NA/NA"
 	
 	#genotype table for admix population
+	admix_genind<-sub[pop(sub) %in% admix,]
+	admix.data<-adegenet::genind2df(admix_genind, sep="/")
+	pop<-admix.data$pop
+	admix.data<-subset(admix.data, select=-c(pop))
+	admix.data[is.na(admix.data)] <- "NA/NA"
+	admix.data <- rbind(pop, row.names(admix.data), admix.data)
+	
+	#aggregate dataframes and return
+	df.list <- c(loci.data, p1.data, p2.data, admix.data)
+	names(df.list) <- c("loci.data", "p1.data", "p2.data", "admix.data")
+	return(df.list)
 }
 
 ###############################################
@@ -89,7 +100,7 @@ filter_missingByLoc<-function(gen, prop=0.5){
 filter_missingByInd<-function(gen, prop=0.5, drop=TRUE){
 	missing<-propTyped(gen, by="ind")
 	#print(missing>prop)
-	return(genind[c(missing>prop), drop=drop])
+	return(gen[c(missing>prop), drop=drop])
 }
 
 filter_randomSubsetLoci<-function(gen, sample){
