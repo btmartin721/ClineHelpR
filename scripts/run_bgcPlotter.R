@@ -12,15 +12,14 @@ if (length(args) != 2) {
 
 prefix <- args[1]
 admixPop <- args[2]
-plotDIR <- "../../plots_final"
+plotDIR <- "../../plots_maf"
 genesDIR <- "../../bgc_results_genes"
 fullDIR <-
   "D:/Dissertation/BOX/bgc_annotations/full_dataset/bgc_results_full/"
 
 bgc.genes <-
   combine_bgc_output(results.dir = genesDIR,
-                                     prefix = prefix,
-                                     discard = 2500)
+                                     prefix = prefix)
 
 plot_traces(df.list = bgc.genes,
          prefix = prefix,
@@ -31,7 +30,7 @@ gene.outliers <-
     df.list = bgc.genes,
     admix.pop = admixPop,
     popmap = file.path("../../popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
-    loci.file = file.path("../../loci_files/", paste0(prefix, "_bgc_loci.txt"))
+    loci.file = file.path("../../data_vcf_maf/", paste0(prefix, "_bgc_loci.txt"))
   )
 
 rm(bgc.genes)
@@ -53,6 +52,32 @@ full.outliers <-
     loci.file = file.path(fullDIR,
                           paste0(prefix, "_bgc_loci.txt"))
   )
+
+ab.range <-
+  data.frame(
+    "full.alpha" = c(
+      "min" = min(full.outliers[[1]]$alpha),
+      "max" = max(full.outliers[[1]]$alpha)
+    ),
+    "full.beta" = c(
+      "min" = min(full.outliers[[1]]$beta),
+      "max" = max(full.outliers[[1]]$beta)
+    ),
+    "genes.alpha" = c(
+      "min" = min(gene.outliers[[1]]$alpha),
+      "max" = max(gene.outliers[[1]]$alpha)
+    ),
+    "genes.beta" = c(min(gene.outliers[[1]]$beta), max(gene.outliers[[1]]$beta))
+  )
+
+write.table(
+  data.frame("Header" = rownames(ab.range), ab.range),
+  file = file.path(plotDIR, paste0(prefix, "_ab.ranges.csv")),
+  sep = ",",
+  row.names = F,
+  col.names = T,
+  quote = F
+)
 
 rm(bgc.full)
 gc()

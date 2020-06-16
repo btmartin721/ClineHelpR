@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 
+library("ClinePlotR")
+
 rasterDIR <- "../../../../Dissertation/BOX/gis/bioclim_R"
 dataDIR <- "../../../../Dissertation/BOX/introgress/"
 
@@ -55,8 +57,9 @@ clinesXenvironment(
   clineLabels = c("EA", "Het", "GU"),
   outputDIR = file.path(dataDIR, "outputFiles", "EAGU"),
   clineMethod = "permutation",
-  prefix = "EAGU"
-)
+  prefix = "EAGU",
+  cor.method = "spearman")
+
 
 dir.create(file.path(dataDIR, "rawRoutput"), showWarnings = FALSE)
 saveRDS(eagu, file = file.path(dataDIR, "rawRoutput", "eagu_introgress.rds"))
@@ -94,7 +97,8 @@ clinesXenvironment(
   clineLabels = c("EA", "Het", "TT"),
   outputDIR = file.path(dataDIR, "outputFiles", "EATT"),
   clineMethod = "permutation",
-  prefix = "EATT"
+  prefix = "EATT",
+  cor.method = "spearman"
 )
 
 #########################################################
@@ -131,7 +135,7 @@ clinesXenvironment(
   outputDIR = file.path(dataDIR, "outputFiles", "GUTT"),
   clineMethod = "permutation",
   prefix = "GUTT",
-  cor.method = "auto"
+  cor.method = "spearman"
 )
 
 
