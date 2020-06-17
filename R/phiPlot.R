@@ -28,6 +28,10 @@
 #'                           Default = "black"
 #' @param neutral.line.size Size for dashed linear line showing mean.
 #'                          Default = 1.0
+#' @param zero.line Boolean to include linear line for alpha=0 and beta=0.
+#'                  Default = TRUE
+#' @param zero.linetype Character string to set linetype for zero.line.
+#'                      Default = "dashed"
 #' @param alpha.color Color for alpha outlier loci. Default = "blue"
 #' @param beta.color Color for beta outlier loci. Default = "red"
 #' @param margins Vector of margins for phi plot: c(Top, Right, Bottom, Left)
@@ -76,6 +80,8 @@ phiPlot <- function(outlier.list,
                     neutral.color = "gray",
                     neutral.line.color = "black",
                     neutral.line.size = 1.0,
+                    zero.line = TRUE,
+                    zero.linetype = "dashed",
                     alpha.color = "blue",
                     beta.color = "red",
                     margins = c(150.0, 5.5, 5.5, 5.5),
@@ -267,7 +273,7 @@ phiPlot <- function(outlier.list,
            ordered = TRUE)
 
   ### Combined alpha and beta plot.
-  alpha.beta.plot <- ggplot2::ggplot(hi.final) +
+  phi.plot <- ggplot2::ggplot(hi.final) +
     ggplot2::geom_smooth(
       ggplot2::aes(hi,
                    phi01,
@@ -307,14 +313,21 @@ phiPlot <- function(outlier.list,
         "Beta Outliers"
       )
     ) +
-    ggplot2::ggtitle(label = paste0(popname, " Alpha and Beta")) +
-    ggplot2::geom_smooth(ggplot2::aes(hi, phi01), hi.final, formula = y ~ x,
-      method = "lm",
-      se = FALSE,
-      color = neutral.line.color,
-      size = neutral.line.size,
-      linetype = "dashed"
-    )
+    ggplot2::ggtitle(label = paste0(popname, " Phi Plot"))
+
+  if (zero.line == TRUE) {
+    phi.plot <-
+      phi.plot + ggplot2::geom_smooth(
+        ggplot2::aes(hi, phi01),
+        hi.final,
+        formula = y ~ x,
+        method = "lm",
+        se = FALSE,
+        size = neutral.line.size,
+        color = neutral.line.color,
+        linetype = zero.linetype
+      )
+  }
 
 
   # Make histogram plot of Hybrid Indices
@@ -344,7 +357,7 @@ phiPlot <- function(outlier.list,
   rm(hi.final)
   gc()
 
-  alpha.beta.plot <- alpha.beta.plot +
+  phi.plot <- phi.plot +
     ggplot2::annotation_custom(
       ggplot2::ggplotGrob(hg),
       xmin = hist.x.origin,
@@ -360,7 +373,7 @@ phiPlot <- function(outlier.list,
 
     ggplot2::ggsave(
       filename = paste0(saveToFile, "_hiXphi_alphaAndBeta.pdf"),
-      plot = alpha.beta.plot,
+      plot = phi.plot,
       device = device,
       plotDIR,
       width = phi.width,
@@ -371,7 +384,7 @@ phiPlot <- function(outlier.list,
 
   } else{
     # If saveToFile is not specified by user.
-    print(alpha.beta.plot)
+    print(phi.plot)
   }
 
   gc()
