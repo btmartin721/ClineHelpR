@@ -123,15 +123,23 @@ phiPlot <- function(outlier.list,
         (!is.na(snps$alpha.excess) | !is.na(snps$alpha.outlier))
       snps$beta.signif <-
         (!is.na(snps$beta.excess) | !is.na(snps$beta.outlier))
+
   } else if (overlap.zero & !qn.interval){
       snps$alpha.signif <- (!is.na(snps$alpha.excess))
       snps$beta.signif <- (!is.na(snps$beta.excess))
+
   } else if (!overlap.zero & qn.interval){
       snps$alpha.signif <- (!is.na(snps$alpha.outlier))
       snps$beta.signif <- (!is.na(snps$beta.outlier))
+
   } else if (!overlap.zero & !qn.interval & !both.outlier.tests){
-      writeLines("Warning: overlap.zero, qn.interval, and both.outlier.tests were
-          all FALSE. Setting both.outlier.tests to TRUE")
+    mywarning <-
+      paste(
+        "\n\noverlap.zero, qn.interval, and both.outlier.tests",
+        "were all FALSE. Setting both.outlier.tests to TRUE\n\n"
+      )
+      warning(paste(strwrap(mywarning), collapse = "\n"))
+
       snps$alpha.signif <-
         snps$crazy.a == TRUE
 
@@ -145,14 +153,18 @@ phiPlot <- function(outlier.list,
   # If there aren't any alpha or beta outliers.
   if (all(snps$alpha.signif == FALSE)){
     isAlphaOutliers <- FALSE
-    writeLines("\n\nWarning: No alpha outliers were identified!")
-    writeLines("\n\nTry setting both.outlier.tests to FALSE")
+    warning("\n\nWarning: No alpha outliers were identified.\n")
+    if (both.outlier.tests){
+      writeLines("\n\nTry setting both.outlier.tests to FALSE")
+    }
   }
 
-  if (all(snps$beta.signif == FALSE) & both.outlier.tests){
+  if (all(snps$beta.signif == FALSE)){
     isBetaOutliers <- FALSE
-    writeLines("\n\nWarning: No beta outliers were identified!")
-    writeLines("\n\nTry setting both.outlier.tests to FALSE")
+    warning("\n\nWarning: No beta outliers were identified.\n\n")
+    if (both.outlier.tests){
+      writeLines("\n\nTry setting both.outlier.tests to FALSE")
+    }
   }
 
   hilist <- list()

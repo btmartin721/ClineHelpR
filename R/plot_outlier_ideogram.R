@@ -298,9 +298,15 @@ plot_outlier_ideogram <- function(prefix,
   } else if (!overlap.zero & qn.interval){
       ref.merged.alpha <- ref.merged[!is.na(ref.merged$alpha.outlier),]
       ref.merged.beta <- ref.merged[!is.na(ref.merged$beta.outlier),]
+
   } else if (!overlap.zero & !qn.interval & !both.outlier.tests){
-    writeLines("Warning: overlap.zero, qn.interval, and both.outlier.tests")
-    writeLines("were all FALSE. Setting both.outlier.tests to TRUE")
+    mywarning <-
+      paste(
+        "\n\noverlap.zero, qn.interval, and both.outlier.tests",
+        "were all FALSE. Setting both.outlier.tests to TRUE\n\n"
+      )
+    warning(paste(strwrap(mywarning), collapse = "\n"))
+
     # Subset extreme outliers
     # (had both alpha excess AND was alpha outlier. Likewise for beta)
     ref.merged.alpha <- ref.merged[ref.merged$crazy.a == TRUE,]
