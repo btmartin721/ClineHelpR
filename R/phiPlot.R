@@ -24,6 +24,10 @@
 #'                saved in this directory
 #' @param device File format to save plot. Supports ggplot2::ggsave devices
 #' @param neutral.color Color for non-outlier loci. Default = "gray"
+#' @param neutral.line.color Color for dashed linear line showing mean
+#'                           Default = "black"
+#' @param neutral.line.size Size for dashed linear line showing mean.
+#'                          Default = 1.0
 #' @param alpha.color Color for alpha outlier loci. Default = "blue"
 #' @param beta.color Color for beta outlier loci. Default = "red"
 #' @param margins Vector of margins for phi plot: c(Top, Right, Bottom, Left)
@@ -70,6 +74,8 @@ phiPlot <- function(outlier.list,
                     plotDIR = "./plots",
                     device = "pdf",
                     neutral.color = "gray",
+                    neutral.line.color = "black",
+                    neutral.line.size = 1.0,
                     alpha.color = "blue",
                     beta.color = "red",
                     margins = c(150.0, 5.5, 5.5, 5.5),
@@ -289,7 +295,14 @@ phiPlot <- function(outlier.list,
         "Beta Outliers"
       )
     ) +
-    ggplot2::ggtitle(label = paste0(popname, " Alpha and Beta"))
+    ggplot2::ggtitle(label = paste0(popname, " Alpha and Beta")) +
+    ggplot2::geom_smooth(ggplot2::aes(hi, phi01), hi.final, formula = y ~ x,
+      method = "lm",
+      se = FALSE,
+      color = neutral.line.color,
+      size = neutral.line.size,
+      linetype = "dashed"
+    )
 
 
   # Make histogram plot of Hybrid Indices

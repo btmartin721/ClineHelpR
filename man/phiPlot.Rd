@@ -15,6 +15,8 @@ phiPlot(
   plotDIR = "./plots",
   device = "pdf",
   neutral.color = "gray",
+  neutral.line.color = "black",
+  neutral.line.size = 1,
   alpha.color = "blue",
   beta.color = "red",
   margins = c(150, 5.5, 5.5, 5.5),
@@ -61,6 +63,12 @@ saved in this directory}
 \item{device}{File format to save plot. Supports ggplot2::ggsave devices}
 
 \item{neutral.color}{Color for non-outlier loci. Default = "gray"}
+
+\item{neutral.line.color}{Color for dashed linear line showing mean
+Default = "black"}
+
+\item{neutral.line.size}{Size for dashed linear line showing mean.
+Default = 1.0}
 
 \item{alpha.color}{Color for alpha outlier loci. Default = "blue"}
 

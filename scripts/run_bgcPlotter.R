@@ -15,7 +15,7 @@ admixPop <- args[2]
 plotDIR <- "../plots_maf"
 genesDIR <- "../bgcPlotter/bgc_results_genes"
 fullDIR <-
-  "D:/Dissertation/BOX/bgc_annotations/full_dataset/bgc_results_full/"
+  "../bgcPlotter/bgc_results_full/"
 
 bgc.genes <-
   combine_bgc_output(results.dir = genesDIR,
@@ -30,7 +30,7 @@ gene.outliers <-
     df.list = bgc.genes,
     admix.pop = admixPop,
     popmap = file.path("../bgcPlotter/popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
-    loci.file = file.path("../bgcPlotter/data_vcf_maf/", paste0(prefix, "_bgc_loci.txt"))
+    loci.file = file.path("../bgcPlotter/data_vcf_maf_genes/", paste0(prefix, "_bgc_loci.txt"))
   )
 
 rm(bgc.genes)
@@ -38,7 +38,7 @@ gc()
 
 bgc.full <-
   combine_bgc_output(results.dir = fullDIR,
-                     prefix = prefix, discard = 2500)
+                     prefix = prefix)
 
 plot_traces(df.list = bgc.full,
          prefix = paste0(prefix, "_full"),
@@ -48,8 +48,8 @@ full.outliers <-
   get_bgc_outliers(
     df.list = bgc.full,
     admix.pop = admixPop,
-    popmap = file.path("../../popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
-    loci.file = file.path(fullDIR,
+    popmap = file.path("../bgcPlotter/popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
+    loci.file = file.path("../bgcPlotter/data_vcf_maf_full/",
                           paste0(prefix, "_bgc_loci.txt"))
   )
 
@@ -84,7 +84,7 @@ gc()
 
 phiPlot(outlier.list = gene.outliers,
         popname = paste0(admixPop, " Genes"),
-        line.size = 0.25,
+        line.size = 0.4,
         saveToFile = paste0(prefix, "_genes"),
         plotDIR = plotDIR,
         both.outlier.tests = FALSE,
@@ -100,10 +100,13 @@ gc()
 
 phiPlot(outlier.list = full.outliers,
         popname = paste0(admixPop, " All"),
-        line.size = 0.25,
+        line.size = 0.2,
         saveToFile = paste0(prefix, "_genome"),
         plotDIR = plotDIR,
         both.outlier.tests = FALSE,
+        neutral.color = "gray60",
+        alpha.color = "cornflowerblue",
+        beta.color = "firebrick",
         hist.y.origin = 1.2,
         hist.height = 1.8,
         margins = c(160.0, 5.5, 5.5, 5.5),
@@ -111,7 +114,7 @@ phiPlot(outlier.list = full.outliers,
 
 gc()
 
-gff <- parseGFF(gff.filepath = "../../gff/genes.gff")
+gff <- parseGFF(gff.filepath = "../bgcPlotter/gff/genes.gff")
 
 
 genes.annotated <-
