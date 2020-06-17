@@ -189,6 +189,7 @@ phiPlot <- function(outlier.list,
   for (i in 1:length(hilist)){
     hilist[[i]]$phi01 <- range01(hilist[[i]]$phi)
   }
+
   gc()
 
   # Reorder by hybrid index.

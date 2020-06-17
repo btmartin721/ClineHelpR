@@ -17,6 +17,8 @@ phiPlot(
   neutral.color = "gray",
   neutral.line.color = "black",
   neutral.line.size = 1,
+  zero.line = TRUE,
+  zero.linetype = "dashed",
   alpha.color = "blue",
   beta.color = "red",
   margins = c(150, 5.5, 5.5, 5.5),
@@ -69,6 +71,12 @@ Default = "black"}
 
 \item{neutral.line.size}{Size for dashed linear line showing mean.
 Default = 1.0}
+
+\item{zero.line}{Boolean to include linear line for alpha=0 and beta=0.
+Default = TRUE}
+
+\item{zero.linetype}{Character string to set linetype for zero.line.
+Default = "dashed"}
 
 \item{alpha.color}{Color for alpha outlier loci. Default = "blue"}
 
