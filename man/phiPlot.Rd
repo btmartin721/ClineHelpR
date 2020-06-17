@@ -15,7 +15,8 @@ phiPlot(
   plotDIR = "./plots",
   device = "pdf",
   neutral.color = "gray",
-  outlier.color = "black",
+  alpha.color = "blue",
+  beta.color = "red",
   margins = c(150, 5.5, 5.5, 5.5),
   margin.units = "points",
   phi.height = 7,
@@ -61,7 +62,9 @@ saved in this directory}
 
 \item{neutral.color}{Color for non-outlier loci. Default = "gray"}
 
-\item{outlier.color}{Color for outlier loci. Default = "black"}
+\item{alpha.color}{Color for alpha outlier loci. Default = "blue"}
+
+\item{beta.color}{Color for beta outlier loci. Default = "red"}
 
 \item{margins}{Vector of margins for phi plot: c(Top, Right, Bottom, Left)
 Top is extended to include the Hybrid Index histogram}

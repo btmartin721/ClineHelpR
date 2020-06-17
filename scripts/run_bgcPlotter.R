@@ -12,8 +12,8 @@ if (length(args) != 2) {
 
 prefix <- args[1]
 admixPop <- args[2]
-plotDIR <- "../../plots_maf"
-genesDIR <- "../../bgc_results_genes"
+plotDIR <- "../plots_maf"
+genesDIR <- "../bgcPlotter/bgc_results_genes"
 fullDIR <-
   "D:/Dissertation/BOX/bgc_annotations/full_dataset/bgc_results_full/"
 
@@ -29,8 +29,8 @@ gene.outliers <-
   get_bgc_outliers(
     df.list = bgc.genes,
     admix.pop = admixPop,
-    popmap = file.path("../../popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
-    loci.file = file.path("../../data_vcf_maf/", paste0(prefix, "_bgc_loci.txt"))
+    popmap = file.path("../bgcPlotter/popmaps/", paste0(prefix, ".bgc.popmap_final.txt")),
+    loci.file = file.path("../bgcPlotter/data_vcf_maf/", paste0(prefix, "_bgc_loci.txt"))
   )
 
 rm(bgc.genes)
@@ -88,6 +88,9 @@ phiPlot(outlier.list = gene.outliers,
         saveToFile = paste0(prefix, "_genes"),
         plotDIR = plotDIR,
         both.outlier.tests = FALSE,
+        neutral.color = "gray60",
+        alpha.color = "cornflowerblue",
+        beta.color = "firebrick",
         hist.y.origin = 1.2,
         hist.height = 1.8,
         margins = c(160.0, 5.5, 5.5, 5.5),

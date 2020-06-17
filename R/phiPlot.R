@@ -24,7 +24,8 @@
 #'                saved in this directory
 #' @param device File format to save plot. Supports ggplot2::ggsave devices
 #' @param neutral.color Color for non-outlier loci. Default = "gray"
-#' @param outlier.color Color for outlier loci. Default = "black"
+#' @param alpha.color Color for alpha outlier loci. Default = "blue"
+#' @param beta.color Color for beta outlier loci. Default = "red"
 #' @param margins Vector of margins for phi plot: c(Top, Right, Bottom, Left)
 #'                Top is extended to include the Hybrid Index histogram
 #' @param margin.units Units for margins parameter. Default = "points"
@@ -69,7 +70,8 @@ phiPlot <- function(outlier.list,
                     plotDIR = "./plots",
                     device = "pdf",
                     neutral.color = "gray",
-                    outlier.color = "black",
+                    alpha.color = "blue",
+                    beta.color = "red",
                     margins = c(150.0, 5.5, 5.5, 5.5),
                     margin.units = "points",
                     phi.height = 7,
@@ -141,7 +143,7 @@ phiPlot <- function(outlier.list,
     writeLines("\n\nTry setting both.outlier.tests to FALSE")
   }
 
-  if (all(snps$beta.signif == FALSE)){
+  if (all(snps$beta.signif == FALSE) & both.outlier.tests){
     isBetaOutliers <- FALSE
     writeLines("\n\nWarning: No beta outliers were identified!")
     writeLines("\n\nTry setting both.outlier.tests to FALSE")
@@ -177,10 +179,10 @@ phiPlot <- function(outlier.list,
   # Clines. Molecular Ecology.
   for (i in 1:length(hilist)){
     for (j in 1:nrow(hilist[[i]])){
-      if (hilist[[i]][j, 6] > min(hilist[[i]]$phi01) &
+      if (hilist[[i]][j, 6] > 0.0 &
           atMin == FALSE &
           atMax == FALSE){
-            hilist[[i]][j, 6] <- min(hilist[[i]]$phi01)
+            hilist[[i]][j, 6] <- 0.0
             next
       }
 
@@ -188,7 +190,7 @@ phiPlot <- function(outlier.list,
           atMin == FALSE &
           atMax == FALSE){
             atMin = TRUE
-            hilist[[i]][j, 6] <- min(hilist[[i]]$phi01)
+            hilist[[i]][j, 6] <- 0.0
             next
       }
 
@@ -217,90 +219,78 @@ phiPlot <- function(outlier.list,
   }
   gc()
 
-  # Make into long format.
-  hi.final <- reshape2::melt(data = hilist,
-                             id.vars = c("hi", "phi01", "alpha", "beta"))
+  # Make into long format for plotting both alpha and beta on one plot.
+  hi.final <-
+    reshape2::melt(data = hilist,
+                               id.vars = c("hi", "phi01", "id", "phi"))
 
   rm(hilist)
   gc()
 
-  # Concatenate alpha (boolean) and L1 (group)
-  # so I can reorder to plot outliers on top.
-  hi.final$ao <- as.factor(apply(format(hi.final[,c("alpha", "L1")]),
-                                 1, paste, collapse = " "))
-  hi.final$bo <- as.factor(apply(format(hi.final[,c("beta", "L1")]),
-                                 1, paste, collapse = " "))
+  # Concatenate value (TRUE or FALSE), variable (alpha or beta), and L1
+  # (locus number). Used for grouping in ggplot. Otherwise the clines would
+  # be averaged into one line.
+  hi.final$trues <- as.factor(apply(format(hi.final[,c("value", "variable", "L1")]),
+                                     1, paste, collapse = " "))
 
-  # Reorder outliers on top. Uses forcats R package.
-  hi.final$ao <- forcats::fct_rev(hi.final$ao)
-  hi.final$bo <- forcats::fct_rev(hi.final$bo)
+  hi.final$varVal <- as.factor(apply(format(hi.final[,c("variable", "value")]),
+                                    1, paste, collapse = ""))
 
-  ### Plot Genomic Clines ###
-  # Alpha
-  alpha.plot <- ggplot2::ggplot(hi.final %>%
-                                  dplyr::arrange(alpha)) +
-    ggplot2::geom_smooth(ggplot2::aes(hi,
-                                      phi01,
-                                      colour = alpha,
-                                      group = ao),
-                         method = "lm",
-                         formula = y ~ poly(x, 3),
-                         se = FALSE,
-                         size = line.size) +
+  # Order factor levels so that outliers get plotted on top.
+  # Want to plot FALSE values first, then TRUE on top.
+  hi.final$levels <-
+    factor(hi.final$varVal,
+           levels = c("alphaFALSE", "betaFALSE", "alpha TRUE", "beta TRUE"))
+
+  # Order trues factor levels by levels column.
+  hi.final$trues2 <-
+    factor(hi.final$trues,
+           levels = unique(hi.final$trues[order(hi.final$levels)]),
+           ordered = TRUE)
+
+  ### Combined alpha and beta plot.
+  alpha.beta.plot <- ggplot2::ggplot(hi.final) +
+    ggplot2::geom_smooth(
+      ggplot2::aes(hi,
+                   phi01,
+                   colour = levels,
+                   group = trues2),
+      method = "lm",
+      formula = y ~ poly(x, 5),
+      se = FALSE,
+      size = line.size
+    ) +
     ggplot2::xlab(label = "Hybrid Index") +
-    ggplot2::ylab(label = expression("Prob. P1 Ancestry ("*Phi*")")) +
+    ggplot2::ylab(label = expression("Prob. P1 Ancestry (" * Phi * ")")) +
     ggplot2::theme_bw() +
-    ggplot2::theme(panel.border = ggplot2::element_blank(),
-                   panel.grid.major = ggplot2::element_blank(),
-                   panel.grid.minor = ggplot2::element_blank(),
-                   axis.line = ggplot2::element_line(colour="black"),
-                   axis.text = ggplot2::element_text(size = phi.text.size,
-                                                     colour = "black"),
-                   text = ggplot2::element_text(size = phi.text.size,
-                                                colour = "black"),
-                   axis.ticks = ggplot2::element_line(size = ggplot2::rel(1.5)),
-                   plot.margin = ggplot2::unit(margins,
-                                               margin.units)) +
-    ggplot2::scale_y_continuous(limits=c(0, 1),
+    ggplot2::theme(
+      panel.border = ggplot2::element_blank(),
+      panel.grid.major = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      axis.line = ggplot2::element_line(colour = "black"),
+      axis.text = ggplot2::element_text(size = phi.text.size,
+                                        colour = "black"),
+      text = ggplot2::element_text(size = phi.text.size,
+                                   colour = "black"),
+      axis.ticks = ggplot2::element_line(size = ggplot2::rel(1.5)),
+      plot.margin = ggplot2::unit(margins,
+                                  margin.units)
+    ) +
+    ggplot2::scale_y_continuous(limits = c(0, 1),
                                 oob = scales::squish) +
     ggplot2::scale_x_continuous(limits = c(0, 1)) +
-    ggplot2::scale_colour_manual(name = "Loci",
-                                 values = c(neutral.color, outlier.color),
-                                 labels = c("Neutral", "Outlier")) +
-    ggplot2::ggtitle(label = paste0(popname, " Alpha"))
+    ggplot2::scale_colour_manual(
+      name = "Loci",
+      values = c(neutral.color, neutral.color, alpha.color, beta.color),
+      labels = c(
+        "Neutral (Alpha)",
+        "Neutral (Beta)",
+        "Alpha Outliers",
+        "Beta Outliers"
+      )
+    ) +
+    ggplot2::ggtitle(label = paste0(popname, " Alpha and Beta"))
 
-  # Beta
-  beta.plot <- ggplot2::ggplot(hi.final %>%
-                                 dplyr::arrange(beta)) +
-    ggplot2::geom_smooth(ggplot2::aes(hi,
-                                      phi01,
-                                      colour = beta,
-                                      group = bo),
-                         method = "lm",
-                         formula = y ~ poly(x, 3),
-                         se = FALSE,
-                         size = line.size) +
-    ggplot2::xlab(label = "Hybrid Index") +
-    ggplot2::ylab(label = expression("Prob. P1 Ancestry ("*Phi*")")) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(panel.border = ggplot2::element_blank(),
-                   panel.grid.major = ggplot2::element_blank(),
-                   panel.grid.minor = ggplot2::element_blank(),
-                   axis.line = ggplot2::element_line(colour="black"),
-                   axis.text = ggplot2::element_text(size = phi.text.size,
-                                                     colour = "black"),
-                   text = ggplot2::element_text(size = phi.text.size,
-                                                colour = "black"),
-                   axis.ticks=ggplot2::element_line(size = ggplot2::rel(1.5)),
-                   plot.margin = ggplot2::unit(margins,
-                                               margin.units)) +
-    ggplot2::scale_y_continuous(limits=c(0, 1),
-                                oob = scales::squish) +
-    ggplot2::scale_x_continuous(limits=c(0, 1)) +
-    ggplot2::scale_colour_manual(name = "Loci",
-                                 values = c(neutral.color, outlier.color),
-                                 labels = c("Neutral", "Outlier")) +
-    ggplot2::ggtitle(label = paste0(popname, " Beta"))
 
   # Make histogram plot of Hybrid Indices
   hg <- ggplot2::ggplot(hi.final, ggplot2::aes(x=hi)) +
@@ -329,16 +319,7 @@ phiPlot <- function(outlier.list,
   rm(hi.final)
   gc()
 
-  alpha.plot <- alpha.plot +
-    ggplot2::annotation_custom(
-      ggplot2::ggplotGrob(hg),
-      xmin = hist.x.origin,
-      xmax = hist.width,
-      ymin = hist.y.origin,
-      ymax = hist.height
-    )
-
-  beta.plot <- beta.plot +
+  alpha.beta.plot <- alpha.beta.plot +
     ggplot2::annotation_custom(
       ggplot2::ggplotGrob(hg),
       xmin = hist.x.origin,
@@ -352,10 +333,9 @@ phiPlot <- function(outlier.list,
     # Create plotDIR if doesn't already exist.
     dir.create(plotDIR, showWarnings = FALSE)
 
-    # Save to file.
     ggplot2::ggsave(
-      filename = paste0(saveToFile, "_hiXphi_alpha.pdf"),
-      plot = alpha.plot,
+      filename = paste0(saveToFile, "_hiXphi_alphaAndBeta.pdf"),
+      plot = alpha.beta.plot,
       device = device,
       plotDIR,
       width = phi.width,
@@ -364,20 +344,9 @@ phiPlot <- function(outlier.list,
       units = phi.units
     )
 
-    ggplot2::ggsave(
-      filename = paste0(saveToFile, "_hiXphi_beta.pdf"),
-      plot = beta.plot,
-      device = device,
-      plotDIR,
-      width = phi.width,
-      height = phi.height,
-      dpi = phi.dpi,
-      units = phi.units
-    )
   } else{
     # If saveToFile is not specified by user.
-    print(alpha.plot)
-    print(beta.plot)
+    print(alpha.beta.plot)
   }
 
   gc()
