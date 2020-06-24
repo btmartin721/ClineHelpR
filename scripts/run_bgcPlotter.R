@@ -220,4 +220,84 @@ gutt.ref.trans.info <-
                  4e6,
                  1e6)
 
+eatt.bgc.genes <-
+  combine_bgc_output(results.dir = genesDIR,
+                     prefix = eatt.prefix)
 
+eatt.gene.outliers <-
+  get_bgc_outliers(
+    df.list = eatt.bgc.genes,
+    admix.pop = eatt.admixPop,
+    popmap = file.path(
+      "../bgcPlotter/popmaps/",
+      paste0(eatt.prefix, ".bgc.popmap_final.txt")
+    ),
+    loci.file = file.path(
+      "../bgcPlotter/data_vcf_maf_genes/",
+      paste0(eatt.prefix, "_bgc_loci.txt")
+    )
+  )
+
+eagu.bgc.genes <-
+  combine_bgc_output(results.dir = genesDIR,
+                     prefix = eagu.prefix)
+
+eagu.gene.outliers <-
+  get_bgc_outliers(
+    df.list = eagu.bgc.genes,
+    admix.pop = eagu.admixPop,
+    popmap = file.path(
+      "../bgcPlotter/popmaps/",
+      paste0(eagu.prefix, ".bgc.popmap_final.txt")
+    ),
+    loci.file = file.path(
+      "../bgcPlotter/data_vcf_maf_genes/",
+      paste0(eagu.prefix, "_bgc_loci.txt")
+    )
+  )
+
+gutt.bgc.genes <-
+  combine_bgc_output(results.dir = genesDIR,
+                     prefix = gutt.prefix)
+
+gutt.gene.outliers <-
+  get_bgc_outliers(
+    df.list = gutt.bgc.genes,
+    admix.pop = gutt.admixPop,
+    popmap = file.path(
+      "../bgcPlotter/popmaps/",
+      paste0(gutt.prefix, ".bgc.popmap_final.txt")
+    ),
+    loci.file = file.path(
+      "../bgcPlotter/data_vcf_maf_genes/",
+      paste0(gutt.prefix, "_bgc_loci.txt")
+    )
+  )
+
+
+alphaBetaPlot(
+  eagu.gene.outliers,
+  alpha.color = "cornflowerblue",
+  beta.color = "orange",
+  neutral.color = "gray60",
+  saveToFile = eagu.prefix,
+  plotDIR = "../plots_maf_trachemys/", padding = 0.2
+)
+
+alphaBetaPlot(
+  eatt.gene.outliers,
+  alpha.color = "cornflowerblue",
+  beta.color = "orange",
+  neutral.color = "gray60",
+  saveToFile = eatt.prefix,
+  plotDIR = "../plots_maf_trachemys/", padding = 0.2,
+)
+
+alphaBetaPlot(
+  gutt.gene.outliers,
+  alpha.color = "cornflowerblue",
+  beta.color = "orange",
+  neutral.color = "gray60",
+  saveToFile = gutt.prefix,
+  plotDIR = "../plots_maf_trachemys/", padding = 0.2,
+)

@@ -1,6 +1,6 @@
 #' Makes Alpha ~ Beta Plots for BGC results
 #'
-#' This function generates an Alpha x Beta 2D density plot 
+#' This function generates an Alpha x Beta 2D density plot
 #' with polygon hulls encapsulating alpha and beta outliers.
 #' The plot can be printed to the plot
 #' window in Rstudio (default) or saved to file by specifying a file prefix
@@ -58,8 +58,8 @@ alphaBetaPlot <- function(outlier.list,
                     beta.color = "red",
                     both.color = "purple",
                     margins = c(150.0, 5.5, 5.5, 5.5),
-                    margin.units = "points", 
-                    padding=0.1, 
+                    margin.units = "points",
+                    padding=0.1,
                     height = 7,
                     width = 7,
                     dim.units = "in",
@@ -67,16 +67,16 @@ alphaBetaPlot <- function(outlier.list,
                     dpi = 300,
                     alpha_limits=NULL,
                     beta_limits=NULL){
-  
+
   # To use the dplyr pipe.
   `%>%` <- dplyr::`%>%`
-  
+
   snps <- outlier.list[[1]] # SNPs data.frame
   hi <- outlier.list[[3]] # hybrid index data.frame
-  
+
   rm(outlier.list)
   gc()
-  
+
   # If only want crazy.a and crazy.b outliers
   if (both.outlier.tests){
     overlap.zero = FALSE
@@ -85,26 +85,26 @@ alphaBetaPlot <- function(outlier.list,
     writeLines("Ignoring overlap.zero qn.interval settings\n")
     snps$alpha.signif <-
       snps$crazy.a == TRUE
-    
+
     snps$beta.signif <-
       snps$crazy.b == TRUE
   }
-  
+
   # TRUE if alpha/beta excess/outliers.
   if (overlap.zero & qn.interval){
     snps$alpha.signif <-
       (!is.na(snps$alpha.excess) | !is.na(snps$alpha.outlier))
     snps$beta.signif <-
       (!is.na(snps$beta.excess) | !is.na(snps$beta.outlier))
-    
+
   } else if (overlap.zero & !qn.interval){
     snps$alpha.signif <- (!is.na(snps$alpha.excess))
     snps$beta.signif <- (!is.na(snps$beta.excess))
-    
+
   } else if (!overlap.zero & qn.interval){
     snps$alpha.signif <- (!is.na(snps$alpha.outlier))
     snps$beta.signif <- (!is.na(snps$beta.outlier))
-    
+
   } else if (!overlap.zero & !qn.interval & !both.outlier.tests){
     mywarning <-
       paste(
@@ -112,17 +112,17 @@ alphaBetaPlot <- function(outlier.list,
         "were all FALSE. Setting both.outlier.tests to TRUE\n\n"
       )
     warning(paste(strwrap(mywarning), collapse = "\n"))
-    
+
     snps$alpha.signif <-
       snps$crazy.a == TRUE
-    
+
     snps$beta.signif <-
       snps$crazy.b == TRUE
   }
-  
+
   isAlphaOutliers <- TRUE
   isBetaOutliers <- TRUE
-  
+
   # If there aren't any alpha or beta outliers.
   if (all(snps$alpha.signif == FALSE)){
     isAlphaOutliers <- FALSE
@@ -131,7 +131,7 @@ alphaBetaPlot <- function(outlier.list,
       writeLines("\n\nTry setting both.outlier.tests to FALSE")
     }
   }
-  
+
   if (all(snps$beta.signif == FALSE)){
     isBetaOutliers <- FALSE
     warning("\n\nWarning: No beta outliers were identified.\n\n")
@@ -139,26 +139,27 @@ alphaBetaPlot <- function(outlier.list,
       writeLines("\n\nTry setting both.outlier.tests to FALSE")
     }
   }
-  
+
   snps[snps$alpha.signif == TRUE & snps$alpha > 0.0, "alpha.signif"] <- "pos"
   snps[snps$alpha.signif == TRUE & snps$alpha < 0.0, "alpha.signif"] <- "neg"
   snps[snps$beta.signif == TRUE & snps$beta > 0.0, "beta.signif"] <- "pos"
   snps[snps$beta.signif == TRUE & snps$beta < 0.0, "beta.signif"] <- "neg"
-  
+
   snps["fill_color"] <- neutral.color
   snps[snps$alpha.signif != FALSE, "fill_color"] <- alpha.color
   snps[snps$beta.signif != FALSE, "fill_color"] <- beta.color
   snps[snps$alpha.signif != FALSE & snps$beta.signif != FALSE, "fill_color"] <- both.color
- 
+
   alpha_hulls <- snps[snps$alpha.signif != FALSE,]
   beta_hulls <- snps[snps$beta.signif != FALSE,]
 
-  
-  ab.plot <- ggplot2::ggplot(snps) + 
-    ggplot2::stat_density_2d(aes(x=alpha, y=beta, fill=..level..), geom="polygon") + 
+
+  ab.plot <- ggplot2::ggplot(snps) +
+    ggplot2::stat_density_2d(ggplot2::aes(x=alpha, y=beta, fill=..level..), geom="polygon") +
     ggplot2::scale_fill_distiller(palette= "Spectral", direction=1) +
-    ggplot2::theme_bw() + 
+    ggplot2::theme_bw() +
     ggplot2::theme(
+        axis.line = ggplot2::element_line(colour = "black"),
         panel.border = ggplot2::element_blank(),
         panel.grid.major = ggplot2::element_blank(),
         panel.grid.minor = ggplot2::element_blank(),
@@ -170,43 +171,43 @@ alphaBetaPlot <- function(outlier.list,
         plot.margin = ggplot2::unit(margins,
                                     margin.units)
     ) +
-    ggplot2::geom_point(aes(x=alpha, y=beta, col=fill_color), size=2) + 
+    ggplot2::geom_point(ggplot2::aes(x=alpha, y=beta, col=fill_color), size=2) +
     ggplot2::scale_colour_identity()
 
-  
+
   if (nrow(beta_hulls) > 0){
-    ab.plot <- ab.plot + 
-      geom_mark_hull(data=beta_hulls, mapping=aes(x=alpha, y=beta, 
+    ab.plot <- ab.plot +
+      ggforce::geom_mark_hull(data=beta_hulls, mapping=ggplot2::aes(x=alpha, y=beta,
                                                    group=beta.signif,
-                                                   color=beta.color), 
-                     concavity=5, expand=0, radius=0, alpha=0.7) 
-  }
-  
-  if (nrow(alpha_hulls) > 0){
-    ab.plot <- ab.plot + 
-      geom_mark_hull(data=alpha_hulls, mapping=aes(x=alpha, y=beta, 
-                                                  group=alpha.signif,
-                                                  color=alpha.color), 
+                                                   color=beta.color),
                      concavity=5, expand=0, radius=0, alpha=0.7)
   }
-  
+
+  if (nrow(alpha_hulls) > 0){
+    ab.plot <- ab.plot +
+      ggforce::geom_mark_hull(data=alpha_hulls, mapping=ggplot2::aes(x=alpha, y=beta,
+                                                  group=alpha.signif,
+                                                  color=alpha.color),
+                     concavity=5, expand=0, radius=0, alpha=0.7)
+  }
+
   if (length(alpha_limits) == 2){
-    ab.plot <- ab.plot + xlim(alpha_limits)
+    ab.plot <- ab.plot + ggplot2::xlim(alpha_limits)
   }else{
-    ab.plot <- ab.plot + xlim(min(snps$alpha)-padding, max(snps$alpha)+padding)
+    ab.plot <- ab.plot + ggplot2::xlim(min(snps$alpha)-padding, max(snps$alpha)+padding)
   }
-  
+
   if (length(beta_limits) == 2){
-    ab.plot <- ab.plot + ylim(beta_limits)
+    ab.plot <- ab.plot + ggplot2::ylim(beta_limits)
   }else{
-    ab.plot <- ab.plot + ylim(min(snps$beta)-padding, max(snps$beta)+padding)
+    ab.plot <- ab.plot + ggplot2::ylim(min(snps$beta)-padding, max(snps$beta)+padding)
   }
-  
+
   if (!is.null(saveToFile)){
     # If saveToFile is specified, save plot as PDF.
     # Create plotDIR if doesn't already exist.
     dir.create(plotDIR, showWarnings = FALSE)
-    
+
     ggplot2::ggsave(
       filename = paste0(saveToFile, "_alphaXbeta.pdf"),
       plot = ab.plot,
@@ -217,10 +218,10 @@ alphaBetaPlot <- function(outlier.list,
       dpi = dpi,
       units = dim.units
     )
-    
+
   } else{
     # If saveToFile is not specified by user.
     print(ab.plot)
   }
-  
+
 }
