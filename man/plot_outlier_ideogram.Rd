@@ -11,15 +11,21 @@ plot_outlier_ideogram(
   pafInfo,
   plotDIR = "./plots",
   both.outlier.tests = FALSE,
+  both.outlier.tests.genes = FALSE,
   overlap.zero = TRUE,
+  overlap.zero.genes = TRUE,
   qn.interval = TRUE,
+  qn.interval.genes = TRUE,
   missing.chrs = NULL,
   miss.chr.length = NULL,
   gene.size = 5e+05,
   other.size = 1e+05,
   convert_svg = "pdf",
   colorset1 = c("#4575b4", "#ffffbf", "#d73027"),
-  colorset2 = c("#4575b4", "#ffffbf", "#d73027")
+  colorset2 = c("#4575b4", "#ffffbf", "#d73027"),
+  chrnum.prefix = NULL,
+  genes.only = FALSE,
+  linked.only = FALSE
 )
 }
 \arguments{
@@ -33,14 +39,24 @@ This must be loci aligned to full scaffolds}
 
 \item{plotDIR}{Directory to save output plots}
 
-\item{both.outlier.tests}{Boolean; If TRUE, outliers must meet both the
+\item{both.outlier.tests}{Boolean; If TRUE, scaffold outliers must meet both the
 overlap.zero and qn.interval criteria}
 
-\item{overlap.zero}{Boolean; If TRUE, outliers are SNPs whose credible
-interval does not contain zero}
+\item{both.outlier.tests.genes}{Boolean; If TRUE, gene outliers must meet
+both the overlap.zero.genes and
+qn.interval.genes criteria}
 
-\item{qn.interval}{Boolean; If TRUE, outliers fall outside the quantile
-interval qn/2 and 1-qn/2}
+\item{overlap.zero}{Boolean; If TRUE, scaffold outliers are SNPs whose
+credible interval does not contain zero}
+
+\item{overlap.zero.genes}{Boolean; If TRUE, gene outliers are SNPs whose
+credible interval does not contain zero}
+
+\item{qn.interval}{Boolean; If TRUE, scaffold outliers fall outside the
+quantile interval qn/2 and 1-qn/2}
+
+\item{qn.interval.genes}{Boolean; If TRUE, gene outliers fall outside the
+quantile interval qn/2 and 1-qn/2}
 
 \item{missing.chrs}{If specified, must be character vector of missing
 chromosome names. Chromosome numbers should be prefixed
@@ -63,6 +79,12 @@ Default is the same as the RIdeogram defaults}
 \item{colorset2}{Vector of colors for RIdeogram beta heatmap.
 Default is the same as the RIdeogram defaults}
 
+\item{chrnum.prefix}{Prefix for chromosome numbers on ideaogram plot}
+
+\item{genes.only}{Boolean; If TRUE, only include known genes on ideogram}
+
+\item{linked.only}{Boolean; If TRUE, only include non-genes on ideogram}
+
 \item{outliers.genes.annotated}{List containing gene outlier data from
 get_bgc_outliers(). See ?get_bgc_outliers.
 This must be outliers from a transcriptome
@@ -72,6 +94,9 @@ alignment}
 missing chromosomes. Must also be specified
 if missing.chrs is used. Vector must also be
 the same length as missing.chrs}
+}
+\value{
+Data.frame containing reference info for gene outliers.
 }
 \description{
 For this function to work, you must have a closely related reference genome

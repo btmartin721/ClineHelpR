@@ -34,6 +34,8 @@
 #'                      Default = "dashed"
 #' @param alpha.color Color for alpha outlier loci. Default = "blue"
 #' @param beta.color Color for beta outlier loci. Default = "red"
+#' @param both.color Color for SNPs that are both alpha and beta outliers.
+#'                   Default = "purple"
 #' @param margins Vector of margins for phi plot: c(Top, Right, Bottom, Left)
 #'                Top is extended to include the Hybrid Index histogram
 #' @param margin.units Units for margins parameter. Default = "points"
@@ -84,6 +86,7 @@ phiPlot <- function(outlier.list,
                     zero.linetype = "dashed",
                     alpha.color = "blue",
                     beta.color = "red",
+                    both.color = "purple",
                     margins = c(150.0, 5.5, 5.5, 5.5),
                     margin.units = "points",
                     phi.height = 7,
@@ -121,6 +124,8 @@ phiPlot <- function(outlier.list,
 
     snps$beta.signif <-
       snps$crazy.b == TRUE
+
+    snps$both <- (snps$crazy.a == TRUE & snps$crazy.b == TRUE)
   }
 
   # TRUE if alpha/beta excess/outliers.
@@ -129,14 +134,21 @@ phiPlot <- function(outlier.list,
         (!is.na(snps$alpha.excess) | !is.na(snps$alpha.outlier))
       snps$beta.signif <-
         (!is.na(snps$beta.excess) | !is.na(snps$beta.outlier))
+      snps$both <-
+        ((!is.na(snps$alpha.excess) |
+            !is.na(snps$alpha.outlier)) &
+           (!is.na(snps$beta.excess) |
+              !is.na(snps$beta.outlier)))
 
   } else if (overlap.zero & !qn.interval){
       snps$alpha.signif <- (!is.na(snps$alpha.excess))
       snps$beta.signif <- (!is.na(snps$beta.excess))
+      snps$both <- (!is.na(snps$alpha.excess) & !is.na(snps$beta.excess))
 
   } else if (!overlap.zero & qn.interval){
       snps$alpha.signif <- (!is.na(snps$alpha.outlier))
       snps$beta.signif <- (!is.na(snps$beta.outlier))
+      snps$both <- (!is.na(snps$alpha.outlier) & !is.na(snps$beta.outlier))
 
   } else if (!overlap.zero & !qn.interval & !both.outlier.tests){
     mywarning <-
@@ -151,6 +163,10 @@ phiPlot <- function(outlier.list,
 
       snps$beta.signif <-
         snps$crazy.b == TRUE
+
+      snps$both <-
+        (snps$crazy.a == TRUE & snps$crazy.b == TRUE)
+
   }
 
   isAlphaOutliers <- TRUE
@@ -180,6 +196,7 @@ phiPlot <- function(outlier.list,
     hilist[[i]] <- get_phi_ih(hi, snps$alpha[[i]], snps$beta[[i]])
     hilist[[i]]$alpha <- snps[i,"alpha.signif"]
     hilist[[i]]$beta <- snps[i, "beta.signif"]
+    hilist[[i]]$both <- snps[i, "both"]
   }
 
   rm(snps, hi)
@@ -204,38 +221,38 @@ phiPlot <- function(outlier.list,
   # Clines. Molecular Ecology.
   for (i in 1:length(hilist)){
     for (j in 1:nrow(hilist[[i]])){
-      if (hilist[[i]][j, 6] > 0.0 &
+      if (hilist[[i]][j, 7] > 0.0 &
           atMin == FALSE &
           atMax == FALSE){
-            hilist[[i]][j, 6] <- 0.0
+            hilist[[i]][j, 7] <- 0.0
             next
       }
 
-      if (hilist[[i]][j, 6] == min(hilist[[i]]$phi01) &
+      if (hilist[[i]][j, 7] == min(hilist[[i]]$phi01) &
           atMin == FALSE &
           atMax == FALSE){
             atMin = TRUE
-            hilist[[i]][j, 6] <- 0.0
+            hilist[[i]][j, 7] <- 0.0
             next
       }
 
-      if (hilist[[i]][j, 6] < max(hilist[[i]]$phi01) &
+      if (hilist[[i]][j, 7] < max(hilist[[i]]$phi01) &
           atMin == TRUE &
           atMax == FALSE){
-            hilist[[i]][j, 6] <- hilist[[i]][j, 6]
+            hilist[[i]][j, 7] <- hilist[[i]][j, 7]
             next
       }
 
       if (atMax == FALSE &
           atMin == TRUE &
-          hilist[[i]][j, 6] == max(hilist[[i]]$phi01)){
+          hilist[[i]][j, 7] == max(hilist[[i]]$phi01)){
         atMax = TRUE
-        hilist[[i]][j, 6] <- max(hilist[[i]]$phi01)
+        hilist[[i]][j, 7] <- max(hilist[[i]]$phi01)
         next
       }
 
       if (atMax == TRUE & atMin == TRUE){
-        hilist[[i]][j, 6] <- max(hilist[[i]]$phi01)
+        hilist[[i]][j, 7] <- max(hilist[[i]]$phi01)
         next
       }
     }
@@ -264,8 +281,17 @@ phiPlot <- function(outlier.list,
   # Order factor levels so that outliers get plotted on top.
   # Want to plot FALSE values first, then TRUE on top.
   hi.final$levels <-
-    factor(hi.final$varVal,
-           levels = c("alphaFALSE", "betaFALSE", "alpha TRUE", "beta TRUE"))
+    factor(
+      hi.final$varVal,
+      levels = c(
+        "bothFALSE",
+        "alphaFALSE",
+        "betaFALSE",
+        "alpha TRUE",
+        "beta TRUE",
+        "both TRUE"
+      )
+    )
 
   # Order trues factor levels by levels column.
   hi.final$trues2 <-
@@ -306,12 +332,14 @@ phiPlot <- function(outlier.list,
     ggplot2::scale_x_continuous(limits = c(0, 1)) +
     ggplot2::scale_colour_manual(
       name = "Loci",
-      values = c(neutral.color, neutral.color, alpha.color, beta.color),
+      values = c(neutral.color, neutral.color, neutral.color, alpha.color, beta.color, both.color),
       labels = c(
         "Neutral (Alpha)",
         "Neutral (Beta)",
+        "Neutral (Both)",
         "Alpha Outliers",
-        "Beta Outliers"
+        "Beta Outliers",
+        "Both Outliers"
       )
     ) +
     ggplot2::ggtitle(label = paste0(popname, " Phi Plot"))

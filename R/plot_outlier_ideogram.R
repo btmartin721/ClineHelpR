@@ -35,12 +35,19 @@
 #'                                This must be loci aligned to full scaffolds
 #' @param pafInfo Path to *.scaffolds.tdt file output from PAFScaff
 #' @param plotDIR Directory to save output plots
-#' @param both.outlier.tests Boolean; If TRUE, outliers must meet both the
+#' @param both.outlier.tests Boolean; If TRUE, scaffold outliers must meet both the
 #'                           overlap.zero and qn.interval criteria
-#' @param overlap.zero Boolean; If TRUE, outliers are SNPs whose credible
-#'                     interval does not contain zero
-#' @param qn.interval Boolean; If TRUE, outliers fall outside the quantile
-#'                    interval qn/2 and 1-qn/2
+#' @param both.outlier.tests.genes Boolean; If TRUE, gene outliers must meet
+#'                                 both the overlap.zero.genes and
+#'                                 qn.interval.genes criteria
+#' @param overlap.zero Boolean; If TRUE, scaffold outliers are SNPs whose
+#'                     credible interval does not contain zero
+#' @param overlap.zero.genes Boolean; If TRUE, gene outliers are SNPs whose
+#'                           credible interval does not contain zero
+#' @param qn.interval Boolean; If TRUE, scaffold outliers fall outside the
+#'                    quantile interval qn/2 and 1-qn/2
+#' @param qn.interval.genes Boolean; If TRUE, gene outliers fall outside the
+#'                          quantile interval qn/2 and 1-qn/2
 #' @param missing.chrs If specified, must be character vector of missing
 #'                     chromosome names. Chromosome numbers should be prefixed
 #'                     with "chr". I.e., c("chr3", "chr6"). If some chromosomes
@@ -61,6 +68,10 @@
 #'                  Default is the same as the RIdeogram defaults
 #' @param colorset2 Vector of colors for RIdeogram beta heatmap.
 #'                  Default is the same as the RIdeogram defaults
+#' @param chrnum.prefix Prefix for chromosome numbers on ideaogram plot
+#' @param genes.only Boolean; If TRUE, only include known genes on ideogram
+#' @param linked.only Boolean; If TRUE, only include non-genes on ideogram
+#' @return Data.frame containing reference info for gene outliers.
 #' @export
 #' @examples
 #' plot_outlier_ideogram(prefix = "population1",
@@ -82,15 +93,21 @@ plot_outlier_ideogram <- function(prefix,
                                   pafInfo,
                                   plotDIR = "./plots",
                                   both.outlier.tests = FALSE,
+                                  both.outlier.tests.genes = FALSE,
                                   overlap.zero = TRUE,
+                                  overlap.zero.genes = TRUE,
                                   qn.interval = TRUE,
+                                  qn.interval.genes = TRUE,
                                   missing.chrs = NULL,
                                   miss.chr.length = NULL,
                                   gene.size = 5e5,
                                   other.size = 1e5,
                                   convert_svg = "pdf",
                                   colorset1 = c("#4575b4", "#ffffbf", "#d73027"),
-                                  colorset2 = c("#4575b4", "#ffffbf", "#d73027")){
+                                  colorset2 = c("#4575b4", "#ffffbf", "#d73027"),
+                                  chrnum.prefix = NULL,
+                                  genes.only = FALSE,
+                                  linked.only = FALSE){
 
   ###############################################################
   ### Read input objects and files.
@@ -139,17 +156,90 @@ plot_outlier_ideogram <- function(prefix,
                             all = FALSE)
 
   # Get SNP position on scaffold:
-  ref.trans.merged$snpPOS <- ref.trans.merged$RefStart + ref.trans.merged$POS
+  ref.trans.merged$snpPOS <-
+    ref.trans.merged$RefStart + ref.trans.merged$POS
 
-  # Subset only outliers for alpha and beta.
+  if (both.outlier.tests.genes){
+
+    overlap.zero.genes <- FALSE
+    qn.interval.genes <- FALSE
+
+    writeLines("\n\nboth.outlier.tests is TRUE for genes.")
+    writeLines("Ignoring overlap.zero qn.interval settings\n")
+
+    # Subset extreme outliers
+    # (had both alpha excess AND was alpha outlier. Likewise for beta)
+    ref.trans.merged.alpha <- ref.trans.merged[ref.trans.merged$crazy.a == TRUE,]
+    ref.trans.merged.beta <- ref.trans.merged[ref.trans.merged$crazy.b == TRUE,]
+    ref.trns.merged.either <-
+      ref.trans.merged[(ref.trans.merged$crazy.a == TRUE |
+                          ref.trans.merged$crazy.b == TRUE),]
+
+    if (nrow(ref.trans.merged.alpha) == 0){
+      stop("No alpha outliers in full dataset. Set both.outlier.tests = FALSE")
+    }
+
+    if (nrow(ref.trans.merged.beta) == 0){
+      stop("No beta outliers in full dataset. Set both.outlier.tests = FALSE.")
+    }
+  }
+
+  # TRUE if alpha/beta excess/outliers.
+  if (overlap.zero.genes & qn.interval.genes){
+    ref.trans.merged.alpha <-
+      ref.trans.merged[(!is.na(ref.trans.merged$alpha.excess) |
+                    !is.na(ref.trans.merged$alpha.outlier)),]
+    ref.trans.merged.beta <-
+      ref.trans.merged[(!is.na(ref.trans.merged$beta.excess) |
+                    !is.na(ref.trans.merged$beta.outlier)),]
+
+    ref.trans.merged.either <-
+      ref.trans.merged[(
+        !is.na(ref.trans.merged$alpha.excess) |
+          !is.na(ref.trans.merged$alpha.outlier) |
+          !is.na(ref.trans.merged$beta.excess) |
+          !is.na(ref.trans.merged$beta.outlier)
+      ), ]
+
+  } else if (overlap.zero.genes & !qn.interval.genes){
+    ref.trans.merged.alpha <- ref.trans.merged[!is.na(ref.trans.merged$alpha.excess),]
+    ref.trans.merged.beta <- ref.trans.merged[!is.na(ref.trans.merged$beta.excess),]
+    ref.trans.merged.either <-
+      ref.trans.merged[(!is.na(ref.trans.merged$alpha.excess) |
+                          !is.na(ref.trans.merged$beta.excess)), ]
+
+  } else if (!overlap.zero.genes & qn.interval.genes){
+    ref.trans.merged.alpha <- ref.trans.merged[!is.na(ref.trans.merged$alpha.outlier),]
+    ref.trans.merged.beta <- ref.trans.merged[!is.na(ref.trans.merged$beta.outlier),]
+
+    ref.trans.merged.either <-
+      ref.trans.merged[(!is.na(ref.trans.merged$alpha.outlier) |
+                          !is.na(ref.trans.merged$beta.outlier)), ]
+
+  } else if (!overlap.zero.genes & !qn.interval.genes & !both.outlier.tests.genes){
+    mywarning <-
+      paste(
+        "\n\noverlap.zero, qn.interval, and both.outlier.tests",
+        "were all FALSE. Setting both.outlier.tests to TRUE\n\n"
+      )
+    warning(paste(strwrap(mywarning), collapse = "\n"))
+
+    # Subset extreme outliers
+    # (had both alpha excess AND was alpha outlier. Likewise for beta)
+    ref.trans.merged.alpha <- ref.trans.merged[ref.trans.merged$crazy.a == TRUE,]
+    ref.trans.merged.beta <- ref.trans.merged[ref.trans.merged$crazy.b == TRUE,]
+    ref.trans.merged.either <-
+      ref.trans.merged[(ref.trans.merged$crazy.a == TRUE |
+                          ref.trans.merged$crazy.b == TRUE),]
+  }
+
+  # Remove rows with NA in snpPOS. NAs caused issues with RIdeogram.
   ref.trans.merged.alpha <-
-    ref.trans.merged[!is.na(ref.trans.merged$alpha.outlier) |
-                       !is.na(ref.trans.merged$alpha.excess),]
-
+    ref.trans.merged.alpha[!is.na(ref.trans.merged.alpha$snpPOS), ]
   ref.trans.merged.beta <-
-    ref.trans.merged[!is.na(ref.trans.merged$beta.outlier) |
-                       !is.na(ref.trans.merged$beta.excess),]
-
+    ref.trans.merged.beta[!is.na(ref.trans.merged.beta$snpPOS), ]
+  ref.trans.merged.either <-
+    ref.trans.merged.either[!is.na(ref.trans.merged.either$snpPOS), ]
 
   ############################################################
   ### Run RIDEOGRAM
@@ -177,11 +267,19 @@ plot_outlier_ideogram <- function(prefix,
   # End: A numeric specifying element end position.
   # Value: A numeric specifying the data value.
 
-  # Create a data.frame with the chromosome information.
-  chrom.df <- data.frame(Chr=paste0("chr", ref.merged$Ref),
-                         Start=as.integer(0),
-                         End=ref.merged$RefLen,
-                         stringsAsFactors = FALSE)
+  if (!is.null(chrnum.prefix)){
+    # Create a data.frame with the chromosome information.
+    chrom.df <- data.frame(Chr=paste0(chrnum.prefix, ref.merged$Ref),
+                           Start=as.integer(0),
+                           End=ref.merged$RefLen,
+                           stringsAsFactors = FALSE)
+  } else if (is.null(chrnum.prefix)){
+    # Create a data.frame with the chromosome information.
+    chrom.df <- data.frame(Chr=ref.merged$Ref,
+                           Start=as.integer(0),
+                           End=ref.merged$RefLen,
+                           stringsAsFactors = FALSE)
+  }
 
   chrom.df <- chrom.df[!duplicated(chrom.df$Chr),]
   chrom.df <- chrom.df[order(chrom.df$Chr),]
@@ -228,24 +326,49 @@ plot_outlier_ideogram <- function(prefix,
   # Made the genes bigger than the genomic loci for clarity.
   # Added gene.size length to each SNP.
   # Do both alpha and beta outliers.
+
+  if (!is.null(chrnum.prefix)){
+
   heatmap.alpha <-
       data.frame(
-        Chr = paste0("chr", ref.trans.merged$Ref),
-        Start = ref.trans.merged$RefStart,
-        End = ref.trans.merged$RefStart+gene.size,
-        Value = ref.trans.merged$alpha,
+        Chr = as.character(paste0(chrnum.prefix, ref.trans.merged.alpha$Ref)),
+        Start = ref.trans.merged.alpha$RefStart,
+        End = ref.trans.merged.alpha$RefStart+gene.size,
+        Value = ref.trans.merged.alpha$alpha,
         stringsAsFactors = FALSE
       )
 
   # Genes only.
   heatmap.beta <-
     data.frame(
-      Chr = paste0("chr", ref.trans.merged$Ref),
-      Start = ref.trans.merged$RefStart,
-      End = ref.trans.merged$RefStart+gene.size,
-      Value = ref.trans.merged$beta,
+      Chr = as.character(paste0(chrnum.prefix, ref.trans.merged.beta$Ref)),
+      Start = ref.trans.merged.beta$RefStart,
+      End = ref.trans.merged.beta$RefStart+gene.size,
+      Value = ref.trans.merged.beta$beta,
       stringsAsFactors = FALSE
     )
+
+  } else if (is.null(chrnum.prefix)){
+    heatmap.alpha <-
+      data.frame(
+        Chr = as.character(ref.trans.merged.alpha$Ref),
+        Start = ref.trans.merged.alpha$RefStart,
+        End = ref.trans.merged.alpha$RefStart+gene.size,
+        Value = ref.trans.merged.alpha$alpha,
+        stringsAsFactors = FALSE
+      )
+
+    heatmap.beta <-
+      data.frame(
+        Chr = as.character(ref.trans.merged.beta$Ref),
+        Start = ref.trans.merged.beta$RefStart,
+        End = ref.trans.merged.beta$RefStart+gene.size,
+        Value = ref.trans.merged.beta$beta,
+        stringsAsFactors = FALSE
+      )
+  }
+
+
 
 
   # Filter out outliers that went beyond chromosome length.
@@ -320,23 +443,47 @@ plot_outlier_ideogram <- function(prefix,
   # Now make the input objects for all the other outliers.
   # Made length longer for clarity.
   # Made length snpPOS + 1e5. Smaller than genes though.
-  linked.alpha <-
-    data.frame(
-      Chr = as.character(paste0("chr", ref.merged.alpha$Ref)),
-      Start = as.integer(ref.merged.alpha$snpPOS),
-      End = as.integer(ref.merged.alpha$snpPOS+other.size),
-      Value = as.numeric(as.character(ref.merged.alpha$alpha)),
-      stringsAsFactors = FALSE
-    )
 
-  linked.beta <-
-    data.frame(
-      Chr = as.character(paste0("chr", ref.merged.beta$Ref)),
-      Start = as.integer(ref.merged.beta$snpPOS),
-      End = as.integer(ref.merged.beta$snpPOS+other.size),
-      Value = as.numeric(as.character(ref.merged.beta$beta)),
-      stringsAsFactors = FALSE
-    )
+  if (!is.null(chrnum.prefix)){
+    linked.alpha <-
+      data.frame(
+        Chr = as.character(paste0(chrnum.prefix, ref.merged.alpha$Ref)),
+        Start = as.integer(ref.merged.alpha$snpPOS),
+        End = as.integer(ref.merged.alpha$snpPOS + other.size),
+        Value = as.numeric(as.character(ref.merged.alpha$alpha)),
+        stringsAsFactors = FALSE
+      )
+
+    linked.beta <-
+      data.frame(
+        Chr = as.character(paste0(chrnum.prefix, ref.merged.beta$Ref)),
+        Start = as.integer(ref.merged.beta$snpPOS),
+        End = as.integer(ref.merged.beta$snpPOS + other.size),
+        Value = as.numeric(as.character(ref.merged.beta$beta)),
+        stringsAsFactors = FALSE
+      )
+
+  } else if (is.null(chrnum.prefix)){
+
+    linked.alpha <-
+      data.frame(
+        Chr = as.character(ref.merged.alpha$Ref),
+        Start = as.integer(ref.merged.alpha$snpPOS),
+        End = as.integer(ref.merged.alpha$snpPOS+other.size),
+        Value = as.numeric(as.character(ref.merged.alpha$alpha)),
+        stringsAsFactors = FALSE
+      )
+
+    linked.beta <-
+      data.frame(
+        Chr = as.character(ref.merged.beta$Ref),
+        Start = as.integer(ref.merged.beta$snpPOS),
+        End = as.integer(ref.merged.beta$snpPOS+other.size),
+        Value = as.numeric(as.character(ref.merged.beta$beta)),
+        stringsAsFactors = FALSE
+      )
+
+  }
 
   # Remove loci that exteded past chromosome length.
   linked.alpha <- filter_overhang(linked.alpha, chrom.df)
@@ -345,8 +492,26 @@ plot_outlier_ideogram <- function(prefix,
 
   ########## ALL LOCI PLOTTED TOGETHER #################
 
-  all.alpha.loci <- rbind(heatmap.alpha, linked.alpha)
-  all.beta.loci <- rbind(heatmap.beta, linked.beta)
+  if (!genes.only & !linked.only){
+
+    all.alpha.loci <- rbind(heatmap.alpha, linked.alpha)
+    all.beta.loci <- rbind(heatmap.beta, linked.beta)
+
+  } else if (genes.only & !linked.only){
+
+    all.alpha.loci <- heatmap.alpha
+    all.beta.loci <- heatmap.beta
+
+  } else if (!genes.only & linked.only){
+    all.alpha.loci <- linked.alpha
+    all.beta.loci <- linked.beta
+
+  } else if (genes.only & linked.only){
+    warning("genes.only and linked.only were both set to TRUE. Including both")
+    all.alpha.loci <- rbind(heatmap.alpha, linked.alpha)
+    all.beta.loci <- rbind(heatmap.beta, linked.beta)
+  }
+
 
   plotdf <-
     data.frame(
@@ -372,6 +537,9 @@ plot_outlier_ideogram <- function(prefix,
   RIdeogram::convertSVG(file.path(plotDIR,
                                   paste0(prefix, "_ideogram.svg")),
                         device = convert_svg)
+
+  # Return data.frame with ref info for gene outliers.
+  return(ref.trans.merged.either)
 
 }
 

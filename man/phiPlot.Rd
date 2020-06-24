@@ -21,6 +21,7 @@ phiPlot(
   zero.linetype = "dashed",
   alpha.color = "blue",
   beta.color = "red",
+  both.color = "purple",
   margins = c(150, 5.5, 5.5, 5.5),
   margin.units = "points",
   phi.height = 7,
@@ -81,6 +82,9 @@ Default = "dashed"}
 \item{alpha.color}{Color for alpha outlier loci. Default = "blue"}
 
 \item{beta.color}{Color for beta outlier loci. Default = "red"}
+
+\item{both.color}{Color for SNPs that are both alpha and beta outliers.
+Default = "purple"}
 
 \item{margins}{Vector of margins for phi plot: c(Top, Right, Bottom, Left)
 Top is extended to include the Hybrid Index histogram}
