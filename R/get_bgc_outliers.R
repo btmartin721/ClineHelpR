@@ -157,7 +157,7 @@ get_bgc_outliers <- function(df.list,
                              admix.pop,
                              popmap,
                              qn = 0.975,
-                             loci.file,
+                             loci.file = NULL,
                              save.obj = NULL){
 
   # Get 95% credible intervals for alpha, beta, gamma-quantile (qa),
@@ -170,6 +170,15 @@ get_bgc_outliers <- function(df.list,
   gc()
   qb <- get_cis(df.list[[5]])
   gc()
+
+  clean=FALSE
+  #if no loci file provided, make a spoof one here
+  if (is.null(loci.file)){
+    clean=TRUE
+    spoof<-data.frame("#CHROM" = 0:((length(df.list[[2]]$V1)-1)), "POS"=0:((length(df.list[[2]]$V1)-1)))
+    write_delim(spoof, "loci_map.txt", delim="\t", col_names=TRUE)
+    loci.file="loci_map.txt"
+  }
 
   if (!file.exists(loci.file)){
     stop(paste0("Error: The loci file ", loci.file, " does not exist!"))
@@ -204,6 +213,12 @@ get_bgc_outliers <- function(df.list,
   }
 
   gc()
+
+  #clean up spoofed loci_map
+  if (clean == TRUE){
+    file.remove(loci.file)
+  }
+
   return(res)
 
 }
