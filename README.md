@@ -68,7 +68,7 @@ First, the Phi plot that Gompert et al. made in some of their papers. In this pl
 
 Here is an example of a Phi plot that ClinePlotR can make:  
 
-<img src="vignettes/eatt_genes_hiXphi_alphaAndBeta.png" width="60%">  
+<img src="img/eatt_genes_hiXphi_alphaAndBeta.png" width="60%">  
 
 In the above plot, significant BGC alpha outlier clines are highlighted in black, and the non-significant loci are gray. A hybrid index histogram is included above the Phi plot. A separate plot is automatically made to highlight beta outliers. Many aspects of the plot can be adjusted with arguments to suit your needs, including colors, width/height, margins, criteria for determining outliers, and many more.  
 
@@ -80,7 +80,7 @@ Positive beta outliers indicate a steeper cline (i.e. a faster rate of transitio
 
 If you have appropriate data and follow some steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:  
 
-<img src="vignettes/ideogram_EATT.png">  
+<img src="img/ideogram_EATT.png">  
 
 For each chromosome, alpha outliers are plotted on the left and beta are on the right. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.  
 
@@ -225,16 +225,16 @@ The plot will be saved in plotDIR.
 
 Here are some examples that plot_traces() makes:
 
-<img src="vignettes/LnL_convergence.png" width="50%">  
+<img src="img/LnL_convergence.png" width="50%">  
 
-<img src="vignettes/alphaTrace.png" width="50%">
+<img src="img/alphaTrace.png" width="50%">
 
 
 Here we aggregated five BGC runs with 2,000 samples each. You can see that all five converged.
 
 Here's an example of LnL that didn't converge among the five runs:
 
-![LnL Plot: Didn't Converge.](vignettes/bad_LnL_convergence.png)
+![LnL Plot: Didn't Converge.](img/bad_LnL_convergence.png)
 
 You can tell the five runs started to converge towards the end, but the LnL were still rising until close to the end of the run. This one needed to be re-run with longer burn-in.
 
@@ -290,13 +290,7 @@ Most of the plot settings can be adjusted. See ?phiPlot for more info.
 
 You can change the criteria for identifying outlier loci with the overlap.zero, qn.interval, and both.outlier.tests options. By default, it is set to identify outliers using either overlap.zero or qn.interval. I.e. it only has to meet at least one of the criteria. You can turn one or the other off if you want by setting e.g. overlap.zero = FALSE. They can't both be off unless both.outlier.tests = TRUE.
 
-If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings.
-
-E.g.,
-
-![Phi Plot: Both Outlier Tests.](vignettes/eatt_genes_hiXphi_alphaAndBeta.png)
-
-This is a more conservative outlier test. There will be fewer outliers with both required.
+If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings. This is a more conservative outlier test. There will be fewer outliers with both required.
 
 ### Chromosome Plots
 
@@ -394,7 +388,7 @@ plot_outlier_ideogram(
 )
 ```
 
-![Ideogram Plot: Alpha and Beta Outliers.](vignettes/population1_chromosome.png)
+![Ideogram Plot: Alpha and Beta Outliers.](img/ideogram_EATT.png)
 
 This plot gets saved as an SVG file in plotDIR and by default a PDF file (saved in the current working directory). But you can change the PDF output to PNG or JPG if you want. See ?plot_outlier_ideogram
 
