@@ -5,6 +5,9 @@ ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran 
 
 The package allows you to make several plots.
 
+## Example Dataset
+All example data will be uploaded to a Dryad Digital Repository (doi: XXXX), as the files are too large for GitHub.
+
 ## Dependencies
 
 ClinePlotR has several dependencies. 
@@ -58,8 +61,6 @@ library("ClinePlotR")
 The BGC functions allow you to:  
 1. Plot genomic clines as Phi (Prob. P1 ancestry) on the Y-axis and hybrid index on the X-axis.  
 2. Plot a chromosomal ideogram with BGC outliers shown on chromosomes.    
-
-
 
 
 ### Phi ~ Hybrid Index Plots  
