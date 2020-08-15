@@ -226,7 +226,7 @@ The plot will be saved in plotDIR.
 
 Here are some examples that plot_traces() makes:
 
-<img src="img/LnL_convergence.png" width="50%">  
+<img src="img/eatt_full_bgc_LnL_convergence.png" width="50%">  
 
 <img src="img/alphaTrace.png" width="50%">
 
