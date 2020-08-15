@@ -3,13 +3,12 @@
 # I first prepared the rasters in prepareRasters.R
 # Now I run the ENMeval pipeline
 
-rasterDIR <- "../../../../Dissertation/BOX/gis/bioclim_R"
+dataDIR <- "bioclim_R"
 
 envList <-
   prepare_rasters(
     raster.dir = file.path(dataDIR, "layers", "maxent_rasters", "crop"),
-    sample.file = file.path(dataDIR,
-                            "sample_localities_maxent_southeast_noNA.csv"),
+    sample.file = "sample_localities_maxent_southeast_noNA.csv",
     header = TRUE,
     bb.buffer = 0.5,
     plotDIR = file.path(dataDIR, "plots")

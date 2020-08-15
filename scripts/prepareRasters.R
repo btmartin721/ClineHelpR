@@ -1,14 +1,21 @@
 
+# Example data can be found in a Dryad Digital Repository (doi: XXXX)
+
 library("raster")
 library("rgdal")
 
-setwd("D:/Dissertation/BOX/gis/bioclim_R/layers/wc2.1_30s_srad/")
+#### Get mean among 12 months of raster layers. ####
+####
+####
+
+# Mean annual solar radiation; worldclim.org
+setwd("bioclim_R/layers/wc2.1_30s_srad/")
 
 # Load into raster stack
 solar.files <- list.files(pattern = "*.tif", full.names = TRUE)
 solar.rad <- raster::stack(solar.files)
 
-setwd("D:/Dissertation/BOX/gis/bioclim_R/layers/wc2.1_30s_wind/")
+setwd("bioclim_R/layers/wc2.1_30s_wind/") # found at worldclim.org; wind speed layer
 
 wind.files <- list.files(pattern = "*.tif", full.names = TRUE)
 wind <- raster::stack(wind.files)
@@ -21,28 +28,25 @@ raster::plot(solar.mean)
 raster::plot(wind.mean)
 
 raster::writeRaster(x = solar.mean,
-                    filename = "../maxent_rasters/solarRAD_annualMean.tif",
+                    filename = "maxent_rasters/solarRAD_annualMean.tif",
                     driver = "GeoTiff")
 
 raster::writeRaster(x = wind.mean,
-                    filename = "../maxent_rasters/windSpeed_annualMean.tif",
+                    filename = "maxent_rasters/windSpeed_annualMean.tif",
                     driver = "GeoTiff")
 
-nlcd <-
-  raster::raster(
-    "../../../../Dissertation/BOX/gis/bioclim_R/layers/maxent_rasters/a_nlcd2011.tif"
-  )
-
+# List all rasters in maxent_rasters to load all of them.
 files <-
-  list.files(path = "../../../../Dissertation/BOX/gis/bioclim_R/layers/maxent_rasters/",
+  list.files(path = "maxent_rasters/",
              pattern = "wc*",
              full.names = TRUE)
 
+# Create a raster stack from the list of files.
 wc <- raster::stack(files)
 
 samples <-
   read.csv(
-    "../../../../Dissertation/BOX/gis/bioclim_R/sample_localities_maxent_southeast.csv",
+    "sample_localities_maxent_southeast.csv",
     header = TRUE,
     stringsAsFactors = FALSE
   )
@@ -78,20 +82,10 @@ envs.cropped <- raster::crop(wc, envs.buf)
 raster::writeRaster(
   envs.cropped,
   filename = file.path(
-    "../../../../Dissertation/BOX/gis/bioclim_R/layers/maxent_rasters",
+    "maxent_rasters",
     paste0("crop_", names(envs.cropped))
   ),
   bylayer = TRUE,
   format = "GTiff"
 )
-
-## Prepared NLCD raster in QGIS because it was taking a long time in R.
-## I ran the raster warp function to resample at same extent and resolution as
-## the worldclim layers. The pixel size was:
-## 0.008333333333333333218,-0.008333333333333373116
-
-# Now run the enmeval pipeline.
-# I made the categorical raster load first by making the filename
-# have an earlier letter.
-# That way I can easily specify which one is categorical when running ENMeval.
 
