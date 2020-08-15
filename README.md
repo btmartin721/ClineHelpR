@@ -677,15 +677,15 @@ clinesXenvironment will generate three output files:
 Here are some example plots that clinesXenvironment can make:  
 
 Genomic Clines ~ Longitude  
-<img src="vignettes/genomicClineXlongitude.png" width="50%">     
+<img src="img/genomicClineXlongitude.png" width="50%">     
 
 Hybrid Index ~ Longitude  
-<img src="vignettes/hybridIndexXLongitude.png" width="50%">     
+<img src="img/hybridIndexXLongitude.png" width="50%">     
 
 Genomic Cline ~ Raster Layers (e.g. Here we used BioClim1)   
-<img src="vignettes/genomicClineXraster_bioclim1.png" width="50%">  
+<img src="img/genomicClineXraster_bioclim1.png" width="50%">  
 
 Hybrid Index ~ Raster Layers (e.g. Here we used BioClim1)  
-<img src="vignettes/hybridIndexXraster_bioClim1.png" width="50%">  
+<img src="img/hybridIndexXraster_bioClim1.png" width="50%">  
 
 
