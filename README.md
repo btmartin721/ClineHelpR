@@ -294,7 +294,7 @@ If you set both.outlier.tests to TRUE, it will require that outliers meet both c
 
 E.g.,
 
-![Phi Plot: Both Outlier Tests.](vignettes/ideogram_EATT.png)
+![Phi Plot: Both Outlier Tests.](vignettes/eatt_genes_hiXphi_alphaAndBeta.png)
 
 This is a more conservative outlier test. There will be fewer outliers with both required.
 
