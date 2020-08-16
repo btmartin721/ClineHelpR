@@ -83,6 +83,12 @@ With BGC, positive alpha outliers indicate excess P1 ancestry compared to the ge
 
 Positive beta outliers indicate a steeper cline (i.e. a faster rate of transition and selection against introgression), whereas negative beta indicates hybrid vigor (i.e. higher introgression than expected).  
 
+### Alpha X Beta Plots
+
+You can also create a contour plot with alpha on the x-axis and beta on the y-axis. The function will also create polygon hulls around the outliers to encapsulate 2-D outlier space.  
+
+<img src="img/alphaBetaCountourPlot.png" width="60%">
+
 ### Chromosome Plots  
 
 If you have appropriate data and follow some external steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:  
