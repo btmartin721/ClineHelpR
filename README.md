@@ -510,10 +510,6 @@ plot_outlier_ideogram(
 
 These functions serve to run INTROGRESS (Gompert and Buerkle, 2010), then correlate the genomic clines with latitude, longitude, and any environmental variables you want. To do this, you need a file with sample coordinates (see format below) and input raster layers. There can be multiple raster layers (e.g., the 19 BioClim layers from https://worldclim.org), and ClinePlotR will correlate each one with the INTROGRESS variables. 
 
-The general workflow for the INTROGRESS functionality is:  
-
-
-
 We can get a bunch of raster layers and determine which are the most important as determined by species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with the most important environmental features, plus latitude and longitude. We will use a wrapper package called ENMeval (Muscarella et al., 2014) to run MAXENT for the species distribution modeling. See the [ENMeval package](https://cran.r-project.org/web/packages/ENMeval/index.html) from CRAN. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g., mine was placed here, where my dismo R package is installed:   
 
 ```"C:/Users/btm/Documents/R/win-library/3.6/dismo/java/maxent.jar"```  
@@ -572,10 +568,11 @@ Then you can run partition_raster_bg(). This will generate a bunch of background
 ```
 bg <- 
   partition_raster_bg(
-    env.list = envList, plotDIR = "./plots")
+    env.list = envList, 
+    plotDIR = "exampleData/ENMeval_bioclim/outputFiles/plots")
 ```  
 
-This will also generate two PDFs, each with multiple plots.  
+This will also generate two PDFs, each with multiple plots that you can look at to decide which type of background partition you want to use.  
 
 1. All your input rasters with sample localities overlaid as points.  
 2. Background points for several partitioning methods. See the ENMeval vignette for more info on bg partitions.  
@@ -586,7 +583,7 @@ This will also generate two PDFs, each with multiple plots.
 Here, you can subset and remove the envList object to reduce your memory footprint if ENMeval runs out of memory. If you don't want to lose envList you can save it as an RDS object before removing it. That way you don't have to re-run the whole environmental pipeline if you want to re-load it.  
 
 ```
-saveRDS(saveRDS(envList, file = "./envList.rds"))
+saveRDS(envList, file = "exampleData/ENMeval_bioclim/Robjects/envList.rds")
 envs.fg <- envList[[1]]
 coords <- envList[[3]]
 rm(envList) # Removes envList object from global environment
@@ -595,18 +592,18 @@ gc() # This will perform garbage collection to release system memory resources
 
 If you decide you want to reload envList again, just do:  
 
-```envList <- readRDS("./envList.rds")```
+```envList <- readRDS("exampleData/ENMeval_bioclim/Robjects/envList.rds")```
 
 You might need to increase the amount of memory that rJava can use if you get an out of memory error:  
 
 ```options(java.parameters = "-Xmx16g")```
 
-This sets the amount of memory that rJava can use to 16 GB.  
+This sets the amount of memory that rJava can use to 16 GB.  Adjust based on your system specifications.  
 
 Now you can run ENMeval.  
 
 ```
-eval.par <- runENMeval(envs.fg = envs.fg,
+eval.par <- runENMeval(envs.fg = envs.fg, # envList[[1]]
                        bg = bg, 
                        parallel = TRUE,
                        categoricals = 1,
@@ -623,13 +620,13 @@ You can try some other options too:
 eval.par <- runENMeval(envs.fg = envs.fg, # envList[[1]]
                        bg = bg, # Returned from partition_raster_bg()
                        parallel = FALSE, # Don't run in parallel
-                       categoricals = c(1, 2), # Specify first two layers as categorical (e.g. land cover)
-                       partition.method = "checkerboard2",
+                       categoricals = c(1, 2), # Specify first two layers as categorical (e.g. land cover rasters)
+                       partition.method = "checkerboard2", # use checkerboard2 partitioning method
                        coords = coords, # envList[[3]]
                        RMvalues = seq(0.5, 5, 0.5), # Runs regularization multipliers from 0.5 to 5 in 0.5 increments
                        agg.factor = c(3, 3), # Changes aggregation.factor for background partition
-                       feature.classes c("L", "LQ", "LQP") # Specify which feature classes to run with MAXENT
-                       algorithm = "maxnet" # Use maxnet instead of maxent
+                       feature.classes c("L", "LQ", "LQP") # Specify which feature classes to run with MAXENT; see ENMeval vignette
+                       algorithm = "maxnet" # Use maxnet instead of maxent # Warning: I haven't tested maxnet with this pipeline.
                        )
 ```
 
@@ -642,7 +639,7 @@ Now you can summarize and plot the ENMeval results. This was all taken from the 
 ```
 summarize_ENMeval(
   eval.par = eval.par,
-  plotDIR = "./plots",
+  plotDIR = "exampleData/ENMeval_bioclim/outputFiles/plots",
   minLat = 25, # Adjust these to your coordinate frame
   maxLat = 45,
   minLon = -100,
@@ -650,7 +647,7 @@ summarize_ENMeval(
   )
 ```
 
-This will make a bunch of plots and CSV files in plotDIR, including the MAXENT precictions, lambda results, best model based on AICc scores, various plots showing how the regularization multipliers and feature classes affect AICc scores, and a barplot showing raster layer Permutation Importance.  
+This will make a bunch of plots and CSV files in plotDIR, including the MAXENT precictions, lambda results, best model based on AICc scores, various plots showing how the regularization multipliers and feature classes affect AICc scores, and a barplot showing raster layer Permutation Importance.  Many of the PDFs will have multiple plots, so scroll down to see them.  
 
 If your raster filenames are long, they will likely run off the Permutation Importance barplot. You can adjust the margins of the plot using the imp.margins parameter. There are some other plot adjustment parameters you can try as well:  
 
