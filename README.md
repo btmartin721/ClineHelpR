@@ -680,6 +680,12 @@ You can inspect eval.par@models to find the model with the best delta AICc. In t
 
 You can then run INTROGRESS and start the next part of this pipeline.  
 
+Here is the permutation importance plot:  
+
+<img src="img/permutationImportance_plot.png">
+
+You can see that two of the layers were by far the most important (BioClim layer 7 and mean annual solar radition). 
+
 ## INTROGRESS Genomic Clines X Environmental Data
 
 Now that we have the important raster, we can use it to plot INTROGRESS genomic clines ~ environment. First, we need to extract the raster values for each sample point. We have included a function that does this. You just need the envList object generated from the prepare_rasters() function above. If you saved this object for later use, you can just reload it with readRDS().
