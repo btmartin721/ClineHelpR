@@ -19,12 +19,25 @@
 #' @param outputDIR Character string; File path for INTROGRESS output
 #' @param sep Character string; Column delimiter for INTROGRESS input files
 #' @param pop.id Boolean; Value for INTROGRESS parameter pop.id.
-#'               See ?prepare.data in introgress pacakge
+#'               See ?prepare.data in introgress R pacakge
 #' @param ind.id Boolean; Value for INTROGRESS parameter ind.id
-#'               See ?prepare.data in introgress package
+#'               See ?prepare.data in introgress R package
 #' @param fixed Boolean; TRUE if input data are fixed SNPs
 #' @return List object containing genomic cline output
 #' @export
+#' @examples
+#' eatt <- runIntrogress(p1.file = "EATT_p1data.txt",
+#'                       p2.file = "EATT_p2data.txt",
+#'                       admix.file = "EATT_admix.txt",
+#'                       loci.file = "EATT_loci.txt",
+#'                       clineLabels = c("EA", "Het", "TT")
+#'                       minDelt = 0.8,
+#'                       prefix = "eatt",
+#'                       outputDIR = "./introgress_plots",
+#'                       sep = "\t",
+#'                       pop.id = FALSE,
+#'                       ind.id = FALSE,
+#'                       fixed = FALSE)
 runIntrogress <- function(p1.file,
                           p2.file,
                           admix.file,
@@ -259,11 +272,11 @@ runIntrogress <- function(p1.file,
 #' @param sample.info File path to sample info file with 4 columns:
 #'                    indID,popID,latitude,longitude
 #' @param header Boolean specifying if sample.info has a header line
-#' @param coords data.frame with coordinates. Can be subset from env.list,
+#' @param coords data.frame with coordinates. Can be taken from env.list,
 #'               an object returned from the prepare_rasters() function.
+#'               See ?prepare_rasters(). If used, value is env.list[[3]]
 #' @param clineLabels Character vector of length == 3 designating population
 #'                    names for c(P1, Het, P2)
-#'               See ?prepare_rasters(). If used, value should be envList[[3]]
 #' @param outputDIR File path to directory for outputting plots
 #' @param clineMethod Character string indicating desired method for generating
 #'                    genomic clines. Must be either "permutation" or
@@ -271,6 +284,15 @@ runIntrogress <- function(p1.file,
 #' @param prefix Character prefix for output files
 #' @param cor.method Method for correlations c("pearson", "kendall", "spearman)
 #' @export
+#' @examples
+#' clinesXenvironment(clineList = eatt,
+#'                    rasterPointValues = rasterPoints,
+#'                    rasterToUse = NULL,
+#'                    clineLabels = c("EA", "Het", "TT"),
+#'                    outputDIR = "./cline_plots",
+#'                    clineMethod = "permutation",
+#'                    prefix = "eatt",
+#'                    cor.method = "auto")
 clinesXenvironment <- function(clineList,
                                rasterPointValues,
                                rastersToUse = NULL,
@@ -317,6 +339,9 @@ clinesXenvironment <- function(clineList,
   # Cline X Environment Plots
 
   ## latitude ##
+
+  # Create output directory if it doesn't already exist.
+  dir.create(outputDIR, showWarnings = FALSE)
 
   pdf(
     file = file.path(outputDIR, paste0(prefix, "_clinesXLatLon.pdf")),
