@@ -171,7 +171,7 @@ These functions all use the example data from the DRYAD repository (see above).
 
 #### Aggregate BGC Runs
 
-ClinePlotR allows you to aggregate multiple BGC runs together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_traces() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL traces below).
+ClinePlotR allows you to aggregate multiple BGC runs together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_traces() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL and parameter traces below).
 
 To aggregate the BGC runs, you first need the BGC output in the correct format.
 
@@ -209,7 +209,7 @@ bgc.genes <-
                      discard = 2500)
 ```
 
-This will discard the first 2500 samples from **each run**. So if like in the example before you had 25,000 MCMC samples, and you discarded 2500 from each of the five runs, you would end up with 12,500 MCMC samples. The difference here is that instead of taking every Nth sample, you are taking the first N samples of each run.
+This will discard the first 2500 samples from **each run**. So if like in the previous example you had 25,000 MCMC samples, and you discarded 2500 from each of the five runs, you would end up with 12,500 MCMC samples. The difference here is that instead of taking every Nth sample, you are discarding the first N samples of each run.
 
 One reason to use this is if you notice that the runs converged e.g. 2500 samples post-burnin. In this case you could just discard the non-converged portions of the runs as burn-in.
 
@@ -246,13 +246,13 @@ You can tell the five runs started to converge towards the end, but the LnL were
 
 Here we identify alpha and beta outliers using the get_bgc_outliers() function.
 
-For this you need a population map file (see above).
+For this you need a population map file (see above for the format).
 
 ```
 gene.outliers <-
   get_bgc_outliers(
     df.list = bgc.genes,
-    admix.pop = "eatt",
+    admix.pop = "EATT",
     popmap = "exampleData/bgc/bgc_lociFiles/eatt.bgc.popmap_final.txt",
     loci.file = "exampledata/genes/eatt_bgc_loci.txt",
     qn = 0.975)
@@ -264,7 +264,7 @@ get_bgc_outliers records outliers in three ways.
 
 2. If alpha or beta falls outside the quantile interval: qn / 2 and (1 - qn) / 2. This one is more conservative.
 
-3. If both are TRUE. This is the most conservative one.  
+3. If both 1. and 2. are TRUE. This is the most conservative one.  
 
 qn can be adjusted. The default is 0.975 as the upper interval bound. If you set the qn parameter to 0.95, the interval will be 0.95 / 2 and (1 - 0.95) / 2.
 
@@ -274,150 +274,236 @@ You can save this function's output as an RDS object for later use by setting sa
 
 #### Plot Genomic Clines
 
-Now you can make the Phi genomic cline plot. The popname can be any string you want here.
+Now you can make the Phi genomic cline plot. The popname argument can be any string you want here.
 
 ```
 phiPlot(outlier.list = gene.outliers,
-        popname = paste0("Pop 1", " Genes"),
+        popname = paste0("EATT", " Genes"),
         line.size = 0.25,
         saveToFile = paste0(prefix, "_genes"),
-        plotDIR = "./plots/",
+        plotDIR = "exampleData/bgc/bgcPlotter_output",
         hist.y.origin = 1.2,
         hist.height = 1.8,
         margins = c(160.0, 5.5, 5.5, 5.5),
         hist.binwidth = 0.05)
 ```
 
-If you want to save the plot to a file, just use the saveToFile option. If specified, it should be the filename you want to save to. If you don't use this option, it will appear in your Rstudio plot window.
+If you want to save the plot to a file, just use the saveToFile option. If specified, the value should be the filename you want to save to. If you don't use this option, it will appear in your Rstudio plot window.
 
-Most of the plot settings can be adjusted. See ?phiPlot for more info.
+Most of the plot settings can be adjusted as needed. See ?phiPlot for more info.
 
-You can change the criteria for identifying outlier loci with the overlap.zero, qn.interval, and both.outlier.tests options. By default, it is set to identify outliers using either overlap.zero or qn.interval. I.e. it only has to meet at least one of the criteria. You can turn one or the other off if you want by setting e.g. overlap.zero = FALSE. They can't both be off unless both.outlier.tests = TRUE.
+You can change the criteria for identifying outlier loci with the overlap.zero, qn.interval, and both.outlier.tests options. By default, it is set to identify outliers using either overlap.zero or qn.interval. I.e., it only has to meet at least one of the criteria. You can turn one or the other off if you want by setting overlap.zero = FALSE or qn.interval = FALSE. They can't both be off unless both.outlier.tests = TRUE.
 
-If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings. This is a more conservative outlier test. There will be fewer outliers with both required.
+If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings and is a more conservative outlier test. There will be fewer outliers with both required.
 
 ### Chromosome Plots
 
-**Important:** If you want to make the ideogram plots, you will need to run BGC and the previous R functions twice: Once for SNPs aligned only to your study organism's transcriptome, and a second time for all genome-wide loci (i.e. unplaced scaffolds). The transcriptome loci names should have the GenBank Transcript IDs (also found in a GFF file), and the genome-wide loci should have scaffold IDs as the loci names.
+**Important:** If you want to make the ideogram plots, you will need to run BGC and the previous R functions twice: Once for SNPs aligned only to your study organism's transcriptome, and a second time for all genome-wide loci (i.e. unplaced scaffolds). The transcriptome loci names should have the GenBank Transcript IDs (as found in the GFF file), and the scaffold-aligned loci should have scaffold IDs as the locus names.
 
-For this part, you need a closely related reference genome that is assembled at the chromosome level. Second, your model organisms needs to have at least a scaffold-level genome and a transcriptome. You will also need a GFF file for the annotations.
+For this part, you need a closely related reference genome that is assembled at the chromosome-level. 
+
+Second, your model organism needs to have at least a scaffold-level genome and a transcriptome available. You will also need a GFF file for the annotations.
 
 **If you don't have all of those, you won't be able to do the chromosome plot.**
 
-#### Align scaffold-level Assembly to a Reference Genome.
+#### Map scaffold-level Assembly to a Reference Genome.
 
-You need to run some a priori analyses first.
+To convert scaffold coordinates to chromosome coordinates, you will need to map the scaffold-level assembly of your study organism to a closely related chromosome-level assembly.
 
-You need to use minimap2 for this part. https://github.com/lh3/minimap2
+First, some *a priori* analyses need to be run.
+
+##### Minimap2
+
+You need to use [minimap2](https://github.com/lh3/minimap2) (Li, 2018) for this part. 
 
 1. To map the assembly data to the reference genome, name the reference chromosomes in a fasta file something like "chr1", "chr2", etc. The important thing is that they have a string prefix and an integer at the end. This will be important downstream.
 
 2. Remove unplaced scaffolds from the reference genome's fasta file.
 
-3. Concatenate the genome-wide and transcriptome fasta files into one file.
+3. Concatenate the reference fasta files (scaffold and transcriptome) into one file. 
+  + In bash, this can be done like ```cat scaffolds.fasta transcriptome.fasta > query.fasta```
 
 4. Run minimap2. Tested with minimap2 v2.17.  
   + Example command: 
-  + ```minimap2 --cs -t 4 -x asm20 -N 100 ref.fasta assembly.fasta > refmap_asm20.paf```  
-  
-5. You will want to adjust asm20 to suit how closely related your reference genome is to your study organism. asm 20 is suitable if the average sequence divergence is ~10%, and it allows up to 20% divergence. asm10 is suitable for 5% average, allowing up to 10%. asm5 is for divergence of a few percent and up to 5%. 
+  + ```minimap2 --cs -t 4 -x asm20 -N 100 ref.fasta query.fasta > refmap_asm20.paf```  
+  + This will map the query scaffold/transcriptome loci to the reference genome. 
+  + You will want to adjust asm20 to suit how closely related your reference genome is to your study organism. asm 20 is suitable if the average sequence divergence is ~10%, and it allows up to 20% divergence. asm10 is suitable for 5% average, allowing up to 10%. asm5 is for average divergence of a few percent and up to 5%. 
 
-6. You also will want to save the output as a paf file (default in minimap2).  
 
-7. Next, run PAFScaff. https://github.com/slimsuite/pafscaff
-  + PAFScaff cleans up and improves the mapping.
-  + One of the output files from PAFScaff will be required to make the chromosome plot.
-  + **Important**: When running PAFScaff, set refprefix=ref_chromosome_prefix, newprefix=query, and unplaced=unplaced_ and sorted=RefStart
-  + E.g., 
-  + ```python pafscaff.py pafin=refmap_asm20.paf basefile=refmap_asm20_pafscaff reference=refchr.fasta assembly=assembly.fasta refprefix=chr newprefix=query unplaced=unplaced_ sorted=RefStart forks=16```
+5. Save the minimap2 output as a paf file (default in minimap2).  
+
+6. Next, run [PAFScaff](https://github.com/slimsuite/pafscaff)  
+  + PAFScaff cleans up and improves the mapping.  
+  + One of the output files from PAFScaff will be required to make the chromosome plot.  
+  + **Important**: When running PAFScaff, set the following options: ```refprefix=ref_chromosome_prefix, newprefix=query, unplaced=unplaced_ and sorted=RefStart```
+  + E.g.,  
+  + ```python pafscaff.py pafin=refmap_asm20.paf basefile=refmap_asm20_pafscaff reference=ref.fasta assembly=query.fasta refprefix=chr newprefix=query unplaced=unplaced_ sorted=RefStart forks=2```  
+  + Adjust the ```forks``` option to how many CPU cores you have available.  
   
   + Once PAFScaff is done running, you can move on with the chromosome plots.
   
 #### Make Chromosome Plots
 
-**These steps assume you have run BGC, combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide (i.e. unplaced scaffolds) loci.**  
+**These steps assume you have run BGC, combine_bgc_output() and get_bgc_outliers() for both transcriptome loci and genome-wide (i.e., unplaced scaffolds) loci.**  
 
 * Read in the GFF file using the parseGFF function.
 
 ```
-gff <- parseGFF(gff.filepath = "./exampledata/genes.gff")
+gff <- parseGFF(gff.filepath = "./exampleData/gff/genes_Terrapene.gff")
 ```
 
 * Now join the GFF annotations with the transcriptome dataset's transcript IDs.
 
 ```
 genes.annotated <-
-  join_bgc_gff(prefix = "population1",
+  join_bgc_gff(prefix = "eatt",
                outlier.list = gene.outliers,
                gff.data = gff,
                scafInfoDIR = "./scaffold_info")
 ```
 
-The scafInfoDIR parameter allows you to save the annotated output (e.g. with gene names) to this directory.  
+The scafInfoDIR parameter allows you to save the annotated output (e.g. with gene names) to this directory. If it doesn't exist, it will be created.  
 
 * Get outliers for unplaced scaffolds. Needed for chromosome plots.  
 
 ```
 # Aggregate the runs
 bgc.full <-
-  combine_bgc_output(results.dir = "exampledata/fulldataset",
-                     prefix = "full_population1")
+  combine_bgc_output(results.dir = "exampleData/bgc/bgc_outputFiles/fulldataset",
+                     prefix = "eatt")
+ 
+# plot parameter traces to confirm convergence
+plot_traces(df.list = bgc.full,
+         prefix = "eatt_full",
+         plotDIR = "exampleData/bgc/bgcPlotter_output")
 
 # Find the outliers
 full.outliers <-
   get_bgc_outliers(
     df.list = bgc.full,
-    admix.pop = "population1",
-    popmap = file.path("./exampledata/popmap.txt"),
-    loci.file = file.path("./exampledata/fulldataset/full_population1_bgc_loci.txt"))
+    admix.pop = "EATT",
+    popmap = file.path("./exampleData/bgc/popmaps/eatt.bgc.popmap_final.txt"),
+    loci.file = "./exampleData/bgc/bgc_lociFiles/fulldataset/eatt_bgc_loci.txt")
+```
+
+If you want, you can save the range of alpha and beta values like so:
+
+```
+# Not ClinePlotR functions.
+# This just saves the minimum and maximum alpha and beta outlier values
+# Can be used to add to the legend manually
+ab.range <-
+  data.frame(
+    "full.alpha" = c(
+      "min" = min(full.outliers[[1]]$alpha),
+      "max" = max(full.outliers[[1]]$alpha)
+    ),
+    "full.beta" = c(
+      "min" = min(full.outliers[[1]]$beta),
+      "max" = max(full.outliers[[1]]$beta)
+    ),
+    "genes.alpha" = c(
+      "min" = min(gene.outliers[[1]]$alpha),
+      "max" = max(gene.outliers[[1]]$alpha)
+    ),
+    "genes.beta" = c(min(gene.outliers[[1]]$beta), max(gene.outliers[[1]]$beta))
   )
+
+# Write alpha beta ranges to file.
+write.table(
+  data.frame("Header" = rownames(ab.range), ab.range),
+  file = file.path("exampleData/bgc/bgcPlotter_output", paste0(prefix, "_ab.ranges.csv")),
+  sep = ",",
+  row.names = F,
+  col.names = T,
+  quote = F
+)
+```  
+
+You can also plot these as a Phi plot and/or alphaBetaPlot.  
+
+```
+phiPlot(outlier.list = full.outliers,
+        popname = paste0("EATT", " Genes"),
+        line.size = 0.25,
+        saveToFile = paste0(prefix, "_full"),
+        plotDIR = "exampleData/bgc/bgcPlotter_output",
+        hist.y.origin = 1.2,
+        hist.height = 1.8,
+        margins = c(160.0, 5.5, 5.5, 5.5),
+        hist.binwidth = 0.05)
 ```
 
 #### Plot Ideograms
 
-To plot, you need the genome-wide outliers, the annotated transcriptome data, and the *.scaffolds.tdt output file from PAFScaff.
-
-If some chromosomes didn't have any outliers on them, they might not get plotted. If that's the case, you can use the missing.chrs and miss.chr.length arguments to include them. You just need their names in a vector and a vector of each chromosome's length (in base pairs).
+To plot, you need the genome-wide outliers, the annotated transcriptome data, and the &ast;.scaffolds.tdt output file from PAFScaff. See the exampleData/PAFScaff/pafscaff_asm20_scafTrans_tscripta.scaffolds.tdt file for an example.  
 
 
 ```
 plot_outlier_ideogram(
-  prefix = "population1",
+  prefix = "eatt",
   outliers.genes = genes.annotated,
   outliers.full.scaffolds = full.outliers,
-  pafInfo = "exampledata/refmap_asm20.scaffolds.tdt", # This is the PAFScaff output file
-  plotDIR = "./plots",
-  missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
-  miss.chr.length = c(4997863, 1374423, 1060959)
+  pafInfo = "exampleData/PAFScaff/pafscaff_asm20_scafTrans_tscripta.scaffolds.tdt", # This is the PAFScaff output file
+  plotDIR = "exampleData/bgc/bgcPlotter_output"
 )
 ```
 
-![Ideogram Plot: Alpha and Beta Outliers.](img/ideogram_EATT.png)
+If some chromosomes didn't have any outliers on them, they might not get plotted. If that's the case, you can use the missing.chrs and miss.chr.length arguments to include them. You just need their names in a vector and a vector of each chromosome's length (in base pairs). Like so:
+
+```
+plot_outlier_ideogram(
+  prefix = "eatt",
+  outliers.genes = genes.annotated,
+  outliers.full.scaffolds = full.outliers,
+  pafInfo = "exampleData/PAFScaff/pafscaff_asm20_scafTrans_tscripta.scaffolds.tdt", # This is the PAFScaff output file
+  plotDIR = "exampleData/bgc/bgcPlotter_output",
+  missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
+  miss.chr.length = c(4997863, 1374423, 1060959) # lenghts (in bp) of chromosomes from missing.chrs
+
+)
+``` 
 
 This plot gets saved as an SVG file in plotDIR and by default a PDF file (saved in the current working directory). But you can change the PDF output to PNG or JPG if you want. See ?plot_outlier_ideogram
 
-You can also mess with the colors and the band sizes. The bands by default are set much larger than the one base pair SNP position for visualization and clarity. If you want to make them larger for the genes and/or the unplaced scaffolds, you can. And you can adjust the colors of the alpha and beta bands separately by specifying a character vector colors (Rcolorbrewer or hex code) to the colorset1 (alpha) and colorset2 (beta) parameters.  E.g., 
+You can also adjust the colors and the band sizes. The bands by default are set much larger than the one base pair SNP position for better visualization and clarity. If you want to make them larger or smaller for the genes and/or the unplaced scaffolds, you can. And you can adjust the colors of the alpha and beta bands separately by specifying a character vector of colors (Rcolorbrewer or hex code) to the colorset1 (alpha) and colorset2 (beta) parameters.  E.g., 
 
 ```
 plot_outlier_ideogram(
-                      prefix = "population1",
+                      prefix = "eatt",
                       outliers.genes = genes.annotated,
                       outliers.full.scaffolds = full.outliers,
-                      pafInfo = "exampledata/refmap_asm20.scaffolds.tdt", # This is the PAFScaff output file
-                      plotDIR = "./plots",
-                      missing.chrs = c("chr11", "chr21", "chr25"), # If some chromosomes didn't have anything aligned to them
-                      miss.chr.length = c(4997863, 1374423, 1060959),
+                      pafInfo = "exampleData/PAFScaff/pafscaff_asm20_scafTrans_tscripta.scaffolds.tdt", # This is the PAFScaff output file
+                      plotDIR = "exampleData/bgc/bgcPlotter_output",
                       gene.size = 100000, # adjust size of known gene bands
                       other.size = 50000, # adjust size of unplaced scaffold bands
-                      colorset1 = c("green", "white", "blue"), # alpha colors
-                      colorset2 = c("red", "yellow", "purple"), # beta colors
-                      convert_svg = "png" # save as png instead of pdf
+                      convert_svg = "png", # save as png instead of pdf
+                      colorset1 = c("orange", "white", "green"), # alpha heatmap color range
+                      colorset2 = c("red", "white", "blue") # beta heatmap color range
 )
+```  
+
+Many of the arguments have default options if you don't want to mess with it. See ?plot_outlier_ideogram.  
+
+Here is the final plot we used:
+
+```
+plot_outlier_ideogram(
+                      prefix = "eatt",
+                      outliers.genes = genes.annotated,
+                      outliers.full.scaffolds = full.outliers,
+                      pafInfo = "exampleData/PAFScaff/pafscaff_asm20_scafTrans_tscripta.scaffolds.tdt", # This is the PAFScaff output file
+                      plotDIR = "exampleData/bgc/bgcPlotter_output",
+                      gene.size = 4e6, # adjust size of known gene bands
+                      other.size = 1e6, # adjust size of unplaced scaffold bands)
 ```
 
-## Finding Important Raster Layers  
+![Ideogram Plot: Alpha and Beta Outliers.](img/ideogram_EATT.png)  
 
-We can get a bunch of raster layers and determine which are the most important with regards to species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with the most important environmental features. We will use a wrapper package called ENMeval to run MAXENT for the species distribution modeling. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g. mine was placed here, where my dismo R package is installed:   
+
+## INTROGRESS Clines X Environment  
+
+We can get a bunch of raster layers and determine which are the most important as determined by species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with the most important environmental features, plus latitude and longitude. We will use a wrapper package called ENMeval (Muscarella et al., 2014) to run MAXENT for the species distribution modeling. See the [ENMeval package](https://cran.r-project.org/web/packages/ENMeval/index.html) from CRAN. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g., mine was placed here, where my dismo R package is installed:   
 
 ```"C:/Users/btm/Documents/R/win-library/3.6/dismo/java/maxent.jar"```  
 
@@ -425,20 +511,28 @@ We can get a bunch of raster layers and determine which are the most important w
 
 You will need all your raster files in one directory, with no other files. E.g., the 19 BioClim layers from https://worldclim.org/. The rasters also all need to be the same extent and resolution. If you got them all from WorldClim, they should all be the same. But if you add layers from other sources you'll need to resample the ones that don't fit. 
 
-See my scripts/prepareRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is the problem and you will need to resample some rasters.
+See my ClinePlotR/scripts/prepareRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is likely the problem and you will need to resample some rasters.  
 
 Also of note, the raster layers load in alphabetical order of filenames. So if you want to e.g. load a categorical layer first, prepend an earlier letter to the filename. 
 
-You will need a file with sample information. This file should be four comma-delimited columns in a specific order:  
+You will need a file with sample information. This file should be four comma-delimited columns in a specific order:
 
 1. IndividualIDs
 2. PopulationIDs
 3. Latitude (in decimal degrees)
 4. Longitude (in decimal degrees)
 
-You will get an error if one or more of your samples falls on an NA value for any of your input rasters. If this happens, just remove the offending individual(s) from the sample.file file and re-run prepare_rasters(). The error message will print out a list of individuals with NA values in each raster layer.
+E.g., 
 
-Then you can run prepare_rasters():  
+```
+SampleID,TaxonomicID,Latitude,Longitude
+EAAL_BX1380,T. carolina carolina,32.46535,-85.19981667
+EAAL_BX1387,T. carolina carolina,32.08411667,-85.6902
+EAAL_BX211,T. carolina carolina,32.43991667,-85.35198333
+EAAL_BXEA27,T. carolina carolina,34.4455,-85.7772
+```   
+
+Then you can run prepare_rasters(), which will load all the layers in the specified directory and crop them to the same extent. This extent is determined by the sampling extent plus a buffer (in arc-seconds) that can be adjusted:   
 
 ```
 envList <- 
@@ -450,6 +544,8 @@ envList <-
     plotDIR = "./plots"
     )
 ```  
+
+You will get an error if one or more of your samples falls on an NA value for any of your input rasters. If this happens, just remove the offending individual(s) from the sample.file file and re-run prepare_rasters(). The error message will print out a list of individuals with NA values in each raster layer.  
 
 You can change the bb.buffer argument to a larger or smaller value. prepare_rasters() will crop your raster layers to the sampling locality extent, and if bb.buffer = 0.5, a 0.5 degree buffer will be added to the sampling extent. This is useful for making the background points later.  
 
