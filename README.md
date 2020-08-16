@@ -100,7 +100,7 @@ If you have appropriate data and follow some external steps beforehand, our pack
 
 <img src="img/ideogram_EATT.png">  
 
-Each chromosome is duplicated with alpha outliers (left) and beta outliers (right) plotted as heatmaps. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes. ClinePlotR uses the [RIdeogram](https://cran.r-project.org/web/packages/RIdeogram/index.html) R-package for these plots (Hao et al., 2020).
+Each chromosome is duplicated with alpha outliers (left) and beta outliers (right) plotted as heatmaps. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes. ClinePlotR uses the [RIdeogram](https://cran.r-project.org/web/packages/RIdeogram/index.html) R-package (Hao et al., 2020) to make these plots.
 
 Here few things you need to have to make the ideogram:  
 
