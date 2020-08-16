@@ -175,7 +175,7 @@ phiPlot <- function(outlier.list,
   # If there aren't any alpha or beta outliers.
   if (all(snps$alpha.signif == FALSE)){
     isAlphaOutliers <- FALSE
-    warning("\n\nWarning: No alpha outliers were identified.\n")
+    writeLines("\n\nWarning: No alpha outliers were identified.\n")
     if (both.outlier.tests){
       writeLines("\n\nTry setting both.outlier.tests to FALSE")
     }
@@ -183,7 +183,7 @@ phiPlot <- function(outlier.list,
 
   if (all(snps$beta.signif == FALSE)){
     isBetaOutliers <- FALSE
-    warning("\n\nWarning: No beta outliers were identified.\n\n")
+    writeLines("\n\nWarning: No beta outliers were identified.\n\n")
     if (both.outlier.tests){
       writeLines("\n\nTry setting both.outlier.tests to FALSE")
     }
