@@ -313,7 +313,31 @@ Most of the plot settings can be adjusted as needed. See ?phiPlot for more info.
 
 You can change the criteria for identifying outlier loci with the overlap.zero, qn.interval, and both.outlier.tests options. By default, it is set to identify outliers using either overlap.zero or qn.interval. I.e., it only has to meet at least one of the criteria. You can turn one or the other off if you want by setting overlap.zero = FALSE or qn.interval = FALSE. They can't both be off unless both.outlier.tests = TRUE.
 
-If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings and is a more conservative outlier test. There will be fewer outliers with both required.
+If you set both.outlier.tests to TRUE, it will require that outliers meet both criteria. This overrides overlap.zero and qn.interval settings and is a more conservative outlier test. There will be fewer outliers with both required.  
+
+### Make Alpha X Beta Contour Plots
+
+Using the output from above, you can also create the Alpha X Beta contour plot. The plot will have polygon hulls around the outlier space. You might need to adjust the 
+
+```
+# alphabetaplot
+# 2-D contour plot with hulls for outliers
+alphaBetaPlot(
+  gene.outliers,
+  alpha.color = "cornflowerblue",
+  beta.color = "orange",
+  neutral.color = "gray60",
+  saveToFile = "eatt",
+  plotDIR = "exampleData/bgc/bgcPlotter_output",
+  padding = 0.2,
+)
+```  
+
+As with the phiPlot function, either or both of the outlier tests can be used to classify outliers. Many of the plot features are also customizable, such as margins, colors, etc.  
+
+If the contours go off the plot space, adjust the padding parameter.
+
+<img src="img/alphaBetaContourPlot.png" width="60%">
 
 ### Chromosome Plots
 
