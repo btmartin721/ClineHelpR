@@ -7,7 +7,7 @@ The package allows you to make several plots.
 
 ## Software Flow Diagram
 
-<img src="img/flowchart_ClinePlotR.png" width="60%">  
+<img src="img/flowchart_ClinePlotR.png" />  
 
 
 ## Example Dataset
