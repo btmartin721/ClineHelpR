@@ -16,3 +16,6 @@ for each raster layer, and list of raster names
 \description{
 Function to extract raster values at each sample point for raster stack
 }
+\examples{
+rasterPoints <- extractPointValues(envList)
+}

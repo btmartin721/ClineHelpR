@@ -31,3 +31,10 @@ Object with background points
 This function uses the output from prepare_raster() and makes
 background partitions using several methods.
 }
+\examples{
+bg <- partition_raster_bg(env.list = envList,
+                          number.bg.points = 10000,
+                          bg.raster = 1,
+                          plotDIR = "./plots",
+                          agg.factor = 2)
+}

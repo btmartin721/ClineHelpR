@@ -23,6 +23,15 @@
 #' @param plotDIR Directory to save plots to
 #' @return List with cropped rasters and other info
 #' @export
+#' @examples
+#' envList <- prepare_rasters(raster.dir = "uncroppedLayers",
+#'                            sample.file = file.path("exampleData",
+#'                                          "ENMeval_bioclim",
+#'                                          "localityInfo",
+#'                            "sample_localities_maxent_southeast_noNA.csv"),
+#'                            header = TRUE,
+#'                            bb.buffer = 10,
+#'                            plotDIR = "./plots")
 prepare_rasters <- function(raster.dir,
                             sample.file,
                             header = TRUE,
@@ -165,6 +174,12 @@ prepare_rasters <- function(raster.dir,
 #' @param plotDIR Directory to save the plots to
 #' @return Object with background points
 #' @export
+#' @examples
+#' bg <- partition_raster_bg(env.list = envList,
+#'                           number.bg.points = 10000,
+#'                           bg.raster = 1,
+#'                           plotDIR = "./plots",
+#'                           agg.factor = 2)
 partition_raster_bg <- function(env.list,
                                 number.bg.points = 10000,
                                 bg.raster = 1,
@@ -212,9 +227,10 @@ partition_raster_bg <- function(env.list,
 
   writeLines(paste0("\n\nGenerating ", number.bg.points, " random points..."))
 
-  # Randomly sample 10,000 background points from one background extent raster
+  # Randomly sample number.bg.points background points from
+  # one background extent raster
   # (only one per cell without replacement).
-  # Note: If the raster has <10,000 pixels,
+  # Note: If the raster has number.bg.points pixels,
   # you'll get a warning and all pixels will be used for background.
   bg <- dismo::randomPoints(envs.backg[[bg.raster]], n=number.bg.points)
   bg <- raster::as.data.frame(bg)
@@ -323,6 +339,22 @@ partition_raster_bg <- function(env.list,
 #' @param algorithm Character vector. Defaults to dismo's maxent.jar
 #' @return ENMeval object
 #' @export
+#' @examples
+#' eval.par <- runENMeval(envs.fg = envList[[1]],
+#'                        bg = bg,
+#'                        coords = envList[[3]],
+#'                        partition.method = "checkerboard1",
+#'                        parallel = FALSE,
+#'                        RMvalues = seq(0.5, 4, 0.5),
+#'                        feature.classes = c("L",
+#'                                            "LQ",
+#'                                            "H",
+#'                                            "LQH",
+#'                                            "LQHP",
+#'                                            "LQHPT")
+#'                        categoricals = NULL,
+#'                        agg.factor = 2,
+#'                        algorithm = "maxent.jar")
 runENMeval <- function(envs.fg,
                        bg,
                        coords,
@@ -424,6 +456,24 @@ runENMeval <- function(envs.fg,
 #' @param imp.margins Integer vector. Margins of variable importance barplot.
 #'                    c(bottom, left, top, right)
 #' @export
+#' @examples
+#' summarize_ENMeval(eval.par = eval.par,
+#'                  minLat = 20,
+#'                  maxLat = 50,
+#'                  minLon = -110,
+#'                  maxLon = -40,
+#'                  examine.predictions = c("L",
+#'                                          "LQ",
+#'                                          "H",
+#'                                          "LQH",
+#'                                          "LQHP",
+#'                                          "LQHPT"),
+#'                  RMvalues = seq(0.5, 4, 0.5),
+#'                  plotDIR = "./plots",
+#'                  niche.overlap = FALSE,
+#'                  plot.width = 7,
+#'                  plot.height = 7,
+#'                  imp.margins = c(10.0, 4.1, 4.1, 2.1))
 summarize_ENMeval <- function(eval.par,
                               minLat = 20,
                               maxLat = 50,
@@ -571,6 +621,8 @@ summarize_ENMeval <- function(eval.par,
 #' @return List of data.frames with raster values at each sample locality
 #'         for each raster layer, and list of raster names
 #' @export
+#' @examples
+#' rasterPoints <- extractPointValues(envList)
 extractPointValues <- function(env.list){
 
   if (!requireNamespace("raster", quietly = TRUE)){

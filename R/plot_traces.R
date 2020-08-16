@@ -11,7 +11,7 @@
 #' @param plotDIR Directory to save the plots
 #' @export
 #' @examples
-#' plot_traces(df.list = aggregated.results, prefix = "population1",
+#' plot_traces(df.list = aggregated.results, prefix = "eatt",
 #'          plotDIR = "./bgc_plots")
 plot_traces <- function(df.list, prefix, plotDIR = "./plots"){
 

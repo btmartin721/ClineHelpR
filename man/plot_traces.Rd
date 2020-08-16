@@ -21,6 +21,6 @@ aggregated. See ?combine_bgc_output. The plot should be inspected for
 convergence before proceeding further in the pipeline.
 }
 \examples{
-plot_traces(df.list = aggregated.results, prefix = "population1",
+plot_traces(df.list = aggregated.results, prefix = "eatt",
          plotDIR = "./bgc_plots")
 }

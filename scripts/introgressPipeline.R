@@ -1,23 +1,36 @@
 
 # Example data can be found in a Dryad Digital Repository (doi: XXXX)
 
+# This script will run Introgress, then use the output from
+# run_enmevalPipeline.R (see ClinePlotR/scripts directory)
+# to correlate genomic clines and hybrid indices with
+# latitude, longitude, and the environmental variables.
+
 library("ClinePlotR")
 
-rasterDIR <- "bioclim_R" # Obtained from worldclim.org
-dataDIR <- "introgress/"
+# Obtained from https://worldclim.org; finest resolution available.
+rasterDIR <- "exampleData/ENMeval_bioclim/"
 
-envList <- readRDS(file.path(rasterDIR, "gis_Routput", "envList.rds"))
+# Introrgress input data directory
+dataDIR <- "exampleData/introgress"
 
+# Object saved in run_enmevalPipeline.R script
+# See ClinePlotR/scripts directory
+envList <- readRDS("exampleData/ENMeval_bioclim/Robjects/envList.rds")
+
+# Extract raster values at each sample locality.
 rasterPoint.list <- extractPointValues(envList)
 
-dir.create(file.path(dataDIR, "rasterPoints"), showWarnings = FALSE)
+# Make directory to store extracted raster values per sample locality
+dir.create(file.path(dataDIR, "extractedRasterValues"), showWarnings = FALSE)
 
+# Write them to file for each raster layer
 for (i in 1:length(rasterPoint.list)) {
   write.table(
     rasterPoint.list[[i]],
     file.path(
-      rasterDIR,
-      "rasterPoints",
+      dataDIR,
+      "extractedRasterValues",
       paste0("rasterPoints_",
              colnames(rasterPoint.list[[i]][4]),
              ".csv")
@@ -29,37 +42,47 @@ for (i in 1:length(rasterPoint.list)) {
   )
 }
 
-gutt <- runIntrogress(
-  p1.file = file.path(dataDIR, "GUTT_p1data.txt"),
-  p2.file = file.path(dataDIR, "GUTT_p2data.txt"),
-  admix.file = file.path(dataDIR, "GUTT_admix.txt"),
-  loci.file = file.path(dataDIR, "GUTT_loci.txt"),
-  clineLabels = c("GU", "Het", "TT"),
+# Run introgress.
+# There are many parameters that can be used to fine-tune the analysis.
+# E.g. minDelt determines the allele frequency threshold (delta)
+# required for a locus to be tested in Introgress.
+# can be lowered to e.g., 0.7 or 0.6, which will include
+# more SNPs.
+eatt <- runIntrogress(
+  p1.file = file.path(dataDIR, "inputFiles", "EATT_p1data.txt"),
+  p2.file = file.path(dataDIR, "inputFiles", "EATT_p2data.txt"),
+  admix.file = file.path(dataDIR, "inputFiles", "EATT_admix.txt"),
+  loci.file = file.path(dataDIR, "inputFiles", "EATT_loci.txt"),
+  clineLabels = c("EA", "Het", "TT"),
   minDelt = 0.8,
-  prefix = "GUTT",
-  outputDIR = file.path(dataDIR, "outputFiles"),
+  prefix = "EATT",
+  outputDIR = file.path(dataDIR, "outputFiles", "introgress_plots"),
   sep = "\t",
   fixed = FALSE,
   pop.id = FALSE,
   ind.id = FALSE
 )
 
-saveRDS(gutt, file = file.path(dataDIR, "rawRoutput", "gutt_introgress.rds"))
+# Save Introgress output to R object.
+saveRDS(eatt, file = file.path(dataDIR, "outputRobject", "eatt_introgress.rds"))
 
 # Subset individuals for only the populations I want
+# This was done because the locality data has more individuals
+# than were used for introgress
 rasterPoint.list.subset <-
   lapply(rasterPoint.list,
          subsetIndividuals,
-         file.path(dataDIR, "gutt_inds.txt"))
+         file.path(dataDIR, "inputFiles", "eatt_inds.txt"))
 
 # Correlate genomic clines/hybrid index with environment/lat/lon
+# Can use different correlation methods. E.g. pearson or kendall
 clinesXenvironment(
-  clineList = gutt,
+  clineList = eatt,
   rasterPointValues = rasterPoint.list.subset,
-  clineLabels = c("GU", "Het", "TT"),
-  outputDIR = file.path(dataDIR, "outputFiles", "GUTT"),
+  clineLabels = c("EA", "Het", "TT"),
+  outputDIR = file.path(dataDIR, "outputFiles", "clines"),
   clineMethod = "permutation",
-  prefix = "GUTT",
+  prefix = "eatt",
   cor.method = "spearman"
 )
 

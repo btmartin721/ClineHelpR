@@ -9,7 +9,7 @@ get_bgc_outliers(
   admix.pop,
   popmap,
   qn = 0.975,
-  loci.file,
+  loci.file = NULL,
   save.obj = NULL
 )
 }

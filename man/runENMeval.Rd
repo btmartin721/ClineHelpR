@@ -54,3 +54,20 @@ the background partitioning method you would like to use
 methods will look by viewing the PDF output from partition_raster_bg.
 See ?partition_raster_bg for more info.
 }
+\examples{
+eval.par <- runENMeval(envs.fg = envList[[1]],
+                       bg = bg,
+                       coords = envList[[3]],
+                       partition.method = "checkerboard1",
+                       parallel = FALSE,
+                       RMvalues = seq(0.5, 4, 0.5),
+                       feature.classes = c("L",
+                                           "LQ",
+                                           "H",
+                                           "LQH",
+                                           "LQHP",
+                                           "LQHPT")
+                       categoricals = NULL,
+                       agg.factor = 2,
+                       algorithm = "maxent.jar")
+}

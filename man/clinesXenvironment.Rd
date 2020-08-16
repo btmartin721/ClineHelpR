@@ -26,8 +26,7 @@ genomic cline X environment plots. If NULL, uses all
 rasters}
 
 \item{clineLabels}{Character vector of length == 3 designating population
-names for c(P1, Het, P2)
-See ?prepare_rasters(). If used, value should be envList[\link{3}]}
+names for c(P1, Het, P2)}
 
 \item{outputDIR}{File path to directory for outputting plots}
 
@@ -44,9 +43,20 @@ indID,popID,latitude,longitude}
 
 \item{header}{Boolean specifying if sample.info has a header line}
 
-\item{coords}{data.frame with coordinates. Can be subset from env.list,
-an object returned from the prepare_rasters() function.}
+\item{coords}{data.frame with coordinates. Can be taken from env.list,
+an object returned from the prepare_rasters() function.
+See ?prepare_rasters(). If used, value is env.list[\link{3}]}
 }
 \description{
 Function to correlate INTROGRESS genomic clines with raster data
+}
+\examples{
+clinesXenvironment(clineList = eatt,
+                   rasterPointValues = rasterPoints,
+                   rasterToUse = NULL,
+                   clineLabels = c("EA", "Het", "TT"),
+                   outputDIR = "./cline_plots",
+                   clineMethod = "permutation",
+                   prefix = "eatt",
+                   cor.method = "auto")
 }

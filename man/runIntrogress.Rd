@@ -41,10 +41,10 @@ INTROGRESS}
 \item{sep}{Character string; Column delimiter for INTROGRESS input files}
 
 \item{pop.id}{Boolean; Value for INTROGRESS parameter pop.id.
-See ?prepare.data in introgress pacakge}
+See ?prepare.data in introgress R pacakge}
 
 \item{ind.id}{Boolean; Value for INTROGRESS parameter ind.id
-See ?prepare.data in introgress package}
+See ?prepare.data in introgress R package}
 
 \item{fixed}{Boolean; TRUE if input data are fixed SNPs}
 }
@@ -60,4 +60,18 @@ distributions in MAXENT. See ?prepare_rasters, ?partition_raster_bg,
 }
 \details{
 Function to run INTROGRESS
+}
+\examples{
+eatt <- runIntrogress(p1.file = "EATT_p1data.txt",
+                      p2.file = "EATT_p2data.txt",
+                      admix.file = "EATT_admix.txt",
+                      loci.file = "EATT_loci.txt",
+                      clineLabels = c("EA", "Het", "TT")
+                      minDelt = 0.8,
+                      prefix = "eatt",
+                      outputDIR = "./introgress_plots",
+                      sep = "\t",
+                      pop.id = FALSE,
+                      ind.id = FALSE,
+                      fixed = FALSE)
 }

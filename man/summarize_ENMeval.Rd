@@ -51,3 +51,22 @@ c(bottom, left, top, right)}
 \description{
 Function to summarize ENMeval output
 }
+\examples{
+summarize_ENMeval(eval.par = eval.par,
+                 minLat = 20,
+                 maxLat = 50,
+                 minLon = -110,
+                 maxLon = -40,
+                 examine.predictions = c("L",
+                                         "LQ",
+                                         "H",
+                                         "LQH",
+                                         "LQHP",
+                                         "LQHPT"),
+                 RMvalues = seq(0.5, 4, 0.5),
+                 plotDIR = "./plots",
+                 niche.overlap = FALSE,
+                 plot.width = 7,
+                 plot.height = 7,
+                 imp.margins = c(10.0, 4.1, 4.1, 2.1))
+}

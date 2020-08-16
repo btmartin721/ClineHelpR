@@ -44,3 +44,13 @@ comma-delimited sample.file that has four columns in a specific order:
 line is present. The rasters will all be put into a stack and cropped to
 the extent of the sample localities + bb.buffer.
 }
+\examples{
+envList <- prepare_rasters(raster.dir = "uncroppedLayers",
+                           sample.file = file.path("exampleData",
+                                         "ENMeval_bioclim",
+                                         "localityInfo",
+                           "sample_localities_maxent_southeast_noNA.csv"),
+                           header = TRUE,
+                           bb.buffer = 10,
+                           plotDIR = "./plots")
+}
