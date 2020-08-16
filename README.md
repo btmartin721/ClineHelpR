@@ -6,7 +6,7 @@ ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran 
 The package allows you to make several plots.
 
 ## Example Dataset
-All example data will be uploaded to a Dryad Digital Repository (doi: XXXX), as the files are too large for GitHub.
+All example data will be uploaded to a Dryad Digital Repository (doi: XXXX), as the files are too large for GitHub. To run the example data, download the exampleData directory from DRYAD, then run the R scripts in the ClinePlotR/scripts directory.
 
 ## Dependencies
 
