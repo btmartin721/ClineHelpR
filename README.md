@@ -852,23 +852,23 @@ Hybrid Index ~ Raster Layers (e.g. Here we used BioClim1)
 
 ## References
 
-Gauthier, J., de Silva, D. L., Gompert, Z., Whibley, A., Houssin, C., Le Poul, Y., … Elias, M. (2020). Contrasting genomic and phenotypic outcomes of hybridization between pairs of mimetic butterfly taxa across a suture zone. Molecular Ecology, 29(7), 1328–1343. [doi](doi:https://doi.org/10.1111/mec.15403)
+Gauthier, J., de Silva, D. L., Gompert, Z., Whibley, A., Houssin, C., Le Poul, Y., … Elias, M. (2020). Contrasting genomic and phenotypic outcomes of hybridization between pairs of mimetic butterfly taxa across a suture zone. Molecular Ecology, 29(7), 1328–1343.
 
-Gompert, Z., & Buerkle, C. A. (2010). INTROGRESS: a software package for mapping components of isolation in hybrids. Molecular Ecology Resources, 10(2), 378–384. [doi](doi:10.1111/j.1755-0998.2009.02733.x)
+Gompert, Z., & Buerkle, C. A. (2010). INTROGRESS: a software package for mapping components of isolation in hybrids. Molecular Ecology Resources, 10(2), 378–384.
 
-Gompert, Z., & Buerkle, C. A. (2011). Bayesian estimation of genomic clines. Molecular Ecology, 20(10), 2111–2127. [doi](doi:10.1111/j.1365-294X.2011.05074.x)
+Gompert, Z., & Buerkle, C. A. (2011). Bayesian estimation of genomic clines. Molecular Ecology, 20(10), 2111–2127.
 
-Gompert, Z., & Buerkle, C. A. (2012). BGC: Software for Bayesian estimation of genomic clines. Molecular Ecology Resources, 12(6), 1168–1176. [doi](doi:10.1111/1755-0998.12009.x)
+Gompert, Z., & Buerkle, C. A. (2012). BGC: Software for Bayesian estimation of genomic clines. Molecular Ecology Resources, 12(6), 1168–1176.
 
-Gompert, Z., Parchman, T. L., and Buerkle, C. A. (2012a). Genomics of isolation in hybrids. Philosophical Transactions of the Royal Society B: Biological Sciences. 
+Gompert, Z., Parchman, T. L., and Buerkle, C. A. (2012a). Genomics of isolation in hybrids. Philosophical Transactions of the Royal Society B: Biological Sciences, 367(1587), 439-450.
 
-Gompert, Z., Lucas, L. K., Nice, C. C., Fordyce, J. A., Forister, M. L., & Buerkle, C. A. (2012b). Genomic regions with a history of divergent selection affect fitness of hybrids between two butterfly species. Evolution, 66(7), 2167–2181. [doi](doi:10.1111/j.1558-5646.2012.01587.x)  
+Gompert, Z., Lucas, L. K., Nice, C. C., Fordyce, J. A., Forister, M. L., & Buerkle, C. A. (2012b). Genomic regions with a history of divergent selection affect fitness of hybrids between two butterfly species. Evolution, 66(7), 2167–2181.
 
-Hao, Z., Lv, D., Ge, Y., Shi, J., Weijers, D., Yu, G., & Chen, J. (2020). RIdeogram: drawing SVG graphics to visualize and map genome-wide data on the ideograms. PeerJ Computer Science, 6, e251. [doi](doi:10.7717/peerj-cs.251)  
+Hao, Z., Lv, D., Ge, Y., Shi, J., Weijers, D., Yu, G., & Chen, J. (2020). RIdeogram: drawing SVG graphics to visualize and map genome-wide data on the ideograms. PeerJ Computer Science, 6, e251.  
 
-Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics, 34(18), 3094–3100. [doi](doi:10.1093/bioinformatics/bty191)  
+Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics, 34(18), 3094–3100.
 
-Martin, B. T., Douglas, M. R., Chafin, T. K., Placyk, J. S., Birkhead, R. D., Phillips, C. A., & Douglas, M. E. (2020). Differential introgression supports thermal adaptation and candidate genes shaping species boundaries in North American box turtles (Terrapene spp.). BioRxiv, [doi](doi:10.1101/752196)
+Martin, B. T., Douglas, M. R., Chafin, T. K., Placyk, J. S., Birkhead, R. D., Phillips, C. A., & Douglas, M. E. (2020). Differential introgression supports thermal adaptation and candidate genes shaping species boundaries in North American box turtles (Terrapene spp.). BioRxiv, https://doi.org/10.1101/752196 
 
-Muscarella, R., Galante, P. J., Soley-Guardia, M., Boria, R. A., Kass, J. M., Uriarte, M., & Anderson, R. P. (2014).  ENMeval: An R package for conducting spatially independent evaluations and estimating optimal model complexity for Maxent ecological niche models . Methods in Ecology and Evolution, 5(11), 1198–1205. [doi](doi:10.1111/2041-210x.12261)
+Muscarella, R., Galante, P. J., Soley-Guardia, M., Boria, R. A., Kass, J. M., Uriarte, M., & Anderson, R. P. (2014).  ENMeval: An R package for conducting spatially independent evaluations and estimating optimal model complexity for Maxent ecological niche models . Methods in Ecology and Evolution, 5(11), 1198–1205.
 
