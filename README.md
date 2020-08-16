@@ -1,9 +1,14 @@
 # ClinePlotR
-Plot BGC and INTROGRESS genomic cline results and correlate INTROGRESS clines with environmental variables.
 
-ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out.
+Plot BGC and INTROGRESS genomic cline results and correlate INTROGRESS clines with environmental variables.  
 
-The package allows you to make several plots.
+
+ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out. 
+
+Our package allows you to make several plots.
+
+The BGC and INTROGRESS software packages are described elsewhere (Gompert and Buerkle, 2010, 2011, 2012; Gompert et al., 2012a, 2012b).  
+
 
 ## Software Flow Diagram
 
@@ -73,7 +78,7 @@ The workflow for plotting BGC results is described below.
 
 First, the Phi plot that Gompert et al. made in some of their papers. In this plot, Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - Phi. Phi is plotted on the Y-axis and hybrid index on the X-axis.  
 
-Here is an example of a Phi plot that ClinePlotR can make:  
+Here is an example of a Phi plot that ClinePlotR can make (*sensu* Gompert et al., 2012b):  
 
 <img src="img/eatt_genes_hiXphi_alphaAndBeta.png" width="60%">  
 
@@ -85,17 +90,17 @@ Positive beta outliers indicate a steeper cline (i.e. a faster rate of transitio
 
 ### Alpha X Beta Contour Plots
 
-You can also create a contour plot with alpha on the x-axis and beta on the y-axis. The function will also create polygon hulls around the outliers to encapsulate 2-D outlier space.  
+You can also create a contour plot with alpha on the x-axis and beta on the y-axis. The function will also create polygon hulls around the outliers to encapsulate 2-D outlier space (*sensu* Gauthier et al., 2020).
 
 <img src="img/alphaBetaContourPlot.png" width="60%">
 
 ### Chromosome Plots  
 
-If you have appropriate data and follow some external steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype, like here:  
+If you have appropriate data and follow some external steps beforehand, our package will also let you plot the alpha and beta outliers on a karyotype (*sensu* Martin et al., 2020):  
 
 <img src="img/ideogram_EATT.png">  
 
-Each chromosome is duplicated with alpha outliers (left) and beta outliers (right) plotted as heatmaps. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes.  
+Each chromosome is duplicated with alpha outliers (left) and beta outliers (right) plotted as heatmaps. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes. ClinePlotR uses the [RIdeogram](https://cran.r-project.org/web/packages/RIdeogram/index.html) R-package for these plots (Hao et al., 2020).
 
 Here few things you need to have to make the ideogram:  
 
@@ -820,4 +825,26 @@ Genomic Cline ~ Raster Layers (e.g. Here we used BioClim1)
 Hybrid Index ~ Raster Layers (e.g. Here we used BioClim1)  
 <img src="img/hybridIndexXraster_bioClim1.png" width="50%">  
 
+
+## References
+
+Gauthier, J., de Silva, D. L., Gompert, Z., Whibley, A., Houssin, C., Le Poul, Y., … Elias, M. (2020). Contrasting genomic and phenotypic outcomes of hybridization between pairs of mimetic butterfly taxa across a suture zone. Molecular Ecology, 29(7), 1328–1343. [doi](doi:https://doi.org/10.1111/mec.15403)
+
+Gompert, Z., & Buerkle, C. A. (2010). INTROGRESS: a software package for mapping components of isolation in hybrids. Molecular Ecology Resources, 10(2), 378–384. [doi](doi:10.1111/j.1755-0998.2009.02733.x)
+
+Gompert, Z., & Buerkle, C. A. (2011). Bayesian estimation of genomic clines. Molecular Ecology, 20(10), 2111–2127. [doi](doi:10.1111/j.1365-294X.2011.05074.x)
+
+Gompert, Z., & Buerkle, C. A. (2012). BGC: Software for Bayesian estimation of genomic clines. Molecular Ecology Resources, 12(6), 1168–1176. [doi](doi:10.1111/1755-0998.12009.x)
+
+Gompert, Z., Parchman, T. L., and Buerkle, C. A. (2012a). Genomics of isolation in hybrids. Philosophical Transactions of the Royal Society B: Biological Sciences. 
+
+Gompert, Z., Lucas, L. K., Nice, C. C., Fordyce, J. A., Forister, M. L., & Buerkle, C. A. (2012b). Genomic regions with a history of divergent selection affect fitness of hybrids between two butterfly species. Evolution, 66(7), 2167–2181. [doi](doi:10.1111/j.1558-5646.2012.01587.x)  
+
+Hao, Z., Lv, D., Ge, Y., Shi, J., Weijers, D., Yu, G., & Chen, J. (2020). RIdeogram: drawing SVG graphics to visualize and map genome-wide data on the ideograms. PeerJ Computer Science, 6, e251. [doi](doi:10.7717/peerj-cs.251)  
+
+Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics, 34(18), 3094–3100. [doi](doi:10.1093/bioinformatics/bty191)  
+
+Martin, B. T., Douglas, M. R., Chafin, T. K., Placyk, J. S., Birkhead, R. D., Phillips, C. A., & Douglas, M. E. (2020). Differential introgression supports thermal adaptation and candidate genes shaping species boundaries in North American box turtles (Terrapene spp.). BioRxiv, [doi](doi:10.1101/752196)
+
+Muscarella, R., Galante, P. J., Soley-Guardia, M., Boria, R. A., Kass, J. M., Uriarte, M., & Anderson, R. P. (2014).  ENMeval: An R package for conducting spatially independent evaluations and estimating optimal model complexity for Maxent ecological niche models . Methods in Ecology and Evolution, 5(11), 1198–1205. [doi](doi:10.1111/2041-210x.12261)
 
