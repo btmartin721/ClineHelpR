@@ -293,6 +293,9 @@ phiPlot(outlier.list = gene.outliers,
         hist.binwidth = 0.05)
 ```
 
+<img src="img/eatt_genes_hiXphi_alphaAndBeta.png" width="60%">  
+
+
 If you want to save the plot to a file, just use the saveToFile option. If specified, the value should be the filename you want to save to. If you don't use this option, it will appear in your Rstudio plot window.
 
 Most of the plot settings can be adjusted as needed. See ?phiPlot for more info.
