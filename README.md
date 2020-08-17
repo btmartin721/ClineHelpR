@@ -16,7 +16,7 @@ The BGC and INTROGRESS software packages are described elsewhere (Gompert and Bu
 
 
 ## Example Dataset
-All example data are available from a Dryad Digital Repository (doi:10.5061/dryad.b2rbnzsc8), as the files are too large for GitHub. To run the example data, download the exampleData directory from DRYAD, then run the R scripts in the ClinePlotR/scripts directory.
+All example data are available from a Dryad Digital Repository (https://doi.org/10.5061/dryad.b2rbnzsc8), as the files are too large for GitHub. To run the example data, download the exampleData directory from DRYAD, then run the R scripts in the ClinePlotR/scripts directory.
 
 ## Dependencies
 
