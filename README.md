@@ -317,7 +317,7 @@ If you set both.outlier.tests to TRUE, it will require that outliers meet both c
 
 ### Make Alpha X Beta Contour Plots
 
-Using the output from above, you can also create the Alpha X Beta contour plot. The plot will have polygon hulls around the outlier space. You might need to adjust the 
+Using the output from above, you can also create the Alpha X Beta contour plot. The plot will have polygon hulls around the outlier space. You might need to adjust the padding.   
 
 ```
 # alphabetaplot
