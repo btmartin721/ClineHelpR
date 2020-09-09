@@ -868,7 +868,7 @@ Hao, Z., Lv, D., Ge, Y., Shi, J., Weijers, D., Yu, G., & Chen, J. (2020). RIdeog
 
 Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. Bioinformatics, 34(18), 3094–3100.
 
-Martin, B. T., Douglas, M. R., Chafin, T. K., Placyk, J. S., Birkhead, R. D., Phillips, C. A., & Douglas, M. E. (2020). Differential introgression supports thermal adaptation and candidate genes shaping species boundaries in North American box turtles (Terrapene spp.). BioRxiv, https://doi.org/10.1101/752196 
+Martin, B. T., Douglas, M. R., Chafin, T. K., Placyk, J. S., Birkhead, R. D., Phillips, C. A., & Douglas, M. E. (2020). Contrasting signatures of introgression in North American box turtle (Terrapene spp.) contact zones. Molecular Ecology, https://doi.org/10.1111/mec.15622 
 
 Muscarella, R., Galante, P. J., Soley-Guardia, M., Boria, R. A., Kass, J. M., Uriarte, M., & Anderson, R. P. (2014).  ENMeval: An R package for conducting spatially independent evaluations and estimating optimal model complexity for Maxent ecological niche models . Methods in Ecology and Evolution, 5(11), 1198–1205.
 
