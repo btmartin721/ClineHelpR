@@ -1,9 +1,9 @@
-# ClinePlotR
+# ClineHelpR
 
 Plot BGC and INTROGRESS genomic cline results and correlate INTROGRESS clines with environmental variables.  
 
 
-ClinePlotR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out. 
+ClineHelpR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out. 
 
 Our package allows you to make several plots.
 
@@ -16,11 +16,11 @@ The BGC and INTROGRESS software packages are described elsewhere (Gompert and Bu
 
 
 ## Example Dataset
-All example data are available from a Dryad Digital Repository (https://doi.org/10.5061/dryad.b2rbnzsc8), as the files are too large for GitHub. To run the example data, download the exampleData directory from DRYAD, then run the R scripts in the ClinePlotR/scripts directory.
+All example data are available from a Dryad Digital Repository (https://doi.org/10.5061/dryad.b2rbnzsc8), as the files are too large for GitHub. To run the example data, download the exampleData directory from DRYAD, then run the R scripts in the ClineHelpR/scripts directory.
 
 ## Dependencies
 
-ClinePlotR has several dependencies. 
+ClineHelpR has several dependencies. 
 
 The bgcPlotter functions require:
 
@@ -52,18 +52,18 @@ The INTROGRESS functions require:
 
 ## Installing the Package
 
-To install ClinePlotR, you can do the following:
+To install ClineHelpR, you can do the following:
 
 ```
 # If you don't already have devtools installed
 install.packages("devtools")
 
-devtools::install_github("btmartin721/ClinePlotR")
+devtools::install_github("btmartin721/ClineHelpR")
 ``` 
 
 Now load the library.  
 ```
-library("ClinePlotR")
+library("ClineHelpR")
 ```
 
 ## bgcPlotter
@@ -78,7 +78,7 @@ The workflow for plotting BGC results is described below.
 
 First, the Phi plot that Gompert et al. made in some of their papers. In this plot, Phi is the Probability of P1 ancestry, and the Probability of P0 ancestry is 1 - Phi. Phi is plotted on the Y-axis and hybrid index on the X-axis.  
 
-Here is an example of a Phi plot that ClinePlotR can make (*sensu* Gompert et al., 2012b):  
+Here is an example of a Phi plot that ClineHelpR can make (*sensu* Gompert et al., 2012b):  
 
 <img src="img/eatt_genes_hiXphi_alphaAndBeta.png" width="60%">  
 
@@ -100,7 +100,7 @@ If you have appropriate data and follow some external steps beforehand, our pack
 
 <img src="img/ideogram_EATT.png">  
 
-Each chromosome is duplicated with alpha outliers (left) and beta outliers (right) plotted as heatmaps. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes. ClinePlotR uses the [RIdeogram](https://cran.r-project.org/web/packages/RIdeogram/index.html) R-package (Hao et al., 2020) to make these plots.
+Each chromosome is duplicated with alpha outliers (left) and beta outliers (right) plotted as heatmaps. The larger bands represent outliers that fell in known mRNA loci, whereas the thinner bands are from unknown scaffolds. This way, you can visualize the outliers on actual chromosomes. ClineHelpR uses the [RIdeogram](https://cran.r-project.org/web/packages/RIdeogram/index.html) R-package (Hao et al., 2020) to make these plots.
 
 Here few things you need to have to make the ideogram:  
 
@@ -145,7 +145,7 @@ I.e., use the following options:
 
 ```-s 2 -w 0```  
 
-This will format them correctly for ClinePlotR.  
+This will format them correctly for ClineHelpR.  
 
 Make sure you tell BGC to output the zeta and gamma quantile estimates into the HDF5 file.  
 
@@ -179,7 +179,7 @@ Each line is one locus.
 
 The first column indicates transcript or scaffold ID. The second indicates the SNP position on the scaffold or mRNA. So you need physical scaffold coordinates for the unplaced scaffolds, and transcriptome coordinates for the transcriptome-aligned dataset.
 
-If you don't have this information, ClinePlotR will detect that you don't and create a spoof one automatically. It isn't used by the phiPlot and alphaBetaPlot functions, so it won't affect those. You just won't be able to make the chromosome plots if you don't have locus information.  
+If you don't have this information, ClineHelpR will detect that you don't and create a spoof one automatically. It isn't used by the phiPlot and alphaBetaPlot functions, so it won't affect those. You just won't be able to make the chromosome plots if you don't have locus information.  
 
 ### Make Phi Plots
 
@@ -187,7 +187,7 @@ These functions all use the example data from the DRYAD repository (see above).
 
 #### Aggregate BGC Runs
 
-ClinePlotR allows you to aggregate multiple BGC runs together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_traces() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL and parameter traces below).
+ClineHelpR allows you to aggregate multiple BGC runs together to increase your MCMC sampling. Log-likelihood MCMC traces can be made with the plot_traces() function to assess convergence. This is **strongly** recommended if aggregating BGC runs. You should make sure all five runs have converged (see the LnL and parameter traces below).
 
 To aggregate the BGC runs, you first need the BGC output in the correct format.
 
@@ -432,7 +432,7 @@ full.outliers <-
 If you want, you can save the range of alpha and beta values like so:
 
 ```
-# Not ClinePlotR functions.
+# Not ClineHelpR functions.
 # This just saves the minimum and maximum alpha and beta outlier values
 # Can be used to add to the legend manually
 ab.range <-
@@ -546,7 +546,7 @@ plot_outlier_ideogram(
 
 ## INTROGRESS Clines X Environment  
 
-These functions serve to run INTROGRESS (Gompert and Buerkle, 2010), then correlate the genomic clines with latitude, longitude, and any environmental variables you want. To do this, you need a file with sample coordinates (see format below) and input raster layers. There can be multiple raster layers (e.g., the 19 BioClim layers from https://worldclim.org), and ClinePlotR will correlate each one with the INTROGRESS variables. 
+These functions serve to run INTROGRESS (Gompert and Buerkle, 2010), then correlate the genomic clines with latitude, longitude, and any environmental variables you want. To do this, you need a file with sample coordinates (see format below) and input raster layers. There can be multiple raster layers (e.g., the 19 BioClim layers from https://worldclim.org), and ClineHelpR will correlate each one with the INTROGRESS variables. 
 
 We can get a bunch of raster layers and determine which are the most important as determined by species distribtution modeling. This info can then be used to correlate significant INTROGRESS loci (see below) with the most important environmental features, plus latitude and longitude. We will use a wrapper package called ENMeval (Muscarella et al., 2014) to run MAXENT for the species distribution modeling. See the [ENMeval package](https://cran.r-project.org/web/packages/ENMeval/index.html) from CRAN. You will need the maxent.jar file to be placed in dismo's java directory, which should be where R installed your dismo package. E.g., mine was placed here, where my dismo R package is installed:   
 
@@ -556,7 +556,7 @@ We can get a bunch of raster layers and determine which are the most important a
 
 You will need all your raster files in one directory, with no other files. E.g., the 19 BioClim layers from https://worldclim.org/. The rasters also all need to be the same extent and resolution. If you got them all from WorldClim, they should all be the same. But if you add layers from other sources you'll need to resample the ones that don't fit. 
 
-See our ClinePlotR/scripts/prepareDifferentRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is likely the problem and you will need to resample some rasters.  
+See our ClineHelpR/scripts/prepareDifferentRasters.R script for examples of how to prepare layers that are different. If you get an error loading the rasters into a stack, this is likely the problem and you will need to resample some rasters.  
 
 Also of note, the raster layers load in alphabetical order of filenames. So if you want to e.g. load a categorical layer first, prepend an earlier letter to the filename. 
 
@@ -579,7 +579,8 @@ EAAL_BXEA27,T. carolina carolina,34.4455,-85.7772
 
 See exampleData/ENMeval_bioclim/localityInfo/sample_localities_maxent_southeast_noNA.csv for the full file.  
 
-Then you can run ClinePlotR's prepare_rasters() function, which will load all the layers in the specified directory and crop them to the same extent. This extent is automatically determined by a bounding box around the sampling extent, plus a buffer (measured by arc-seconds) that can be adjusted (bb.buffer option):   
+Then you can run 
+'s prepare_rasters() function, which will load all the layers in the specified directory and crop them to the same extent. This extent is automatically determined by a bounding box around the sampling extent, plus a buffer (measured by arc-seconds) that can be adjusted (bb.buffer option):   
 
 ```
 # Most original rasters were too big to be included in exampleData (>150GB total). Only a couple were included as examples.
@@ -614,7 +615,7 @@ This will also generate two PDFs, each with multiple plots that you can look at 
 
 1. All your input rasters with sample localities overlaid as points.  
 2. Background points for several partitioning methods. See the ENMeval vignette for more info on bg partitions.  
-  + The background partition methods that ClinePlotR supports are: block, checkerboard1, and checkerboard2.  
+  + The background partition methods that ClineHelpR supports are: block, checkerboard1, and checkerboard2.  
 
 ### Run ENMeval
 
@@ -771,7 +772,7 @@ If your SNPs are fixed between parental populations, set fixed = TRUE and it wil
 
 pop.id and ind.id are used if your input files have these headers.  
 
-Once this finishes running, you can use another ClinePlotR function, *subsetIndividuals()*, to subset a full list of individuals to just those included in the INTROGRESS analysis (i.e., if you are only using a subset of populations). It needs to be used in an lapply like below:  
+Once this finishes running, you can use another ClineHelpR function, *subsetIndividuals()*, to subset a full list of individuals to just those included in the INTROGRESS analysis (i.e., if you are only using a subset of populations). It needs to be used in an lapply like below:  
 
 ```
 # Subset individuals for only the populations run in INTROGRESS
