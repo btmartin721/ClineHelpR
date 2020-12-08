@@ -1,4 +1,4 @@
-Package: ClinePlotR
+Package: ClineHelpR
 Title: Parses and Plots BGC and INTROGRESS Output
 Version: 0.0.0.9000
 Authors@R: c(
