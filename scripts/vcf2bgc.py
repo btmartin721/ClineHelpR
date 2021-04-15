@@ -127,7 +127,7 @@ def main():
 					if args.linkage:
 						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM, 1.0)
 
-					locus_list.clear() # Adding last locus.
+					del locus_list[:] # Adding last locus.
 					locus_list.append(locus)
 
 					# Now add the last record.
@@ -137,7 +137,7 @@ def main():
 					if args.linkage:
 						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM)
 
-					locus_list.clear()
+					del locus_list[:]
 					locus_list.append(locus)
 
 					if args.linkage:
@@ -152,8 +152,8 @@ def main():
 
 			# Reset pos_list and then append current chrom value.
 			chrom_number += 1 # Increase chromosome count.
-			pos_list.clear()
-			locus_list.clear()
+			del pos_list[:]
+			del locus_list[:]
 			locus_list.append(locus)
 			pos_list.append(record.POS)
 
