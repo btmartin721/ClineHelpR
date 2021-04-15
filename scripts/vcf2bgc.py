@@ -76,7 +76,9 @@ def main():
 	p2 = open(p2_file, "w")
 	loci = open(loci_order_file, "w")
 	loci.write("#CHROM POS\n")
-	linkage_fh = open(linkage_file, "w")
+
+	if args.linkage:
+		linkage_fh = open(linkage_file, "w")
 
 	# Initialize variables used in for loop.
 	previous_chrom = None
@@ -178,7 +180,9 @@ def main():
 	p1.close()
 	p2.close()
 	loci.close()
-	linkage_fh.close()
+
+	if args.linkage:
+		linkage_fh.close()
 
 	print("DONE!\n\n")
 
