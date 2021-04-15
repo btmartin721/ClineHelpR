@@ -113,7 +113,7 @@ def main():
 				pos_min = min(pos_list) # Get min/max of pos_list.
 				pos_max = max(pos_list)
 				if args.linkage:
-					normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list)
+					normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM)
 		
 		# else current CHROM different than previous_chrom:
 		else:
@@ -123,30 +123,30 @@ def main():
 			if j == nrecords: # If last record and different:
 				if diff_counter > 1:
 					if args.linkage:
-						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, 1.0)
+						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM, 1.0)
 
 					locus_list.clear() # Adding last locus.
 					locus_list.append(locus)
 
 					# Now add the last record.
 					if args.linkage:
-						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number+1, linkage_fh, locus_list, 1.0)
+						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number+1, linkage_fh, locus_list, record.CHROM, 1.0)
 				else:
 					if args.linkage:
-						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list)
+						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM)
 
 					locus_list.clear()
 					locus_list.append(locus)
 
 					if args.linkage:
-						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number+1, linkage_fh, locus_list, 1.0)
+						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number+1, linkage_fh, locus_list, record.CHROM, 1.0)
 
 			else: # If different than previous_chrom but not last record:
 				if diff_counter > 1 and args.linkage: # If multiple different in a row.
-					normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, 1.0)
+					normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM, 1.0)
 				else: # Normalize 0 -> 1 and write to file.
 					if args.linkage:
-						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list)
+						normalize_linkagemap(pos_list, pos_min, pos_max, chrom_number, linkage_fh, locus_list, record.CHROM)
 
 			# Reset pos_list and then append current chrom value.
 			chrom_number += 1 # Increase chromosome count.
@@ -182,7 +182,7 @@ def main():
 
 	print("DONE!\n\n")
 
-def normalize_linkagemap(mylist, nmin, nmax, number, fh, loc, one_pos=None):
+def normalize_linkagemap(mylist, nmin, nmax, number, fh, loc, chrom_name, one_pos=None):
 	"""
 	Normalize chromosome positions from 0 to 1 and write to file.
 	Input:
@@ -192,14 +192,19 @@ def normalize_linkagemap(mylist, nmin, nmax, number, fh, loc, one_pos=None):
 		number: chromosome number.
 		fh: filehandle to write output to.
 		loc: list of strings identifying the locus: "locus_N".
+		chrom_name: Name of chromosome in VCF file.
 		one_pos: 1.0 if chromosome only has one locus; else==None.
 	"""
 	if one_pos:
 		fh.write("{} {} {}\n".format(loc[0], number, one_pos))
 	else:
 		for i, val in enumerate(mylist):
-			mylist[i] = (val - nmin) / (nmax - nmin)
-			fh.write("{} {} {:.20f}\n".format(loc[i], number, mylist[i]))
+			try:
+				mylist[i] = (val - nmin) / (nmax - nmin)
+				fh.write("{} {} {:.20f}\n".format(loc[i], number, mylist[i]))
+			except ZeroDivisionError:
+				print("Warning: Chromosome {} has only one SNP and the linkage model was specified. Setting normalized linkage distance to 1.0 for this chromosome.\n".format(chrom_name))
+				fh.write("{} {} {:.20f}\n".format(loc[0], number, 1.0))
 
 def get_allele_depth(record, pop, ref, alt, sampledict):
 	"""
@@ -371,7 +376,9 @@ def Get_Arguments():
 								default="bgc",
 								help="Specify output prefix for BGC files.")
 	optional_args.add_argument("-l", "--linkage",
-								default = True, action="store_false")
+								default = False, 
+								action="store_true",
+								help="Toggle to create a linkage map file for BGC's linkage model. Only use if you have a reference-mapped VCF file; default = off.")
 	optional_args.add_argument("-h", "--help",
 								action="help",
 								help="Displays this help menu")
