@@ -98,7 +98,8 @@ def main():
 	for j, record in enumerate(vcf_reader, start = 1):
 		locus = "locus_{}".format(j)
 
-		# For linkage map. Check if CHROM == previous CHROM and if so, add to pos_list.
+		# For linkage map. Check if CHROM == previous CHROM
+		# if so, add to pos_list.
 		# If CHROM is different than previous, add the previous
 		# chromosome as a chunk. If last record, add current at end.
 		if previous_chrom is None:
@@ -226,14 +227,31 @@ def get_allele_depth(record, pop, ref, alt, sampledict):
 	result = list()
 	for call in record.samples:
 
-		# CallData from PyVCF has depth counts as comma-delimited.
-		alleles = call.data[2].split(",")
+		if isinstance(call.data[2], list):
+			# For stacks allele depth style
+			# CallData from PyVCF has depth counts as list
+			allele_depth = {
+				ref: int(call.data[2][0]), alt: int(call.data[2][1])}
+		
+		else:
+			# CallData from PyVCF has depth counts as comma-delimited.
+			try:
+				# ipyrad VCF style
+				alleles = call.data[2].split(",")
+				
+				# cast depth counts to integers.
+				alleles = [int(x) for x in alleles]
 
-		# cast depth counts to integers.
-		alleles = [int(x) for x in alleles]
+				# Make into dict: {'C': DepthCount, 'A': DC, 'T': DC, 'G': DC}
+				allele_depth = dict(zip(possible, alleles))
 
-		# Make into dict object: {'C': DepthCount, 'A': DC, 'T': DC, 'G': DC}
-		allele_depth = dict(zip(possible, alleles))
+			except AttributeError:
+				# AD is None (GT=./.); stacks-style
+				if call.data[2] is None:
+					allele_depth = {ref: 0, alt: 0}
+				
+				else:
+					raise AttributeError("Error with parsing allele depths!")
 
 		try:
 			idx = sampledict[pop].index(call.sample)
@@ -304,26 +322,31 @@ def get_samples_by_pop(d, admix, p1, p2):
 		elif str(v) == str(p2):
 			p2_inds.append(k)
 		else:
-			raise ValueError("\n\nPopulation {} is different than P1, P2 and Admixed! Aborting.")
+			raise ValueError(
+				"\n\nPopulation '{}' not found! Aborting.".format(p1))
 
 	# Error handling if wrong population specified.
 	if not admix_inds:
-		raise ValueError("\n\nPopulation {} was not found in the popmap file! Aborting\n\n".format(admix))
+		raise ValueError("\n\nPopulation '{}' not found in the popmap file! Aborting\n\n".format(admix))
 	if not p1_inds:
-		raise ValueError("\n\nPopulation {} was not found in the popmap file! Aborting\n\n".format(p1))
+		raise ValueError("\n\nPopulation '{}' not found in the popmap file! Aborting\n\n".format(p1))
 	if not p2_inds:
-		raise ValueError("\n\nPopulation {} was not found in the popmap file! Aborting\n\n".format(p2))
+		raise ValueError("\n\nPopulation '{}' not found in the popmap file! Aborting\n\n".format(p2))
 
 	popdict["Admixed"] = admix_inds
 	popdict["P1"] = p1_inds
 	popdict["P2"] = p2_inds
 
 	# Sanity checks. Print number of individuals in each population.
-	print("\n\nP1 population has {} individuals...\n".format(len(popdict["P1"])))
+	print(
+		"\n\nP1 population has {} individuals...\n".format(len(popdict["P1"])))
 
-	print("P2 population has {} individuals...\n".format(len(popdict["P2"])))
+	print(
+		"P2 population has {} individuals...\n".format(len(popdict["P2"])))
 
-	print("Admixed populalation has {} individuals...\n\n".format(len(popdict["Admixed"])))
+	print(
+		"Admixed populalation has {} individuals...\n\n".format(
+			len(popdict["Admixed"])))
 
 	return popdict
 
