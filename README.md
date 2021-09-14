@@ -56,7 +56,7 @@ Most of the dependencies can be installed with Anaconda3. The only one that cann
 Introgress R package. Below is a conda command that can be used to install all the other dependencies:
 
 ```
-conda install -c conda-forge r-base r-dplyr r-bayestestr r-scales r-reshape2 r-ggplot2 r-forcats r-gtools r-rideogram r-gdata r-adegenet r-enmeval r-rjava r-raster r-sp r-dismo
+conda install -c conda-forge r-base r-dplyr r-bayestestr r-scales r-reshape2 r-ggplot2 r-forcats r-gtools r-rideogram r-gdata r-adegenet r-enmeval r-rjava r-raster r-sp r-dismo r-devtools
 ```
 
 ## Installing the Package
