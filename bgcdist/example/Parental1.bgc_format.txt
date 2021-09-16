@@ -1,0 +1,3266 @@
+locus_0
+0 54
+locus_1
+2 52
+locus_2
+1 51
+locus_3
+1 53
+locus_4
+0 52
+locus_5
+52 0
+locus_6
+48 2
+locus_7
+1 51
+locus_8
+54 0
+locus_9
+50 0
+locus_10
+52 0
+locus_11
+52 0
+locus_12
+50 0
+locus_13
+1 51
+locus_14
+54 0
+locus_15
+9 43
+locus_16
+3 51
+locus_17
+6 48
+locus_18
+4 48
+locus_19
+7 45
+locus_20
+11 41
+locus_21
+3 49
+locus_22
+52 0
+locus_23
+9 41
+locus_24
+52 2
+locus_25
+9 45
+locus_26
+12 42
+locus_27
+8 44
+locus_28
+52 2
+locus_29
+11 43
+locus_30
+14 40
+locus_31
+11 41
+locus_32
+9 41
+locus_33
+12 40
+locus_34
+53 1
+locus_35
+10 42
+locus_36
+4 48
+locus_37
+44 8
+locus_38
+54 0
+locus_39
+43 7
+locus_40
+18 36
+locus_41
+52 0
+locus_42
+7 45
+locus_43
+54 0
+locus_44
+16 38
+locus_45
+11 43
+locus_46
+54 0
+locus_47
+19 35
+locus_48
+19 35
+locus_49
+18 36
+locus_50
+36 16
+locus_51
+47 7
+locus_52
+16 38
+locus_53
+21 33
+locus_54
+16 38
+locus_55
+8 44
+locus_56
+18 34
+locus_57
+54 0
+locus_58
+20 34
+locus_59
+50 2
+locus_60
+19 35
+locus_61
+52 0
+locus_62
+52 0
+locus_63
+10 42
+locus_64
+22 32
+locus_65
+3 49
+locus_66
+47 7
+locus_67
+20 34
+locus_68
+15 39
+locus_69
+48 6
+locus_70
+19 35
+locus_71
+21 31
+locus_72
+39 15
+locus_73
+54 0
+locus_74
+37 15
+locus_75
+9 43
+locus_76
+50 2
+locus_77
+23 31
+locus_78
+54 0
+locus_79
+52 0
+locus_80
+54 0
+locus_81
+52 0
+locus_82
+52 0
+locus_83
+21 31
+locus_84
+17 37
+locus_85
+21 33
+locus_86
+49 3
+locus_87
+25 29
+locus_88
+25 29
+locus_89
+13 39
+locus_90
+53 1
+locus_91
+52 0
+locus_92
+54 0
+locus_93
+4 50
+locus_94
+51 3
+locus_95
+52 2
+locus_96
+52 2
+locus_97
+15 35
+locus_98
+40 12
+locus_99
+51 1
+locus_100
+53 1
+locus_101
+53 1
+locus_102
+18 34
+locus_103
+11 41
+locus_104
+11 41
+locus_105
+23 31
+locus_106
+21 31
+locus_107
+52 0
+locus_108
+54 0
+locus_109
+15 39
+locus_110
+43 11
+locus_111
+25 27
+locus_112
+8 46
+locus_113
+14 40
+locus_114
+25 29
+locus_115
+25 29
+locus_116
+39 15
+locus_117
+12 40
+locus_118
+53 1
+locus_119
+53 1
+locus_120
+28 26
+locus_121
+28 26
+locus_122
+51 1
+locus_123
+16 38
+locus_124
+16 36
+locus_125
+9 45
+locus_126
+54 0
+locus_127
+54 0
+locus_128
+27 27
+locus_129
+54 0
+locus_130
+41 13
+locus_131
+37 17
+locus_132
+48 4
+locus_133
+47 7
+locus_134
+42 12
+locus_135
+52 2
+locus_136
+29 25
+locus_137
+50 2
+locus_138
+24 30
+locus_139
+53 1
+locus_140
+52 0
+locus_141
+52 0
+locus_142
+26 26
+locus_143
+27 27
+locus_144
+52 0
+locus_145
+47 5
+locus_146
+21 33
+locus_147
+51 3
+locus_148
+30 24
+locus_149
+25 29
+locus_150
+16 38
+locus_151
+29 25
+locus_152
+23 29
+locus_153
+41 11
+locus_154
+7 45
+locus_155
+28 26
+locus_156
+11 41
+locus_157
+24 30
+locus_158
+52 0
+locus_159
+31 23
+locus_160
+41 7
+locus_161
+51 3
+locus_162
+29 23
+locus_163
+29 25
+locus_164
+20 34
+locus_165
+52 2
+locus_166
+24 30
+locus_167
+20 30
+locus_168
+46 6
+locus_169
+32 22
+locus_170
+32 22
+locus_171
+32 22
+locus_172
+36 16
+locus_173
+51 1
+locus_174
+54 0
+locus_175
+52 0
+locus_176
+27 27
+locus_177
+47 5
+locus_178
+31 21
+locus_179
+54 0
+locus_180
+27 27
+locus_181
+52 0
+locus_182
+46 8
+locus_183
+26 28
+locus_184
+44 8
+locus_185
+47 7
+locus_186
+47 7
+locus_187
+28 24
+locus_188
+29 25
+locus_189
+52 2
+locus_190
+27 25
+locus_191
+27 25
+locus_192
+32 20
+locus_193
+32 20
+locus_194
+32 22
+locus_195
+52 0
+locus_196
+52 0
+locus_197
+52 0
+locus_198
+52 0
+locus_199
+54 0
+locus_200
+54 0
+locus_201
+52 0
+locus_202
+54 0
+locus_203
+31 21
+locus_204
+46 8
+locus_205
+31 23
+locus_206
+17 37
+locus_207
+51 1
+locus_208
+4 48
+locus_209
+30 22
+locus_210
+51 3
+locus_211
+43 11
+locus_212
+25 29
+locus_213
+34 20
+locus_214
+29 25
+locus_215
+52 2
+locus_216
+29 23
+locus_217
+33 21
+locus_218
+33 21
+locus_219
+24 28
+locus_220
+53 1
+locus_221
+28 26
+locus_222
+32 20
+locus_223
+54 0
+locus_224
+54 0
+locus_225
+52 0
+locus_226
+54 0
+locus_227
+52 0
+locus_228
+54 0
+locus_229
+54 0
+locus_230
+43 9
+locus_231
+25 27
+locus_232
+35 19
+locus_233
+35 19
+locus_234
+35 19
+locus_235
+35 19
+locus_236
+52 0
+locus_237
+52 0
+locus_238
+52 0
+locus_239
+50 0
+locus_240
+12 42
+locus_241
+29 19
+locus_242
+34 20
+locus_243
+34 18
+locus_244
+34 18
+locus_245
+34 20
+locus_246
+52 2
+locus_247
+26 28
+locus_248
+33 19
+locus_249
+33 21
+locus_250
+33 21
+locus_251
+33 21
+locus_252
+53 1
+locus_253
+29 25
+locus_254
+37 15
+locus_255
+11 41
+locus_256
+37 17
+locus_257
+32 20
+locus_258
+36 18
+locus_259
+52 0
+locus_260
+54 0
+locus_261
+54 0
+locus_262
+36 18
+locus_263
+50 0
+locus_264
+54 0
+locus_265
+52 0
+locus_266
+36 18
+locus_267
+54 0
+locus_268
+31 21
+locus_269
+42 10
+locus_270
+52 2
+locus_271
+50 4
+locus_272
+31 23
+locus_273
+35 19
+locus_274
+35 17
+locus_275
+35 17
+locus_276
+38 14
+locus_277
+51 3
+locus_278
+51 3
+locus_279
+50 0
+locus_280
+52 0
+locus_281
+52 0
+locus_282
+50 0
+locus_283
+53 1
+locus_284
+52 2
+locus_285
+52 2
+locus_286
+23 29
+locus_287
+50 2
+locus_288
+26 28
+locus_289
+47 7
+locus_290
+33 21
+locus_291
+49 3
+locus_292
+33 17
+locus_293
+45 7
+locus_294
+37 17
+locus_295
+37 17
+locus_296
+53 1
+locus_297
+30 20
+locus_298
+51 1
+locus_299
+51 1
+locus_300
+51 1
+locus_301
+51 1
+locus_302
+51 1
+locus_303
+32 20
+locus_304
+52 0
+locus_305
+54 0
+locus_306
+52 0
+locus_307
+52 0
+locus_308
+54 0
+locus_309
+36 18
+locus_310
+36 18
+locus_311
+36 18
+locus_312
+54 0
+locus_313
+54 0
+locus_314
+52 0
+locus_315
+52 0
+locus_316
+36 16
+locus_317
+53 1
+locus_318
+53 1
+locus_319
+53 1
+locus_320
+53 1
+locus_321
+24 30
+locus_322
+35 19
+locus_323
+30 22
+locus_324
+48 4
+locus_325
+35 17
+locus_326
+35 19
+locus_327
+51 3
+locus_328
+46 0
+locus_329
+52 0
+locus_330
+54 0
+locus_331
+54 0
+locus_332
+54 0
+locus_333
+54 0
+locus_334
+29 23
+locus_335
+44 8
+locus_336
+38 16
+locus_337
+38 16
+locus_338
+38 16
+locus_339
+52 2
+locus_340
+38 16
+locus_341
+29 19
+locus_342
+25 27
+locus_343
+30 24
+locus_344
+53 1
+locus_345
+37 17
+locus_346
+51 1
+locus_347
+27 25
+locus_348
+44 10
+locus_349
+37 15
+locus_350
+41 11
+locus_351
+52 2
+locus_352
+51 3
+locus_353
+15 37
+locus_354
+33 21
+locus_355
+52 0
+locus_356
+52 0
+locus_357
+36 18
+locus_358
+52 0
+locus_359
+54 0
+locus_360
+36 18
+locus_361
+50 0
+locus_362
+54 0
+locus_363
+50 0
+locus_364
+27 27
+locus_365
+50 0
+locus_366
+54 0
+locus_367
+52 0
+locus_368
+54 0
+locus_369
+54 0
+locus_370
+36 18
+locus_371
+36 18
+locus_372
+54 0
+locus_373
+29 23
+locus_374
+36 16
+locus_375
+42 10
+locus_376
+42 10
+locus_377
+53 1
+locus_378
+25 27
+locus_379
+27 25
+locus_380
+46 8
+locus_381
+28 26
+locus_382
+38 14
+locus_383
+42 12
+locus_384
+51 3
+locus_385
+39 15
+locus_386
+39 15
+locus_387
+39 15
+locus_388
+35 17
+locus_389
+35 19
+locus_390
+46 8
+locus_391
+49 3
+locus_392
+54 0
+locus_393
+54 0
+locus_394
+54 0
+locus_395
+52 0
+locus_396
+52 0
+locus_397
+54 0
+locus_398
+54 0
+locus_399
+52 0
+locus_400
+52 0
+locus_401
+40 10
+locus_402
+44 8
+locus_403
+52 2
+locus_404
+29 25
+locus_405
+52 2
+locus_406
+38 16
+locus_407
+53 1
+locus_408
+45 7
+locus_409
+38 14
+locus_410
+38 14
+locus_411
+38 14
+locus_412
+49 3
+locus_413
+44 10
+locus_414
+28 26
+locus_415
+53 1
+locus_416
+37 17
+locus_417
+43 7
+locus_418
+37 15
+locus_419
+49 5
+locus_420
+16 36
+locus_421
+37 15
+locus_422
+52 0
+locus_423
+52 0
+locus_424
+54 0
+locus_425
+52 2
+locus_426
+37 15
+locus_427
+54 0
+locus_428
+54 0
+locus_429
+54 0
+locus_430
+54 0
+locus_431
+52 0
+locus_432
+54 0
+locus_433
+54 0
+locus_434
+54 0
+locus_435
+52 0
+locus_436
+52 0
+locus_437
+54 0
+locus_438
+52 0
+locus_439
+52 0
+locus_440
+36 18
+locus_441
+31 21
+locus_442
+44 6
+locus_443
+50 4
+locus_444
+40 14
+locus_445
+40 14
+locus_446
+26 24
+locus_447
+35 19
+locus_448
+53 1
+locus_449
+51 1
+locus_450
+24 30
+locus_451
+49 1
+locus_452
+45 7
+locus_453
+39 15
+locus_454
+35 15
+locus_455
+36 16
+locus_456
+29 23
+locus_457
+25 29
+locus_458
+47 7
+locus_459
+50 2
+locus_460
+52 0
+locus_461
+39 13
+locus_462
+52 0
+locus_463
+39 13
+locus_464
+20 30
+locus_465
+54 0
+locus_466
+39 13
+locus_467
+54 0
+locus_468
+39 13
+locus_469
+52 0
+locus_470
+54 0
+locus_471
+54 0
+locus_472
+52 0
+locus_473
+54 0
+locus_474
+54 0
+locus_475
+20 34
+locus_476
+52 2
+locus_477
+38 16
+locus_478
+33 21
+locus_479
+38 14
+locus_480
+38 14
+locus_481
+40 12
+locus_482
+33 17
+locus_483
+38 14
+locus_484
+38 14
+locus_485
+38 14
+locus_486
+43 11
+locus_487
+26 28
+locus_488
+28 26
+locus_489
+28 26
+locus_490
+28 26
+locus_491
+49 3
+locus_492
+43 7
+locus_493
+44 8
+locus_494
+41 13
+locus_495
+41 13
+locus_496
+41 13
+locus_497
+41 13
+locus_498
+54 0
+locus_499
+54 0
+locus_500
+54 0
+locus_501
+54 0
+locus_502
+52 0
+locus_503
+52 0
+locus_504
+54 0
+locus_505
+54 0
+locus_506
+54 0
+locus_507
+52 0
+locus_508
+52 0
+locus_509
+52 0
+locus_510
+52 2
+locus_511
+47 5
+locus_512
+47 5
+locus_513
+54 0
+locus_514
+42 10
+locus_515
+50 4
+locus_516
+22 32
+locus_517
+25 27
+locus_518
+36 18
+locus_519
+46 8
+locus_520
+48 4
+locus_521
+48 4
+locus_522
+53 1
+locus_523
+51 1
+locus_524
+40 12
+locus_525
+24 26
+locus_526
+39 15
+locus_527
+51 3
+locus_528
+51 3
+locus_529
+33 19
+locus_530
+34 18
+locus_531
+36 16
+locus_532
+39 15
+locus_533
+42 12
+locus_534
+39 13
+locus_535
+39 13
+locus_536
+50 4
+locus_537
+54 0
+locus_538
+39 13
+locus_539
+54 0
+locus_540
+54 0
+locus_541
+54 0
+locus_542
+52 0
+locus_543
+54 0
+locus_544
+38 16
+locus_545
+34 16
+locus_546
+22 32
+locus_547
+24 30
+locus_548
+33 21
+locus_549
+42 12
+locus_550
+42 12
+locus_551
+42 12
+locus_552
+42 12
+locus_553
+38 14
+locus_554
+34 20
+locus_555
+53 1
+locus_556
+53 1
+locus_557
+53 1
+locus_558
+49 1
+locus_559
+37 15
+locus_560
+37 15
+locus_561
+49 5
+locus_562
+37 13
+locus_563
+45 7
+locus_564
+54 0
+locus_565
+54 0
+locus_566
+50 0
+locus_567
+54 0
+locus_568
+54 0
+locus_569
+54 0
+locus_570
+54 0
+locus_571
+54 0
+locus_572
+52 0
+locus_573
+54 0
+locus_574
+54 0
+locus_575
+54 0
+locus_576
+52 0
+locus_577
+52 0
+locus_578
+54 0
+locus_579
+52 0
+locus_580
+54 0
+locus_581
+52 0
+locus_582
+54 0
+locus_583
+41 11
+locus_584
+31 21
+locus_585
+34 20
+locus_586
+36 16
+locus_587
+50 4
+locus_588
+23 31
+locus_589
+41 11
+locus_590
+41 11
+locus_591
+41 11
+locus_592
+54 0
+locus_593
+52 0
+locus_594
+54 0
+locus_595
+17 37
+locus_596
+46 6
+locus_597
+40 14
+locus_598
+26 28
+locus_599
+30 22
+locus_600
+40 12
+locus_601
+51 3
+locus_602
+51 3
+locus_603
+27 25
+locus_604
+48 6
+locus_605
+16 38
+locus_606
+43 11
+locus_607
+43 11
+locus_608
+43 11
+locus_609
+47 7
+locus_610
+43 11
+locus_611
+53 1
+locus_612
+34 18
+locus_613
+46 8
+locus_614
+52 2
+locus_615
+38 16
+locus_616
+38 16
+locus_617
+54 0
+locus_618
+54 0
+locus_619
+54 0
+locus_620
+52 0
+locus_621
+54 0
+locus_622
+52 0
+locus_623
+50 2
+locus_624
+50 2
+locus_625
+48 6
+locus_626
+33 21
+locus_627
+42 12
+locus_628
+38 14
+locus_629
+38 14
+locus_630
+42 12
+locus_631
+29 23
+locus_632
+28 26
+locus_633
+51 1
+locus_634
+51 3
+locus_635
+41 13
+locus_636
+49 5
+locus_637
+49 5
+locus_638
+42 10
+locus_639
+49 3
+locus_640
+51 1
+locus_641
+54 0
+locus_642
+52 0
+locus_643
+52 0
+locus_644
+54 0
+locus_645
+52 0
+locus_646
+36 18
+locus_647
+52 0
+locus_648
+54 0
+locus_649
+54 0
+locus_650
+36 18
+locus_651
+54 0
+locus_652
+54 0
+locus_653
+54 0
+locus_654
+54 0
+locus_655
+54 0
+locus_656
+54 0
+locus_657
+52 0
+locus_658
+52 0
+locus_659
+29 23
+locus_660
+52 2
+locus_661
+50 4
+locus_662
+41 11
+locus_663
+33 21
+locus_664
+44 10
+locus_665
+44 10
+locus_666
+37 17
+locus_667
+44 10
+locus_668
+40 14
+locus_669
+44 10
+locus_670
+51 3
+locus_671
+49 5
+locus_672
+40 12
+locus_673
+49 3
+locus_674
+36 14
+locus_675
+43 11
+locus_676
+46 8
+locus_677
+28 24
+locus_678
+27 27
+locus_679
+52 0
+locus_680
+39 13
+locus_681
+50 0
+locus_682
+39 13
+locus_683
+52 0
+locus_684
+52 0
+locus_685
+52 0
+locus_686
+52 0
+locus_687
+44 10
+locus_688
+53 1
+locus_689
+51 1
+locus_690
+51 1
+locus_691
+51 1
+locus_692
+49 1
+locus_693
+34 20
+locus_694
+51 3
+locus_695
+49 5
+locus_696
+40 14
+locus_697
+41 13
+locus_698
+40 14
+locus_699
+46 8
+locus_700
+49 3
+locus_701
+52 0
+locus_702
+54 0
+locus_703
+52 0
+locus_704
+52 0
+locus_705
+50 0
+locus_706
+52 0
+locus_707
+50 0
+locus_708
+45 9
+locus_709
+52 0
+locus_710
+54 0
+locus_711
+54 0
+locus_712
+54 0
+locus_713
+54 0
+locus_714
+45 9
+locus_715
+50 0
+locus_716
+41 13
+locus_717
+28 26
+locus_718
+37 17
+locus_719
+41 13
+locus_720
+32 22
+locus_721
+50 4
+locus_722
+37 15
+locus_723
+52 2
+locus_724
+44 10
+locus_725
+44 10
+locus_726
+30 22
+locus_727
+35 17
+locus_728
+43 9
+locus_729
+44 10
+locus_730
+44 10
+locus_731
+44 10
+locus_732
+42 8
+locus_733
+34 20
+locus_734
+33 19
+locus_735
+32 20
+locus_736
+39 15
+locus_737
+30 24
+locus_738
+30 24
+locus_739
+51 3
+locus_740
+51 3
+locus_741
+54 0
+locus_742
+49 3
+locus_743
+53 1
+locus_744
+53 1
+locus_745
+53 1
+locus_746
+38 16
+locus_747
+43 11
+locus_748
+51 1
+locus_749
+44 8
+locus_750
+44 8
+locus_751
+16 38
+locus_752
+43 11
+locus_753
+43 11
+locus_754
+43 11
+locus_755
+38 16
+locus_756
+38 16
+locus_757
+52 2
+locus_758
+21 29
+locus_759
+24 30
+locus_760
+42 12
+locus_761
+42 12
+locus_762
+40 12
+locus_763
+27 27
+locus_764
+52 0
+locus_765
+54 0
+locus_766
+54 0
+locus_767
+54 0
+locus_768
+52 0
+locus_769
+50 0
+locus_770
+46 8
+locus_771
+53 1
+locus_772
+46 8
+locus_773
+46 8
+locus_774
+46 8
+locus_775
+51 1
+locus_776
+51 1
+locus_777
+51 1
+locus_778
+52 2
+locus_779
+35 17
+locus_780
+32 20
+locus_781
+22 32
+locus_782
+47 7
+locus_783
+43 11
+locus_784
+39 13
+locus_785
+42 10
+locus_786
+40 12
+locus_787
+50 0
+locus_788
+54 0
+locus_789
+27 27
+locus_790
+52 0
+locus_791
+52 0
+locus_792
+52 0
+locus_793
+27 27
+locus_794
+54 0
+locus_795
+52 0
+locus_796
+54 0
+locus_797
+50 0
+locus_798
+54 0
+locus_799
+54 0
+locus_800
+54 0
+locus_801
+52 0
+locus_802
+54 0
+locus_803
+54 0
+locus_804
+54 0
+locus_805
+52 0
+locus_806
+27 27
+locus_807
+54 0
+locus_808
+52 0
+locus_809
+45 9
+locus_810
+40 8
+locus_811
+33 19
+locus_812
+53 1
+locus_813
+28 26
+locus_814
+54 0
+locus_815
+30 20
+locus_816
+45 5
+locus_817
+52 2
+locus_818
+35 19
+locus_819
+35 19
+locus_820
+44 10
+locus_821
+48 4
+locus_822
+50 2
+locus_823
+40 12
+locus_824
+39 15
+locus_825
+33 21
+locus_826
+51 3
+locus_827
+45 7
+locus_828
+40 14
+locus_829
+47 7
+locus_830
+34 18
+locus_831
+54 0
+locus_832
+53 1
+locus_833
+53 1
+locus_834
+27 25
+locus_835
+51 1
+locus_836
+51 1
+locus_837
+44 8
+locus_838
+44 8
+locus_839
+52 2
+locus_840
+47 7
+locus_841
+47 7
+locus_842
+47 7
+locus_843
+43 11
+locus_844
+43 11
+locus_845
+44 8
+locus_846
+48 6
+locus_847
+48 6
+locus_848
+48 6
+locus_849
+52 0
+locus_850
+52 0
+locus_851
+54 0
+locus_852
+54 0
+locus_853
+54 0
+locus_854
+54 0
+locus_855
+54 0
+locus_856
+54 0
+locus_857
+52 0
+locus_858
+52 0
+locus_859
+54 0
+locus_860
+54 0
+locus_861
+52 0
+locus_862
+22 30
+locus_863
+53 1
+locus_864
+53 1
+locus_865
+53 1
+locus_866
+53 1
+locus_867
+53 1
+locus_868
+35 19
+locus_869
+35 19
+locus_870
+51 1
+locus_871
+51 1
+locus_872
+51 1
+locus_873
+51 1
+locus_874
+46 8
+locus_875
+48 4
+locus_876
+49 1
+locus_877
+37 15
+locus_878
+41 13
+locus_879
+44 8
+locus_880
+42 10
+locus_881
+47 7
+locus_882
+39 15
+locus_883
+27 27
+locus_884
+54 0
+locus_885
+54 0
+locus_886
+54 0
+locus_887
+52 0
+locus_888
+52 0
+locus_889
+54 0
+locus_890
+54 0
+locus_891
+54 0
+locus_892
+52 0
+locus_893
+54 0
+locus_894
+52 0
+locus_895
+45 9
+locus_896
+54 0
+locus_897
+54 0
+locus_898
+45 9
+locus_899
+50 0
+locus_900
+50 0
+locus_901
+42 10
+locus_902
+45 9
+locus_903
+40 8
+locus_904
+32 22
+locus_905
+50 4
+locus_906
+46 6
+locus_907
+46 6
+locus_908
+46 6
+locus_909
+46 6
+locus_910
+46 6
+locus_911
+46 8
+locus_912
+44 10
+locus_913
+51 1
+locus_914
+40 12
+locus_915
+50 2
+locus_916
+54 0
+locus_917
+30 24
+locus_918
+48 6
+locus_919
+48 6
+locus_920
+30 24
+locus_921
+48 6
+locus_922
+45 7
+locus_923
+45 7
+locus_924
+45 7
+locus_925
+40 10
+locus_926
+49 3
+locus_927
+38 16
+locus_928
+43 11
+locus_929
+36 16
+locus_930
+39 13
+locus_931
+28 26
+locus_932
+43 11
+locus_933
+29 25
+locus_934
+29 25
+locus_935
+52 2
+locus_936
+47 7
+locus_937
+47 7
+locus_938
+20 34
+locus_939
+44 8
+locus_940
+45 7
+locus_941
+33 21
+locus_942
+42 6
+locus_943
+50 4
+locus_944
+22 30
+locus_945
+53 1
+locus_946
+46 8
+locus_947
+46 8
+locus_948
+35 19
+locus_949
+53 1
+locus_950
+53 1
+locus_951
+53 1
+locus_952
+53 1
+locus_953
+54 0
+locus_954
+50 0
+locus_955
+54 0
+locus_956
+52 0
+locus_957
+40 10
+locus_958
+54 0
+locus_959
+52 0
+locus_960
+54 0
+locus_961
+54 0
+locus_962
+51 1
+locus_963
+46 6
+locus_964
+23 31
+locus_965
+40 14
+locus_966
+32 22
+locus_967
+14 40
+locus_968
+36 16
+locus_969
+43 11
+locus_970
+47 5
+locus_971
+47 5
+locus_972
+52 0
+locus_973
+54 0
+locus_974
+25 25
+locus_975
+54 0
+locus_976
+36 18
+locus_977
+54 0
+locus_978
+54 0
+locus_979
+52 0
+locus_980
+54 0
+locus_981
+54 0
+locus_982
+52 0
+locus_983
+27 27
+locus_984
+52 0
+locus_985
+30 24
+locus_986
+31 21
+locus_987
+38 14
+locus_988
+32 22
+locus_989
+50 4
+locus_990
+49 5
+locus_991
+50 4
+locus_992
+41 13
+locus_993
+23 31
+locus_994
+22 32
+locus_995
+41 11
+locus_996
+45 9
+locus_997
+44 10
+locus_998
+44 10
+locus_999
+44 10
+locus_1000
+35 19
+locus_1001
+44 10
+locus_1002
+44 10
+locus_1003
+26 28
+locus_1004
+44 10
+locus_1005
+37 17
+locus_1006
+46 8
+locus_1007
+48 4
+locus_1008
+46 6
+locus_1009
+35 17
+locus_1010
+35 17
+locus_1011
+52 2
+locus_1012
+52 2
+locus_1013
+40 12
+locus_1014
+42 12
+locus_1015
+42 12
+locus_1016
+42 12
+locus_1017
+39 15
+locus_1018
+48 6
+locus_1019
+30 24
+locus_1020
+45 7
+locus_1021
+44 10
+locus_1022
+44 10
+locus_1023
+49 3
+locus_1024
+48 6
+locus_1025
+29 25
+locus_1026
+25 29
+locus_1027
+47 7
+locus_1028
+47 7
+locus_1029
+43 11
+locus_1030
+45 9
+locus_1031
+41 9
+locus_1032
+36 16
+locus_1033
+32 22
+locus_1034
+32 22
+locus_1035
+32 22
+locus_1036
+34 20
+locus_1037
+52 2
+locus_1038
+52 2
+locus_1039
+53 1
+locus_1040
+50 2
+locus_1041
+49 1
+locus_1042
+47 7
+locus_1043
+48 6
+locus_1044
+48 6
+locus_1045
+39 15
+locus_1046
+38 16
+locus_1047
+46 4
+locus_1048
+39 15
+locus_1049
+30 22
+locus_1050
+48 4
+locus_1051
+48 4
+locus_1052
+44 10
+locus_1053
+37 17
+locus_1054
+53 1
+locus_1055
+53 1
+locus_1056
+53 1
+locus_1057
+53 1
+locus_1058
+46 8
+locus_1059
+35 19
+locus_1060
+51 1
+locus_1061
+51 1
+locus_1062
+51 1
+locus_1063
+49 1
+locus_1064
+54 0
+locus_1065
+54 0
+locus_1066
+54 0
+locus_1067
+52 0
+locus_1068
+52 0
+locus_1069
+37 15
+locus_1070
+37 15
+locus_1071
+31 23
+locus_1072
+50 4
+locus_1073
+50 4
+locus_1074
+50 4
+locus_1075
+38 12
+locus_1076
+42 10
+locus_1077
+42 10
+locus_1078
+35 19
+locus_1079
+43 9
+locus_1080
+44 6
+locus_1081
+44 6
+locus_1082
+31 19
+locus_1083
+47 5
+locus_1084
+27 27
+locus_1085
+27 27
+locus_1086
+54 0
+locus_1087
+52 0
+locus_1088
+54 0
+locus_1089
+52 0
+locus_1090
+54 0
+locus_1091
+54 0
+locus_1092
+50 0
+locus_1093
+50 0
+locus_1094
+50 0
+locus_1095
+26 26
+locus_1096
+43 11
+locus_1097
+47 7
+locus_1098
+42 10
+locus_1099
+32 22
+locus_1100
+49 5
+locus_1101
+32 22
+locus_1102
+32 22
+locus_1103
+50 4
+locus_1104
+49 5
+locus_1105
+46 6
+locus_1106
+49 5
+locus_1107
+49 5
+locus_1108
+49 3
+locus_1109
+25 27
+locus_1110
+28 26
+locus_1111
+48 4
+locus_1112
+46 6
+locus_1113
+46 6
+locus_1114
+20 32
+locus_1115
+40 12
+locus_1116
+39 15
+locus_1117
+42 12
+locus_1118
+51 3
+locus_1119
+51 3
+locus_1120
+30 24
+locus_1121
+45 7
+locus_1122
+52 2
+locus_1123
+52 2
+locus_1124
+46 4
+locus_1125
+41 11
+locus_1126
+45 9
+locus_1127
+41 9
+locus_1128
+25 29
+locus_1129
+29 25
+locus_1130
+42 10
+locus_1131
+34 18
+locus_1132
+47 3
+locus_1133
+36 12
+locus_1134
+44 8
+locus_1135
+43 11
+locus_1136
+52 2
+locus_1137
+29 25
+locus_1138
+42 10
+locus_1139
+50 4
+locus_1140
+32 22
+locus_1141
+50 2
+locus_1142
+50 2
+locus_1143
+53 1
+locus_1144
+53 1
+locus_1145
+28 26
+locus_1146
+30 24
+locus_1147
+30 24
+locus_1148
+51 3
+locus_1149
+51 3
+locus_1150
+51 3
+locus_1151
+51 3
+locus_1152
+42 12
+locus_1153
+54 0
+locus_1154
+48 4
+locus_1155
+47 7
+locus_1156
+47 7
+locus_1157
+43 9
+locus_1158
+48 4
+locus_1159
+48 4
+locus_1160
+48 4
+locus_1161
+30 22
+locus_1162
+53 1
+locus_1163
+46 8
+locus_1164
+54 0
+locus_1165
+51 1
+locus_1166
+51 1
+locus_1167
+31 23
+locus_1168
+54 0
+locus_1169
+54 0
+locus_1170
+52 0
+locus_1171
+54 0
+locus_1172
+54 0
+locus_1173
+52 0
+locus_1174
+30 20
+locus_1175
+33 19
+locus_1176
+47 5
+locus_1177
+54 0
+locus_1178
+52 0
+locus_1179
+54 0
+locus_1180
+54 0
+locus_1181
+54 0
+locus_1182
+52 0
+locus_1183
+45 9
+locus_1184
+27 27
+locus_1185
+45 9
+locus_1186
+52 0
+locus_1187
+52 0
+locus_1188
+54 0
+locus_1189
+54 0
+locus_1190
+52 0
+locus_1191
+44 6
+locus_1192
+50 4
+locus_1193
+50 4
+locus_1194
+49 5
+locus_1195
+50 4
+locus_1196
+37 15
+locus_1197
+37 15
+locus_1198
+51 3
+locus_1199
+51 3
+locus_1200
+40 12
+locus_1201
+26 28
+locus_1202
+37 17
+locus_1203
+49 3
+locus_1204
+48 4
+locus_1205
+43 9
+locus_1206
+33 17
+locus_1207
+39 15
+locus_1208
+41 13
+locus_1209
+32 20
+locus_1210
+28 22
+locus_1211
+42 12
+locus_1212
+39 15
+locus_1213
+39 15
+locus_1214
+51 3
+locus_1215
+48 6
+locus_1216
+48 6
+locus_1217
+35 13
+locus_1218
+50 2
+locus_1219
+50 2
+locus_1220
+50 2
+locus_1221
+50 2
+locus_1222
+50 2
+locus_1223
+29 25
+locus_1224
+52 2
+locus_1225
+52 2
+locus_1226
+52 2
+locus_1227
+49 3
+locus_1228
+29 25
+locus_1229
+38 16
+locus_1230
+52 2
+locus_1231
+29 25
+locus_1232
+52 2
+locus_1233
+52 2
+locus_1234
+52 2
+locus_1235
+38 16
+locus_1236
+38 16
+locus_1237
+52 2
+locus_1238
+47 7
+locus_1239
+52 2
+locus_1240
+52 2
+locus_1241
+52 2
+locus_1242
+52 2
+locus_1243
+52 2
+locus_1244
+52 2
+locus_1245
+48 6
+locus_1246
+44 10
+locus_1247
+45 9
+locus_1248
+29 25
+locus_1249
+47 7
+locus_1250
+53 1
+locus_1251
+49 3
+locus_1252
+49 3
+locus_1253
+49 3
+locus_1254
+51 1
+locus_1255
+36 18
+locus_1256
+45 3
+locus_1257
+49 5
+locus_1258
+30 24
+locus_1259
+53 1
+locus_1260
+53 1
+locus_1261
+53 1
+locus_1262
+49 3
+locus_1263
+50 4
+locus_1264
+51 1
+locus_1265
+51 3
+locus_1266
+54 0
+locus_1267
+37 17
+locus_1268
+53 1
+locus_1269
+53 1
+locus_1270
+53 1
+locus_1271
+44 10
+locus_1272
+46 8
+locus_1273
+53 1
+locus_1274
+28 26
+locus_1275
+54 0
+locus_1276
+49 1
+locus_1277
+46 6
+locus_1278
+43 7
+locus_1279
+32 22
+locus_1280
+31 23
+locus_1281
+32 22
+locus_1282
+50 4
+locus_1283
+31 23
+locus_1284
+49 5
+locus_1285
+52 0
+locus_1286
+52 0
+locus_1287
+52 0
+locus_1288
+52 0
+locus_1289
+36 16
+locus_1290
+52 0
+locus_1291
+54 0
+locus_1292
+54 0
+locus_1293
+52 0
+locus_1294
+52 0
+locus_1295
+54 0
+locus_1296
+52 0
+locus_1297
+54 0
+locus_1298
+52 0
+locus_1299
+54 0
+locus_1300
+54 0
+locus_1301
+54 0
+locus_1302
+54 0
+locus_1303
+48 4
+locus_1304
+27 27
+locus_1305
+27 27
+locus_1306
+27 27
+locus_1307
+27 27
+locus_1308
+27 27
+locus_1309
+52 0
+locus_1310
+54 0
+locus_1311
+52 0
+locus_1312
+54 0
+locus_1313
+54 0
+locus_1314
+54 0
+locus_1315
+54 0
+locus_1316
+54 0
+locus_1317
+52 0
+locus_1318
+54 0
+locus_1319
+54 0
+locus_1320
+52 0
+locus_1321
+52 0
+locus_1322
+52 0
+locus_1323
+54 0
+locus_1324
+52 0
+locus_1325
+52 0
+locus_1326
+50 0
+locus_1327
+50 0
+locus_1328
+54 0
+locus_1329
+54 0
+locus_1330
+52 0
+locus_1331
+52 0
+locus_1332
+52 0
+locus_1333
+50 0
+locus_1334
+50 0
+locus_1335
+54 0
+locus_1336
+40 8
+locus_1337
+52 0
+locus_1338
+52 0
+locus_1339
+54 0
+locus_1340
+54 0
+locus_1341
+52 0
+locus_1342
+46 8
+locus_1343
+42 12
+locus_1344
+39 15
+locus_1345
+39 15
+locus_1346
+16 36
+locus_1347
+36 16
+locus_1348
+43 11
+locus_1349
+47 5
+locus_1350
+48 6
+locus_1351
+51 3
+locus_1352
+51 1
+locus_1353
+51 1
+locus_1354
+51 1
+locus_1355
+51 1
+locus_1356
+51 1
+locus_1357
+51 1
+locus_1358
+51 1
+locus_1359
+51 1
+locus_1360
+51 1
+locus_1361
+51 1
+locus_1362
+51 1
+locus_1363
+51 1
+locus_1364
+51 1
+locus_1365
+51 1
+locus_1366
+51 1
+locus_1367
+51 1
+locus_1368
+51 1
+locus_1369
+51 1
+locus_1370
+51 1
+locus_1371
+28 26
+locus_1372
+35 19
+locus_1373
+28 26
+locus_1374
+28 26
+locus_1375
+53 1
+locus_1376
+53 1
+locus_1377
+53 1
+locus_1378
+53 1
+locus_1379
+47 7
+locus_1380
+53 1
+locus_1381
+53 1
+locus_1382
+53 1
+locus_1383
+53 1
+locus_1384
+53 1
+locus_1385
+53 1
+locus_1386
+53 1
+locus_1387
+53 1
+locus_1388
+53 1
+locus_1389
+53 1
+locus_1390
+53 1
+locus_1391
+53 1
+locus_1392
+53 1
+locus_1393
+26 28
+locus_1394
+26 28
+locus_1395
+30 22
+locus_1396
+49 5
+locus_1397
+49 5
+locus_1398
+49 3
+locus_1399
+36 18
+locus_1400
+36 18
+locus_1401
+38 14
+locus_1402
+48 2
+locus_1403
+42 12
+locus_1404
+48 6
+locus_1405
+51 3
+locus_1406
+30 24
+locus_1407
+51 3
+locus_1408
+24 30
+locus_1409
+52 2
+locus_1410
+52 2
+locus_1411
+45 7
+locus_1412
+46 6
+locus_1413
+44 10
+locus_1414
+50 2
+locus_1415
+39 15
+locus_1416
+49 3
+locus_1417
+52 2
+locus_1418
+43 11
+locus_1419
+47 7
+locus_1420
+47 7
+locus_1421
+29 25
+locus_1422
+29 25
+locus_1423
+52 2
+locus_1424
+52 2
+locus_1425
+44 8
+locus_1426
+52 2
+locus_1427
+50 2
+locus_1428
+50 2
+locus_1429
+48 6
+locus_1430
+44 8
+locus_1431
+52 2
+locus_1432
+29 25
+locus_1433
+47 7
+locus_1434
+52 2
+locus_1435
+29 25
+locus_1436
+44 10
+locus_1437
+50 2
+locus_1438
+45 7
+locus_1439
+33 21
+locus_1440
+30 24
+locus_1441
+30 24
+locus_1442
+30 24
+locus_1443
+51 3
+locus_1444
+51 3
+locus_1445
+48 6
+locus_1446
+48 6
+locus_1447
+53 1
+locus_1448
+48 2
+locus_1449
+48 2
+locus_1450
+35 17
+locus_1451
+38 14
+locus_1452
+38 14
+locus_1453
+38 14
+locus_1454
+51 1
+locus_1455
+51 1
+locus_1456
+36 14
+locus_1457
+48 4
+locus_1458
+22 30
+locus_1459
+28 26
+locus_1460
+46 8
+locus_1461
+35 19
+locus_1462
+53 1
+locus_1463
+37 17
+locus_1464
+53 1
+locus_1465
+53 1
+locus_1466
+53 1
+locus_1467
+51 1
+locus_1468
+51 1
+locus_1469
+51 1
+locus_1470
+51 1
+locus_1471
+51 1
+locus_1472
+49 1
+locus_1473
+32 20
+locus_1474
+39 15
+locus_1475
+49 5
+locus_1476
+50 4
+locus_1477
+50 4
+locus_1478
+49 5
+locus_1479
+54 0
+locus_1480
+50 0
+locus_1481
+54 0
+locus_1482
+52 0
+locus_1483
+52 0
+locus_1484
+54 0
+locus_1485
+54 0
+locus_1486
+54 0
+locus_1487
+52 0
+locus_1488
+52 0
+locus_1489
+50 0
+locus_1490
+54 0
+locus_1491
+52 0
+locus_1492
+52 0
+locus_1493
+54 0
+locus_1494
+52 0
+locus_1495
+27 27
+locus_1496
+54 0
+locus_1497
+54 0
+locus_1498
+54 0
+locus_1499
+27 27
+locus_1500
+54 0
+locus_1501
+54 0
+locus_1502
+52 0
+locus_1503
+54 0
+locus_1504
+54 0
+locus_1505
+54 0
+locus_1506
+27 27
+locus_1507
+52 0
+locus_1508
+54 0
+locus_1509
+52 0
+locus_1510
+54 0
+locus_1511
+50 0
+locus_1512
+54 0
+locus_1513
+54 0
+locus_1514
+52 0
+locus_1515
+50 0
+locus_1516
+52 0
+locus_1517
+54 0
+locus_1518
+54 0
+locus_1519
+52 0
+locus_1520
+52 0
+locus_1521
+52 0
+locus_1522
+54 0
+locus_1523
+54 0
+locus_1524
+52 0
+locus_1525
+52 0
+locus_1526
+54 0
+locus_1527
+54 0
+locus_1528
+54 0
+locus_1529
+54 0
+locus_1530
+50 0
+locus_1531
+52 0
+locus_1532
+52 0
+locus_1533
+50 0
+locus_1534
+52 0
+locus_1535
+54 0
+locus_1536
+52 0
+locus_1537
+54 0
+locus_1538
+50 0
+locus_1539
+50 0
+locus_1540
+54 0
+locus_1541
+54 0
+locus_1542
+52 0
+locus_1543
+50 0
+locus_1544
+54 0
+locus_1545
+54 0
+locus_1546
+54 0
+locus_1547
+54 0
+locus_1548
+27 27
+locus_1549
+52 0
+locus_1550
+54 0
+locus_1551
+52 0
+locus_1552
+52 0
+locus_1553
+52 0
+locus_1554
+27 27
+locus_1555
+52 0
+locus_1556
+54 0
+locus_1557
+54 0
+locus_1558
+54 0
+locus_1559
+54 0
+locus_1560
+27 27
+locus_1561
+52 0
+locus_1562
+54 0
+locus_1563
+54 0
+locus_1564
+52 0
+locus_1565
+54 0
+locus_1566
+52 0
+locus_1567
+54 0
+locus_1568
+54 0
+locus_1569
+54 0
+locus_1570
+54 0
+locus_1571
+54 0
+locus_1572
+50 0
+locus_1573
+54 0
+locus_1574
+27 27
+locus_1575
+54 0
+locus_1576
+54 0
+locus_1577
+54 0
+locus_1578
+27 27
+locus_1579
+27 27
+locus_1580
+54 0
+locus_1581
+52 0
+locus_1582
+54 0
+locus_1583
+54 0
+locus_1584
+52 0
+locus_1585
+52 0
+locus_1586
+54 0
+locus_1587
+50 0
+locus_1588
+48 0
+locus_1589
+52 0
+locus_1590
+52 0
+locus_1591
+54 0
+locus_1592
+52 0
+locus_1593
+54 0
+locus_1594
+52 0
+locus_1595
+50 0
+locus_1596
+54 0
+locus_1597
+54 0
+locus_1598
+54 0
+locus_1599
+54 0
+locus_1600
+54 0
+locus_1601
+52 0
+locus_1602
+52 0
+locus_1603
+54 0
+locus_1604
+54 0
+locus_1605
+52 0
+locus_1606
+52 0
+locus_1607
+54 0
+locus_1608
+54 0
+locus_1609
+52 0
+locus_1610
+54 0
+locus_1611
+54 0
+locus_1612
+54 0
+locus_1613
+54 0
+locus_1614
+54 0
+locus_1615
+52 0
+locus_1616
+52 0
+locus_1617
+54 0
+locus_1618
+54 0
+locus_1619
+52 0
+locus_1620
+27 27
+locus_1621
+54 0
+locus_1622
+52 0
+locus_1623
+52 0
+locus_1624
+54 0
+locus_1625
+54 0
+locus_1626
+54 0
+locus_1627
+52 0
+locus_1628
+54 0
+locus_1629
+54 0
+locus_1630
+52 0
+locus_1631
+54 0
+locus_1632
+54 0
