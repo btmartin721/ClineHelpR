@@ -1,0 +1,71 @@
+FROM continuumio/miniconda3
+
+LABEL maintainer="evobio721@gmail.com" \
+      version="1.0" \
+      github="https://github.com/btmartin721/ClineHelpR" \
+      description="Docker image for ClineHelpR that includes all required dependencies"
+
+# Specify bash as the default shell
+SHELL [ "/bin/bash", "--login", "-c" ]
+
+COPY environment.yml /tmp/
+
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod u+x /usr/local/bin/entrypoint.sh
+
+ENV PROJECT_DIR $HOME/app
+RUN mkdir $PROJECT_DIR
+WORKDIR $PROJECT_DIR
+
+COPY environment.yml .
+RUN conda env create -f environment.yml --force && conda clean --all --yes
+
+# Make RUN commands use the new environment
+#SHELL ["conda", "run", "-n", "clinehelpr", "/bin/bash", "-c"]\
+RUN echo "conda activate clinehelpr" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
+# Create entry point to make sure conda is activated at runtime
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+
+#RUN conda activate clinehelpr
+
+# install other tools not available on conda cloud
+# GCC, GSL, and HDF5
+RUN apt-get -y update && \
+    apt-get -y install build-essential && \
+    apt-get -y install libgsl-dev && \
+    apt-get -y install libhdf5-serial-dev
+
+RUN mkdir $PROJECT_DIR/bin
+RUN mkdir $PROJECT_DIR/src
+
+ENV SRC_DIR $PROJECT_DIR/src
+ENV BIN_DIR $PROJECT_DIR/bin
+
+# Copy BGC source code to image
+COPY bgcdist1.03.tar.gz $SRC_DIR
+RUN tar -xzvf $SRC_DIR/bgcdist1.03.tar.gz
+WORKDIR $SRC_DIR/bgcdist/
+
+# Compile BGC
+RUN h5c++ -Wall -O2 -o bgc bgc_main.C bgc_func_readdata.C bgc_func_initialize.C \
+    bgc_func_mcmc.C bgc_func_write.C bgc_func_linkage.C bgc_func_ngs.C \
+    bgc_func_hdf5.C mvrandist.c -lgsl -lgslcblas
+
+# Compile estpost
+RUN h5c++ -Wall -O3 -o estpost estpost_h5.c -lgsl -lgslcblas
+
+# Add BGC executable
+RUN ln -s bgc $BIN_DIR/bgc
+RUN ln -s estpost $BIN_DIR/estpost
+
+ENV PATH="${BIN_DIR}:${PATH}"
+
+# Install INTROGRESS R package
+RUN R -e "install.packages('introgress', dependencies=TRUE, repos='http://cran.us.r-project.org')"
+
+WORKDIR $PROJECT_DIR
+
+# default command will launch JupyterLab server for development
+CMD [ "jupyter", "lab", "--no-browser", "--ip", "0.0.0.0" ]

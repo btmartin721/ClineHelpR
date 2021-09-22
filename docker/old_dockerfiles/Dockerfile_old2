@@ -9,7 +9,7 @@ LABEL maintainer="evobio721@gmail.com" \
 # Specify bash as the default shell
 SHELL [ "/bin/bash", "--login", "-c" ]
 
-ARG username=user
+ARG username=current_user
 ARG uid=1000
 ARG gid=100
 ARG IMAGE_NAME=clinehelpr
@@ -21,39 +21,22 @@ ENV HOME /home/$USER
 ENV IMAGE_NAME $IMAGE_NAME
 ENV IMAGE_TAG $IMAGE_TAG
 
-# Add a user so that they aren't executing as root
+RUN apt-get update && \
+    apt-get install -y wget
+
 RUN adduser --disabled-password \
     --gecos "Non-root user" \
     --uid $UID \
     --home $HOME \
     $USER
 
-###############################################
-### Install tools not available on conda cloud
-###############################################
-
-# Install dependencies for BGC and tools for downloading files
-RUN apt-get -y update && \
-    apt-get -y install build-essential && \
-    apt-get -y install libgsl-dev && \
-    apt-get -y install libhdf5-serial-dev && \
-    apt-get -y install wget && \
-    apt-get -y install git
-
-##############################################
-### Install miniconda
-##############################################
-
-# Move conda environment to /tmp and changer ownership to user
 COPY environment.yml /tmp/
 RUN chown $UID /tmp/environment.yml
 
-# Copy entrypoint.sh to /usr/loca/bin and give user privelidges 
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chown $UID /usr/local/bin/entrypoint.sh && \
     chmod u+x /usr/local/bin/entrypoint.sh
 
-# Change from root to user
 USER $USER
 
 # install miniconda
@@ -72,12 +55,12 @@ RUN echo ". $CONDA_DIR/etc/profile.d/conda.sh" >> ~/.profile
 # make conda activate command available from /bin/bash --interative shells
 RUN conda init bash
 
-# Create a project directory inside user home
+# create a project directory inside user home
 ENV PROJECT_DIR $HOME/app
 RUN mkdir $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 
-# Build the conda environment
+# build the conda environment
 ENV ENV_PREFIX $PROJECT_DIR/env
 RUN conda update --name base --channel defaults conda && \
     conda env create --prefix $ENV_PREFIX --file /tmp/environment.yml --force && \
@@ -86,15 +69,20 @@ RUN conda update --name base --channel defaults conda && \
 # Create entry point to make sure conda is activated at runtime
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
-# Create bin and src directories
+USER root
+
+# install other tools not available on conda cloud
+RUN apt-get -y update && \
+    apt-get -y install build-essential && \
+    apt-get -y install libgsl-dev && \
+    apt-get -y install libhdf5-serial-dev
+
+USER $USER
+
 RUN mkdir src && mkdir bin
 ENV SRC_DIR $PROJECT_DIR/src
 ENV BIN_DIR $PROJECT_DIR/bin
 WORKDIR $SRC_DIR
-
-##########################################
-### Install BGC
-##########################################
 
 # Copy BGC source code to image
 COPY bgcdist1.03.tar.gz .
@@ -109,44 +97,52 @@ RUN h5c++ -Wall -O2 -o bgc bgc_main.C bgc_func_readdata.C bgc_func_initialize.C 
 # Compile estpost
 RUN h5c++ -Wall -O3 -o estpost estpost_h5.c -lgsl -lgslcblas
 
-# Make binaries executable
-RUN chmod u+x bgc && \
-    chmod u+x estpost
+#RUN ln -s bgc $BIN_DIR/bgc
+#RUN ln -s estpost $BIN_DIR/estpost
 
-# Add everything to the path
+#RUN chmod u+x bgc
+#RUN chmod u+x estpost
+
 ENV PATH="${PROJECT_DIR}/bin:${PROJECT_DIR}/env/bin:${PATH}"
 
-#####################################
-### Install R dependencies
-#####################################
+#RUN conda activate $ENV_PREFIX
 
 # Install INTROGRESS R package and setup R for use with Jupyter notebooks
 RUN R -e "install.packages('introgress', dependencies=TRUE, repos='http://cran.us.r-project.org')" && \
     R -e "install.packages('IRkernel', repos='http://cran.us.r-project.org')" && \
     R -e "IRkernel::installspec(user = TRUE)"
 
+WORKDIR $SRC_DIR
+
 # Install ClineHelpR API
 RUN R -e "devtools::install_github('btmartin721/ClineHelpR')" && \
     R -e "download.file(url = 'https://github.com/btmartin721/ClineHelpR/archive/refs/heads/master.zip', destfile = 'ClineHelpR-master.zip')" && \
     R -e "unzip(zipfile = 'ClineHelpR-master.zip')"
 
+#USER root
+
+# WORKDIR $SRC_DIR/ClineHelpR-master/scripts
+
 # Copy ClineHelpR scripts to container path
+#COPY scripts/* /usr/local/bin/
 COPY scripts $SRC_DIR/scripts
 
-RUN mkdir $SRC_DIR/tkchafin
+ENV PATH="${SRC_DIR}/scripts:${PATH}"
 
-WORKDIR $SRC_DIR/tkchafin
+#WORKDIR $SRC_DIR/scripts
+#RUN for file in ./*; do chown $UID:$GID /usr/local/bin/$file; chmod u+x /usr/local/bin/$file; done
 
-# Get supporting scripts from tkchafin/scripts repo
-RUN git clone --depth 1 https://github.com/tkchafin/scripts.git
+#USER $USER
 
-# Copy supporting scripts to scripts directory
-RUN cp scripts/phylip2bgc.pl $SRC_DIR/scripts/ && \
-    cp scripts/phylip2introgress.pl $SRC_DIR/scripts/ && \
-    cp scripts/nremover.pl $SRC_DIR/scripts/
+#COPY scripts/bgc_settings.txt $SRC_DIR/bgcdist/
 
-# Put it in the path
-ENV PATH=${SRC_DIR}/scripts:${PATH}
+#RUN source $SRC_DIR/bgcdist/bgc_settings.txt && \
+#    export $(sed '/^#/d' $SRC_DIR/bgcdist/bgc_settings.txt | cut -d= -f1)
+
+WORKDIR $SRC_DIR/bgcdist
+
+RUN chmod u+x bgc && \
+    chmod u+x estpost
 
 WORKDIR $PROJECT_DIR
 
