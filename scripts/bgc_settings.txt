@@ -1,0 +1,54 @@
+# BGC parameter settings
+# See the BGC manual for more information
+
+# Directory where bgc and estpost executables are located
+BGC_PATH=$HOME/app/src/bgcdist
+
+ESTPOST_PATH=$HOME/app/src/bgcdist
+
+# Directory where input files are located
+# Input files should have the correct suffixes. See documentation.
+INPUT_DATA_DIR=$HOME/app/data
+
+# Directory where output files will be saved
+RESULTS_DIR=$HOME/app/results
+
+# Run number (integer)
+run=1
+
+# Prefix for input and output files (string)
+prefix=test
+
+# Number of MCMC generations (integer)
+mcmc=100000
+
+# MCMC burnin generations (integer)
+burnin=50000
+
+# Thin MCMC to every $thin generations (integer)
+thin=24
+
+# gt_uncert: 0 if not using gt_uncert, 1 if using it (boolean integer)
+gt_uncert=1
+
+# error: Error rate for genotype_uncertainty model (float)
+error=0.001
+
+# Linkage: 0 for no linkage model, 1 for linkage model (boolean integer)
+linkage=0
+
+# Maximum distance between loci, free recombination. Only used for linkage model (default=0.5)
+linkage_dist=0.5
+
+# standard deviation for Gaussian proposal of cline parameter gamma (default=0.05)
+stddev_gamma=0.05
+
+# standard deviation for Gaussian proposal of cline parameter zeta (default=0.05)
+stddev_zeta=0.05
+
+# standard deviation for Gaussian proposal of cline parameters eta and kappa (default=0.02)
+stddev_eta_kappa=0.02
+
+# MCMC tuning parameter, maximum deviate from uniform for proposed hybrid index  (default=0.1)
+mcmc_tuning=0.1
+
