@@ -13,6 +13,7 @@ summarize_ENMeval(
   examine.predictions = c("L", "LQ", "H", "LQH", "LQHP", "LQHPT"),
   RMvalues = seq(0.5, 4, 0.5),
   plotDIR = "./plots",
+  showPLOTS = FALSE,
   niche.overlap = FALSE,
   plot.width = 7,
   plot.height = 7,
@@ -37,6 +38,8 @@ how complexity affects predictions}
 complexity affects predictions}
 
 \item{plotDIR}{Directory to save plots to}
+
+\item{showPLOTS}{Boolean; Whether to print plots to screen}
 
 \item{niche.overlap}{Boolean. If TRUE, calculates pairwise niche overlap
 matrix}
@@ -65,6 +68,7 @@ summarize_ENMeval(eval.par = eval.par,
                                          "LQHPT"),
                  RMvalues = seq(0.5, 4, 0.5),
                  plotDIR = "./plots",
+                 showPLOTS = TRUE,
                  niche.overlap = FALSE,
                  plot.width = 7,
                  plot.height = 7,

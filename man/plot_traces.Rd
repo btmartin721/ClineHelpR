@@ -4,7 +4,7 @@
 \alias{plot_traces}
 \title{Plot LnL Traces to Assess Convergence for BGC Log-likelihoods}
 \usage{
-plot_traces(df.list, prefix, plotDIR = "./plots")
+plot_traces(df.list, prefix, plotDIR = "./plots", showPLOTS = FALSE)
 }
 \arguments{
 \item{df.list}{List of data.frames containing aggregated BGC results.
@@ -13,6 +13,8 @@ See ?combine_bgc_output}
 \item{prefix}{Prefix used for input files}
 
 \item{plotDIR}{Directory to save the plots}
+
+\item{showPLOTS}{Boolean Whether to print the plot}
 }
 \description{
 Wrapper function to make BGC parameter trace plots

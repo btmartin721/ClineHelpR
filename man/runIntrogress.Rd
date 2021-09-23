@@ -13,6 +13,7 @@ runIntrogress(
   minDelt = 0.8,
   prefix = "population1",
   outputDIR = "./plots",
+  showPLOTS = FALSE,
   sep = "\\t",
   pop.id = FALSE,
   ind.id = FALSE,
@@ -37,6 +38,8 @@ INTROGRESS}
 \item{prefix}{Character string; Population prefix for input and output files}
 
 \item{outputDIR}{Character string; File path for INTROGRESS output}
+
+\item{showPLOTS}{Boolean; Whether to print the plots to the screen}
 
 \item{sep}{Character string; Column delimiter for INTROGRESS input files}
 

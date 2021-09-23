@@ -9,41 +9,47 @@
 #'                See ?combine_bgc_output
 #' @param prefix Prefix used for input files
 #' @param plotDIR Directory to save the plots
+#' @param showPLOTS Boolean Whether to print the plot
 #' @export
 #' @examples
 #' plot_traces(df.list = aggregated.results, prefix = "eatt",
 #'          plotDIR = "./bgc_plots")
-plot_traces <- function(df.list, prefix, plotDIR = "./plots"){
+plot_traces <- function(df.list, prefix, plotDIR = "./plots", showPLOTS=FALSE){
 
   # Create plotDIR if doesn't already exist.
   dir.create(plotDIR, showWarnings = FALSE)
 
-  plotLnL(df.list[[1]], plotDIR, prefix)
+  plotLnL(df.list[[1]], plotDIR, prefix, showPLOTS=showPLOTS)
   plotBGCparams(df = df.list[[2]],
                 ylab = "Alpha",
                 bgc_param = "alpha",
                 prefix = prefix,
-                plotDIR = plotDIR)
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
   plotBGCparams(df = df.list[[3]],
                 ylab = "Beta",
                 bgc_param = "beta",
                 prefix = prefix,
-                plotDIR = plotDIR)
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
   plotBGCparams(df = df.list[[4]],
                 ylab = "Gamma-Quantile",
                 bgc_param = "qa",
                 prefix = prefix,
-                plotDIR = plotDIR)
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
   plotBGCparams(df = df.list[[5]],
                 ylab = "Zeta-Quantile",
                 bgc_param = "qb",
                 prefix = prefix,
-                plotDIR = plotDIR)
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
   plotBGCparams(df = df.list[[6]],
                 ylab = "Hybrid Index",
                 bgc_param = "hi",
                 prefix = prefix,
-                plotDIR = plotDIR)
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
 
   writeLines(paste("Saved trace plots to", plotDIR))
 
@@ -54,7 +60,7 @@ plot_traces <- function(df.list, prefix, plotDIR = "./plots"){
 #' @param plotDIR Directory path to save plots in
 #' @param prefix Character string; Prefix for output files
 #' @noRd
-plotLnL <- function(df, plotDIR, prefix){
+plotLnL <- function(df, plotDIR, prefix, showPLOTS){
 
   # Load in and transpose LnL data.
   lnl.df <- as.data.frame(t(df))
@@ -84,6 +90,10 @@ plotLnL <- function(df, plotDIR, prefix){
     height = 4,
     useDingbats = FALSE
   )
+
+  if (showPLOTS == TRUE){
+    print(p1)
+  }
 }
 
 #' Function to plot BGC parameter traces
@@ -94,7 +104,7 @@ plotLnL <- function(df, plotDIR, prefix){
 #' @param prefix Character string; prefix for output files
 #' @param plotDIR Directory path to save plots in
 #' @noRd
-plotBGCparams <- function(df, ylab, bgc_param, prefix, plotDIR){
+plotBGCparams <- function(df, ylab, bgc_param, prefix, plotDIR, showPLOTS){
 
   # Get mean of parameter for each MCMC sample
   df.mean <- lapply(df, mean)
@@ -121,4 +131,8 @@ plotBGCparams <- function(df, ylab, bgc_param, prefix, plotDIR){
     height = 4,
     useDingbats = FALSE
   )
+
+  if (showPLOTS == TRUE){
+    print(p1)
+  }
 }

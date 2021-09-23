@@ -21,6 +21,7 @@
 #' @param bb.buffer Integer; Buffer around sample bounding box.
 #'                  bb.buffer = bb.buffer * resolution (in arc-seconds)
 #' @param plotDIR Directory to save plots to
+#' @param showPLOTS Boolean; Whether to print plots to screen
 #' @return List with cropped rasters and other info
 #' @export
 #' @examples
@@ -31,12 +32,14 @@
 #'                            "sample_localities_maxent_southeast_noNA.csv"),
 #'                            header = TRUE,
 #'                            bb.buffer = 10,
-#'                            plotDIR = "./plots")
+#'                            plotDIR = "./plots",
+#'                            showPLOTS = TRUE)
 prepare_rasters <- function(raster.dir,
                             sample.file,
                             header = TRUE,
                             bb.buffer = 10,
-                            plotDIR = "./plots"){
+                            plotDIR = "./plots",
+                            showPLOTS = FALSE){
 
   if (!requireNamespace("raster", quietly = TRUE)){
     warning("The raster package must be installed to use this functionality")
@@ -154,6 +157,15 @@ prepare_rasters <- function(raster.dir,
     }
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    for (i in 1:raster::nlayers(envs.backg)){
+      writeLines(paste0("Saving raster plot ", i, " to disk..."))
+      raster::plot(envs.backg[[i]])
+      dismo::points(coords, pch=21, bg=pops)
+      counter <- counter+1
+    }
+  }
+
   envList <- list(envs.cropped, envs.backg, coords, p, pops, samples[,1])
 
   rm(envs, p, bb, bb.buf, envs.buf, envs.cropped, envs.backg)
@@ -172,6 +184,7 @@ prepare_rasters <- function(raster.dir,
 #' @param agg.factor A vector of 1 or 2 numbers for the checkerboard
 #'                           methods
 #' @param plotDIR Directory to save the plots to
+#' @param showPLOTS Boolean; Whether to print plots to screen
 #' @return Object with background points
 #' @export
 #' @examples
@@ -179,11 +192,13 @@ prepare_rasters <- function(raster.dir,
 #'                           number.bg.points = 10000,
 #'                           bg.raster = 1,
 #'                           plotDIR = "./plots",
+#'                           showPLOTS = TRUE,
 #'                           agg.factor = 2)
 partition_raster_bg <- function(env.list,
                                 number.bg.points = 10000,
                                 bg.raster = 1,
                                 plotDIR = "./plots",
+                                showPLOTS = FALSE,
                                 agg.factor = 2){
 
   if (!requireNamespace("raster", quietly = TRUE)){
@@ -257,6 +272,15 @@ partition_raster_bg <- function(env.list,
     dismo::points(coords, pch=21, bg=blocks$occ.grp)
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    raster::plot(envs.backg[[bg.raster]], col="gray",
+                 main = "Partitions into Training and Test Data",
+                 sub="Block Method",
+                 xlab = "Longitude",
+                 ylab = "Latitude")
+    dismo::points(coords, pch=21, bg=blocks$occ.grp)
+  }
+
   rm(blocks)
   gc(verbose = FALSE)
 
@@ -280,6 +304,18 @@ partition_raster_bg <- function(env.list,
         )
       dismo::points(bg, pch=21, bg=check1$occ.grp)
     dev.off()
+
+    if (isTRUE(showPLOTS)) {
+      raster::plot(
+        envs.backg[[bg.raster]],
+        col="gray",
+        main = "Partitions into Training and Test Data (Aggregation Factor=5)",
+        sub="Checkerboard1 Method",
+        xlab = "Longitude",
+        ylab = "Latitude"
+      )
+      dismo::points(bg, pch=21, bg=check1$occ.grp)
+    }
 
     rm(check1)
     gc(verbose = FALSE)
@@ -307,6 +343,19 @@ partition_raster_bg <- function(env.list,
                   col="white",
                   cex=1.5)
   dev.off()
+
+  if (isTRUE(showPLOTS)) {
+    raster::plot(envs.backg[[bg.raster]], col="gray",
+                 main = "Partitions into Training and Test Data",
+                 sub="Checkerboard2 Method",
+                 xlab = "Longitude",
+                 ylab = "Latitude")
+    dismo::points(bg, pch=21, bg=check2$bg.grp)
+    dismo::points(coords, pch=21,
+                  bg=check2$occ.grp,
+                  col="white",
+                  cex=1.5)
+  }
 
   rm(check2)
   gc(verbose = FALSE)
@@ -449,6 +498,7 @@ runENMeval <- function(envs.fg,
 #' @param RMvalues Vector of non-negative RM values to examine how
 #'                 complexity affects predictions
 #' @param plotDIR Directory to save plots to
+#' @param showPLOTS Boolean; Whether to print plots to screen
 #' @param niche.overlap Boolean. If TRUE, calculates pairwise niche overlap
 #'                      matrix
 #' @param plot.width Integer. Specify plot widths
@@ -470,6 +520,7 @@ runENMeval <- function(envs.fg,
 #'                                          "LQHPT"),
 #'                  RMvalues = seq(0.5, 4, 0.5),
 #'                  plotDIR = "./plots",
+#'                  showPLOTS = TRUE,
 #'                  niche.overlap = FALSE,
 #'                  plot.width = 7,
 #'                  plot.height = 7,
@@ -487,6 +538,7 @@ summarize_ENMeval <- function(eval.par,
                                                       "LQHPT"),
                               RMvalues = seq(0.5, 4, 0.5),
                               plotDIR = "./plots",
+                              showPLOTS = FALSE,
                               niche.overlap = FALSE,
                               plot.width = 7,
                               plot.height = 7,
@@ -552,6 +604,11 @@ summarize_ENMeval <- function(eval.par,
                main="Relative Occurrence Rate")
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    raster::plot(eval.par@predictions[[which(eval.par@results$delta.AICc==0)]],
+                 main="Relative Occurrence Rate")
+  }
+
   # Look at the model object for our "AICc optimal" model:
   aic.opt <- eval.par@models[[which(eval.par@results$delta.AICc==0)]]
 
@@ -593,6 +650,22 @@ summarize_ENMeval <- function(eval.par,
                     ylab = "Permutation Importance")
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    ENMeval::eval.plot(eval.par@results)
+    ENMeval::eval.plot(eval.par@results, 'avg.test.AUC',
+                       variance ='var.test.AUC')
+    ENMeval::eval.plot(eval.par@results, "avg.diff.AUC",
+                       variance="var.diff.AUC")
+
+    # Plot permutation importance.
+    df <- ENMeval::var.importance(aic.opt)
+    par(mar=imp.margins)
+    raster::barplot(df$permutation.importance,
+                    names.arg = df$variable,
+                    las = 2,
+                    ylab = "Permutation Importance")
+  }
+
   # Let's see how model complexity changes the predictions in our example
   pdf(file = file.path(plotDIR, "modelPredictions.pdf"),
       width = plot.width,
@@ -614,6 +687,24 @@ summarize_ENMeval <- function(eval.par,
     }
 
   dev.off()
+
+  if (isTRUE(showPLOTS)) {
+    for (i in 1:length(examine.predictions)){
+      for (j in 1:length(RMvalues)){
+        raster::plot(eval.par@predictions[[paste(examine.predictions[i],
+                                                 RMvalues[j],
+                                                 sep = "_")]],
+                     ylim=c(minLat,maxLat),
+                     xlim=c(minLon, maxLon),
+                     main=paste0(examine.predictions[i],
+                                 "_",
+                                 RMvalues[j],
+                                 " Prediction"),
+        )
+      }
+    }
+  }
+
 }
 
 #' Function to extract raster values at each sample point for raster stack

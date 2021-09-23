@@ -22,6 +22,7 @@
 #'                   you want to save to
 #' @param plotDIR Directory path. If saveToFile is specified, plots are
 #'                saved in this directory
+#' @param showPLOTS Boolean Whether to print the plots to the screen
 #' @param device File format to save plot. Supports ggplot2::ggsave devices
 #' @param neutral.color Color for non-outlier loci. Default = "gray"
 #' @param neutral.line.color Color for dashed linear line showing mean
@@ -78,6 +79,7 @@ phiPlot <- function(outlier.list,
                     line.size = 0.25,
                     saveToFile = NULL,
                     plotDIR = "./plots",
+                    showPLOTS = FALSE,
                     device = "pdf",
                     neutral.color = "gray",
                     neutral.line.color = "black",
@@ -411,9 +413,11 @@ phiPlot <- function(outlier.list,
       units = phi.units
     )
 
-  } else{
-    # If saveToFile is not specified by user.
-    print(phi.plot)
+  }
+
+  if (isTRUE(showPLOTS)){
+      # If showPLOTS is TRUE.
+      print(phi.plot)
   }
 
   gc()

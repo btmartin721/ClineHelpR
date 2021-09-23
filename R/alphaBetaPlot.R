@@ -20,6 +20,7 @@
 #'                   you want to save to
 #' @param plotDIR Directory path. If saveToFile is specified, plots are
 #'                saved in this directory
+#' @param showPLOTS Boolean Whether to print the plots to the screen.
 #' @param device File format to save plot. Supports ggplot2::ggsave devices
 #' @param neutral.color Color for non-outlier loci. Default = "gray"
 #' @param alpha.color Color for alpha outlier loci. Default = "blue"
@@ -43,7 +44,7 @@
 #'
 #' phiPlot(outlier.list = gene.outliers, ,
 #' line.size = 0.1, qn.interval = FALSE, overlap.zero = FALSE,
-#' both.outlier.tests = TRUE, saveToFile = "mus_phiPlot")
+#' both.outlier.tests = TRUE, saveToFile = "mus_phiPlot", showPLOTS=TRUE)
 #'
 #' phiPlot(outlier.list = full.outliers,  overlap.zero = FALSE)
 alphaBetaPlot <- function(outlier.list,
@@ -52,6 +53,7 @@ alphaBetaPlot <- function(outlier.list,
                     both.outlier.tests = FALSE,
                     saveToFile = NULL,
                     plotDIR = "./plots",
+                    showPLOTS=FALSE,
                     device = "pdf",
                     neutral.color = "gray",
                     alpha.color = "blue",
@@ -219,9 +221,11 @@ alphaBetaPlot <- function(outlier.list,
       units = dim.units
     )
 
-  } else{
-    # If saveToFile is not specified by user.
-    print(ab.plot)
+  }
+
+  if (isTRUE(showPLOTS)) {
+      # If showPLOTS is TRUE.
+      print(ab.plot)
   }
 
 }
