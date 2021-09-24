@@ -1,79 +1,149 @@
 # ClineHelpR
 
-Plot BGC and INTROGRESS genomic cline results and correlate INTROGRESS clines with environmental variables.  
+Plot BGC and INTROGRESS genomic cline results and correlate INTROGRESS clines with environmental variables.
 
+ClineHelpR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out.
 
-ClineHelpR allows you to plot BGC (Bayesian Genomic Cline) output. After we ran BGC, we realized it wasn't easy to plot the BGC results, so we put together this package in the process of figuring it out. 
+Our package provides tools for running BGC as well as pre- and post-processing its input and output files. The pipeline spans from input file conversion to plotting results, identifies outliers from the BGC output files, and allows you to make numerous highly customizable, publication-quality plots.
 
-Our package allows you to make several plots.
+ClineHelpR also provides INTROGRESS tools spanning input file conversion and parsing and plotting the results. Finally, ClineHelpR provides tools for performing ecological niche modeling to correlate environmental variables with the INTROGRESS output. 
 
-The BGC and INTROGRESS software packages are described elsewhere (Gompert and Buerkle, 2010, 2011, 2012; Gompert et al., 2012a, 2012b).  
-
+The BGC and INTROGRESS software packages are described elsewhere (Gompert and Buerkle, 2010, 2011, 2012; Gompert et al., 2012a, 2012b).
 
 ## Software Flow Diagram
 
-<img src="img/flowchart_ClinePlotR.png" />  
-
+<img src="img/flowchart_ClinePlotR.png" width=100% height=100% />
 
 ## Example Dataset
+
 All example data are available from a Dryad Digital Repository (https://doi.org/10.5061/dryad.b2rbnzsc8), as the files are too large for GitHub. To run the example data, download the exampleData directory from DRYAD, then run the R scripts in the ClineHelpR/scripts directory.
 
-## Dependencies
+## Installation  
 
-ClineHelpR has several dependencies. 
+There are two options for installing ClineHelpR and its dependencies:
 
-The bgcPlotter functions require:
+1. With docker
+2. Manual installation.
 
-* data.table
-* dplyr
-* bayestestR
-* scales
-* reshape2
-* ggplot2
-* forcats
-* gtools
-* RIdeogram
-* gdata
-* adegenet
+### Docker
 
-The environmental functions require:
+ClineHelpR can be run in a container from our pre-built image. The image has all the dependencies installed and is compatible with Python 3.6, BGC, and R. Additionally, the docker container can be run in a Jupyter notebook directly from your browser! However, if you would rather run it in a terminal, we still provide that as an option.
 
-* ENMeval
-* rJava
-* raster
-* sp
-* dismo
+#### Docker Step 1: Pull the Docker Image
 
-The INTROGRESS functions require:  
-* introgress
-* ggplot2
-* dplyr
-* scales
+First, pull the docker image. 
 
-## Installing the Dependencies  
+TODO
 
-Most of the dependencies can be installed with Anaconda3. The only one that cannot be installed via conda is the 
-Introgress R package. Below is a conda command that can be used to install all the other dependencies:
+#### Docker Step 2: Run the Image
+
+Once you have the image, then you can run the docker image in a container. If you aren't familiar with docker, it basically runs a pre-built image in a "container", which is like a virtual machine that is isolated from your operating system. In this case, that virtual machine runs Ubuntu 18.04 and has all the necessary dependencies and software pre-installed and in your path. 
+
+We have provided a BASH script to run the docker image in a container. The script has command-line arguments that allow you to choose between running a shell environment or a Jupyter Notebook.
+
+Let's run it to start the container. The script can be found at ```ClineHelpR/scripts/run_docker.sh```.
+
+## Running the Jupyter Notebook
+
+If you are using Jupyter, you can freely switch between Python3 and R kernels. We will start with Python3 because it allows you to run bash with the magic command, ```%%bash```. To switch between Python3 and R, click just to the left of the circle in the top right corner of the Jupyter Notebook and choose the kernel you want. See the following images.
+
+<img src="img/jupyter_notebook_screenshot.png" width="100%" height="100%" /> 
+
+
+<img src="img/jupyter_notebook_screenshot_choosekernel.png" width="100%" height="100%" />
+
+### Manual Installation
+
+If you don't want to use a jupyter notebook with docker, e.g. if you are on a high-performance computing cluster, you can manually install the dependencies. Most of them can be installed directly with Anaconda. The only one that has to be installed manually is the "INTROGRESS" R package. Additionally, we include a conda environment file, ```environment.yml```, that contains a blueprint for installing all the necessary conda dependencies.
+
+
+#### Conda Environment File
+
+You can use it by typing ```conda install --file environment.yml``` into a terminal that has anaconda3 or miniconda3 installed. The ```environment.yml``` file is located in the root ClineHelpR GitHub directory. 
+
+#### Full Manual Installation with Conda
+
+If you would rather install the dependencies manually, they are listed below. To install them, you can run the following commands in a terminal:  
 
 ```
-conda install -c conda-forge r-base r-dplyr r-bayestestr r-scales r-reshape2 r-ggplot2 r-forcats r-gtools r-rideogram r-gdata r-adegenet r-enmeval r-rjava r-raster r-sp r-dismo r-devtools
+conda create -n clinehelpr python=3.6
+conda activate clinehelpr
+conda install -c conda-forge r-base r-dplyr r-bayestestr r-scales r-reshape2 r-ggplot2 r-forcats r-gtools r-rideogram r-gdata r-adegenet r-enmeval r-rjava r-raster r-sp r-dismo r-ggforce r-concaveman r-readr r-xml r-stringi r-devtools jupyterlab
 ```
 
-## Installing the Package
+To install the additional pyVCF dependency for the vcf2bgc.py script:
 
-To install ClineHelpR, you can do the following:
+```conda install -c bioconda pyvcf```
+
+In our experience, installing conda packages from conda-forge and bioconda works better with R packages than the default anaconda or r channels. Importantly, we have experienced compatibility issues when trying to install some packages from the r or default conda channels and others from bioconda or conda-forge. We highly recommend using conda-forge and bioconda, which play nicely together.
+
+#### Install R Packages
+
+If you are not using docker, then you also need to install the INTROGRESS R package. Type the following command into your R session:
+
+```install.packages("introgress", dependencies=TRUE, repos="https://cran.r-project.org/")```
+
+#### Installing ClineHelpR
+
+Finally, if you are not using docker, you need to install ClineHelpR. ClineHelpR can be installed directly from GitHub using the devtools R package. Run the following command(s) from an R session:
 
 ```
-# If you don't already have devtools installed
-install.packages("devtools")
+# NOTE: devtools can be installed with conda (recommended)
+# However, if you don't already have devtools installed, uncomment the next line
+# install.packages("devtools")
 
+# Install ClineHelpR
 devtools::install_github("btmartin721/ClineHelpR")
 ``` 
 
-Now load the library.  
-```
-library("ClineHelpR")
-```
+### Dependencies
+
+ClineHelpR has multiple dependencies, most of which can be installed using Anaconda3. They are all listed below.
+
+The bgcPlotter functions require:
+
++ data.table
++ dplyr
++ bayestestR
++ scales
++ reshape2
++ ggplot2
++ forcats
++ gtools
++ RIdeogram
++ gdata
++ adegenet
++ ggforce
++ concaveman
++ readr
+
+The environmental functions require:
+
++ ENMeval
++ rJava
++ raster
++ sp
++ dismo
+
+The INTROGRESS functions require:
+
++ introgress (not available from conda)
++ ggplot2
++ dplyr
++ scales
+
+Other required dependencies
+
++ XML (R package)
++ stringi
+
+The vcf2bgc.py script requires:
++ Python >= 3.4 and Python <= 3.6
++ pyVCF
+
+## Pipeline
+
+There are R and python scripts in the ClineHelpR/scripts directory that allow you to run our whole pipeline. All the steps from below can be run by modifying and using those scripts. We also demonstrate each step in our Jupyter Notebook tutorial in the ClineHelpR/tutorials directory.
 
 ## bgcPlotter
 
