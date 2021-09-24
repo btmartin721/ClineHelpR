@@ -12,7 +12,7 @@ Help()
    echo
    echo "Options:"
    echo "-h     Print this help menu."
-   echo "-s     Path to BGC settinigs file."
+   echo "-s     Path to BGC settings file."
    echo
 }
 
