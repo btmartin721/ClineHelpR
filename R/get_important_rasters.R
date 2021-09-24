@@ -463,7 +463,7 @@ runENMeval <- function(envs.fg,
         parallel = parallel,
         algorithm = algorithm,
         categoricals = categoricals,
-        aggregation.factor = agg.factor,
+        #aggregation.factor = agg.factor,
         numCores = np
       )
   } else if (parallel == FALSE){
@@ -477,8 +477,8 @@ runENMeval <- function(envs.fg,
         fc = feature.classes,
         parallel = parallel,
         algorithm = algorithm,
-        categoricals = categoricals,
-        aggregation.factor = agg.factor
+        categoricals = categoricals
+        #aggregation.factor = agg.factor
       )
   } else {
     stop("Parallel must be either TRUE or FALSE")

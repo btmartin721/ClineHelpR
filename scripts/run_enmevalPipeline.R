@@ -5,6 +5,8 @@
 
 # This script will run the ENMeval pipeline and save the output as an R object
 
+library("ClineHelpR")
+
 dataDIR <- "exampleData/ENMeval_bioclim"
 
 envList <-
