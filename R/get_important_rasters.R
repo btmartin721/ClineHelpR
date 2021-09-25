@@ -639,8 +639,11 @@ runENMeval <- function(env.list,
 #' @param maxLon Maximum longitude to plot for predictions
 #' @param examine.predictions Character vector of feature classes to examine
 #'                            how complexity affects predictions
+#' @param examine.stats Character vector of stats to evaluate
 #' @param RMvalues Vector of non-negative RM values to examine how
 #'                 complexity affects predictions
+#' @param nullmodel.iter Integer; Number of iterations to perform with null
+#'                       model.
 #' @param plotDIR Directory to save plots to
 #' @param showPLOTS Boolean; Whether to print plots to screen
 #' @param niche.overlap Boolean. If TRUE, calculates pairwise niche overlap
@@ -680,7 +683,13 @@ summarize_ENMeval <- function(eval.par,
                                                       "LQH",
                                                       "LQHP",
                                                       "LQHPT"),
+                              examine.stats = c("auc.val",
+                                                "auc.diff",
+                                                "cbi.val",
+                                                "or.mtp",
+                                                "or.10p"),
                               RMvalues = seq(0.5, 4, 0.5),
+                              nullmodel.iter = 100,
                               plotDIR = "./plots",
                               showPLOTS = FALSE,
                               niche.overlap = FALSE,
@@ -690,6 +699,7 @@ summarize_ENMeval <- function(eval.par,
 
   dir.create(plotDIR, showWarnings = FALSE)
 
+  `%>%` <- dplyr::`%>%`
 
   if (!requireNamespace("raster", quietly = TRUE)){
     warning("The raster package must be installed to use this functionality")
@@ -782,35 +792,33 @@ summarize_ENMeval <- function(eval.par,
       width = plot.width,
       height = plot.height,
       onefile = TRUE)
-    ENMeval::eval.plot(eval.par@results)
-    ENMeval::eval.plot(eval.par@results, 'avg.test.AUC',
-                       variance ='var.test.AUC')
-    ENMeval::eval.plot(eval.par@results, "avg.diff.AUC",
-                       variance="var.diff.AUC")
+    p1 <- ENMeval::evalplot.stats(e = eval.par,
+                            stats = examine.stats,
+                            color = "fc", x.var = "rm")
+
+    p2 <- ENMeval::evalplot.stats(e = eval.par,
+                                  stats = examine.stats,
+                                  color = "rm", x.var = "fc")
+
+    print(p1)
+    print(p2)
 
     # Plot permutation importance.
-    df <- ENMeval::var.importance(aic.opt)
+    df <- varImportance
     par(mar=imp.margins)
-    raster::barplot(df$permutation.importance,
+    p3 <- raster::barplot(df$permutation.importance,
                     names.arg = df$variable,
                     las = 2,
                     ylab = "Permutation Importance")
+
+    print(p3)
+
   dev.off()
 
   if (isTRUE(showPLOTS)) {
-    ENMeval::eval.plot(eval.par@results)
-    ENMeval::eval.plot(eval.par@results, 'avg.test.AUC',
-                       variance ='var.test.AUC')
-    ENMeval::eval.plot(eval.par@results, "avg.diff.AUC",
-                       variance="var.diff.AUC")
-
-    # Plot permutation importance.
-    df <- ENMeval::var.importance(aic.opt)
-    par(mar=imp.margins)
-    raster::barplot(df$permutation.importance,
-                    names.arg = df$variable,
-                    las = 2,
-                    ylab = "Permutation Importance")
+    print(p1)
+    print(p2)
+    print(p3)
   }
 
   # Let's see how model complexity changes the predictions in our example
@@ -818,40 +826,124 @@ summarize_ENMeval <- function(eval.par,
       width = plot.width,
       height = plot.height,
       onefile = TRUE)
+
+    res <- ENMeval::eval.results(eval.par)
+
+    opt.aicc <- res %>% dplyr::filter(delta.AICc == 0)
+
+    opt.seq <- res %>%
+      dplyr::filter(or.10p.avg == min(or.10p.avg)) %>%
+      dplyr::filter(auc.val.avg == max(auc.val.avg))
+
+    mod.seq <- ENMeval::eval.models(eval.par)[[opt.seq$tune.args]]
+    raster::plot(mod.seq)
+
+    # View the response curves
+    #mod.seq <- dismo::response(ENMeval::eval.models(eval.par)[[opt.seq$tune.args]])
+    #raster::plot(mod.seq, main="MAXENT Response Curves")
+    #dev.off()
+
+    # Assess predictions for optimal model
+    pred.seq <- ENMeval::eval.predictions(eval.par)[[opt.seq$tune.args]]
+
+    # Plot predictions for optimal model
+    raster::plot(pred.seq, main=paste0("Optimal Model Prediction (",
+                                       opt.seq$tune.args,
+                                       ")"))
+
+    # Plot binned background points
+    points(ENMeval::eval.bg(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.bg.grp(eval.par))
+
+    # Plot occurence points on top
+    points(ENMeval::eval.occs(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.occs.grp(eval.par))
+
+  # Plot predictions for all models
     for (i in 1:length(examine.predictions)){
       for (j in 1:length(RMvalues)){
-        raster::plot(eval.par@predictions[[paste(examine.predictions[i],
-                                                    RMvalues[j],
-                                                    sep = "_")]],
-                       ylim=c(minLat,maxLat),
-                       xlim=c(minLon, maxLon),
-                       main=paste0(examine.predictions[i],
-                                   "_",
-                                   RMvalues[j],
-                                   " Prediction"),
-        )
-      }
-    }
-
-  dev.off()
-
-  if (isTRUE(showPLOTS)) {
-    for (i in 1:length(examine.predictions)){
-      for (j in 1:length(RMvalues)){
-        raster::plot(eval.par@predictions[[paste(examine.predictions[i],
-                                                 RMvalues[j],
-                                                 sep = "_")]],
+        raster::plot(ENMeval::eval.predictions(eval.par)[[paste0(
+          "fc.",
+          examine.predictions[i],
+          "_rm.",
+          RMvalues[j])]],
                      ylim=c(minLat,maxLat),
                      xlim=c(minLon, maxLon),
-                     main=paste0(examine.predictions[i],
-                                 "_",
-                                 RMvalues[j],
+                     main=paste0("fc.",
+                                  examine.predictions[i],
+                                  "_rm.",
+                                  RMvalues[j],
                                  " Prediction"),
         )
       }
     }
-  }
 
+    ### Compare against null models for significance
+    mod.null <- ENMeval::ENMnulls(e = eval.par,
+                                  mod.settings = list(fc = "LQ",
+                                                      rm = tail(RMvalues, n=1)),
+                                  no.iter = nullmodel.iter,
+                                  eval.stats = examine.stats)
+
+    pnull.hist <- ENMeval::evalplot.nulls(mod.null,
+                                     stats = examine.stats,
+                                     plot.type = "histogram")
+
+    # Violin plot
+    pnull.violin <- ENMeval::evalplot.nulls(mod.null,
+                                            stats = examine.stats,
+                                            plot.type = "violin")
+
+    print(pnull.hist)
+    print(pnull.violin)
+
+  dev.off()
+
+  if (isTRUE(showPLOTS)){
+    raster::plot(mod.seq, main="MAXENT Response Curves")
+    #dismo::response(ENMeval::eval.models(eval.par)[[opt.seq$tune.args]])
+
+    # Plot predictions
+    # Plot predictions for optimal model
+    raster::plot(pred.seq, main=paste0("Optimal Model Prediction (",
+                                       opt.seq$tune.args,
+                                       ")"))
+
+    # Plot binned background points
+    points(ENMeval::eval.bg(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.bg.grp(eval.par))
+
+    # Plot occurence points on top
+    points(ENMeval::eval.occs(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.occs.grp(eval.par))
+
+    # Plot predictions for all models
+    for (i in 1:length(examine.predictions)){
+      for (j in 1:length(RMvalues)){
+        raster::plot(ENMeval::eval.predictions(eval.par)[[paste0(
+          "fc.",
+          examine.predictions[i],
+          "_rm.",
+          RMvalues[j])]],
+          ylim=c(minLat,maxLat),
+          xlim=c(minLon, maxLon),
+          main=paste0("fc.",
+                      examine.predictions[i],
+                      "_rm.",
+                      RMvalues[j],
+                      " Prediction"),
+        )
+      }
+    }
+
+    print(pnull.hist)
+    print(pnull.violin)
+
+  }
 }
 
 #' Function to extract raster values at each sample point for raster stack

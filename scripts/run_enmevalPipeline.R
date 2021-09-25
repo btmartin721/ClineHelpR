@@ -58,12 +58,14 @@ saveRDS(eval.par, file.path(dataDIR, "Robjects", "enm_eval_test.rds"))
 # Adjust coordinate bounds as needed.
 summarize_ENMeval(
   eval.par = eval.par,
-  plotDIR = file.path(dataDIR, "outputFiles", "plots"),
+  plotDIR = plotDIR,
+  showPLOTS = TRUE,
   minLat = 25,
   maxLat = 45,
   minLon = -100,
   maxLon = -45,
-  imp.margins = c(15.1, 4.1, 3.1, 2.1))
+  imp.margins = c(15.1, 4.1, 3.1, 2.1),
+  examine.predictions=c("L", "LQ", "LQHP"))
 
 # Use delta.AICc to find best model and plot response curves for it
 # For this dataset it was features classes LQH and RM = 2.5
