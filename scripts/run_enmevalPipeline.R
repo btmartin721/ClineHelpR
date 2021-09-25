@@ -7,13 +7,12 @@
 
 library("ClineHelpR")
 
-dataDIR <- "exampleData/ENMeval_bioclim"
+dataDIR <- ".../../../../clinehelpr_analysis/data/exampleData/ENMeval_bioclim"
 
 envList <-
   prepare_rasters(
     raster.dir = file.path(dataDIR, "rasterLayers", "cropped"),
-    sample.file = file.path("exampleData",
-                            "ENMeval_bioclim",
+    sample.file = file.path( dataDIR,
                             "localityInfo",
                             "sample_localities_maxent_southeast_noNA.csv"),
     header = TRUE,
@@ -39,16 +38,17 @@ bg <- readRDS(file.path(dataDIR, "Robjects", "bg.rds"))
 # Give rJava more memory. Otherwise it will throw an error.
 # Here, I used 24GB of RAM.
 # Adjust based on your system.
-options(java.parameters = "-Xmx24g")
+options(java.parameters = "-Xmx4g")
 
 # Run ENMeval.
 # Adjust parameters as needed.
 # See ENMeval vignette
 eval.par <- runENMeval(envs.fg = envs.fg,
-                       bg = bg, parallel = FALSE,
-                       categoricals = 1,
+                       bg = bg,
+                       parallel = FALSE,
+                       categoricals = c("a_crop_nlcd2011_resampled"),
                        partition.method = "checkerboard1",
-                       coords = coords )
+                       coords = coords)
 
 # Save ENMeval results to R object file.
 saveRDS(eval.par, file.path(dataDIR, "Robjects", "enm_eval.rds"))

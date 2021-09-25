@@ -447,42 +447,28 @@ runENMeval <- function(envs.fg,
     return(NULL)
   }
 
-  if (partition.method == "checkerboard2"){
-    agg.factor <- c(agg.factor, agg.factor)
-  }
-
-  if (parallel == TRUE){
-    eval.par <-
-      ENMeval::ENMevaluate(
-        occ = coords,
-        env = envs.fg,
-        bg.coords = bg,
-        method = partition.method,
-        RMvalues = RMvalues,
-        fc = feature.classes,
-        parallel = parallel,
-        algorithm = algorithm,
-        categoricals = categoricals,
-        #aggregation.factor = agg.factor,
-        numCores = np
-      )
-  } else if (parallel == FALSE){
-    eval.par <-
-      ENMeval::ENMevaluate(
-        occ = coords,
-        env = envs.fg,
-        bg.coords = bg,
-        method = partition.method,
-        RMvalues = RMvalues,
-        fc = feature.classes,
-        parallel = parallel,
-        algorithm = algorithm,
-        categoricals = categoricals
-        #aggregation.factor = agg.factor
-      )
+  if (isTRUE(parallel)){
+    numCores <- np
+  } else if (isFALSE(parallel)) {
+    numCores = 1
   } else {
     stop("Parallel must be either TRUE or FALSE")
   }
+
+  colnames(bg) <- c("lng", "lat")
+
+  eval.par <-
+    ENMeval::ENMevaluate(
+      occs = coords,
+      envs = envs.fg,
+      bg = bg,
+      tune.args = list(fc = feature.classes, rm = RMvalues),
+      partitions = partition.method,
+      parallel = parallel,
+      algorithm = algorithm,
+      categoricals = categoricals,
+      numCores = np
+    )
 
   return(eval.par)
 }
