@@ -67,7 +67,7 @@ genind2introgress <- function(
 	p1.data<-adegenet::genind2df(p1_genind, sep="/")
 	p1.data<-subset(p1.data, select=-c(pop))
 	p1.data[is.na(p1.data)] <- "NA/NA"
-
+	
 	# genotype table for p2
 	p2_genind<-sub[pop(sub) %in% p2,]
 	p2.data<-adegenet::genind2df(p2_genind, sep="/")
@@ -83,7 +83,7 @@ genind2introgress <- function(
 	admix.data <- rbind(pop, row.names(admix.data), admix.data)
 
 	# aggregate dataframes and return
-	df.list <- c(loci.data, p1.data, p2.data, admix.data)
+	df.list <- list(loci.data, p1.data, p2.data, admix.data)
 	names(df.list) <- c("loci.data", "p1.data", "p2.data", "admix.data")
 	return(df.list)
 }
