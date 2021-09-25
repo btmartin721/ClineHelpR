@@ -412,14 +412,14 @@ plot_partitions <- function(envs.fg,
   p1 <- ENMeval::evalplot.grps(pts = coords,
                                pts.grp = partitions$occs.grp,
                                envs = envs.bg) +
-    ggplot2::ggtitle(paste0("Spatial ", partition.type, "Partitions: Occurrences"))
+    ggplot2::ggtitle(paste0("Spatial ", partition.type, " Partitions: Occurrences"))
 
   #bg <- bg[[which(!is.na(envs.bg[[1]]@data@values))]]
 
   p2 <- ENMeval::evalplot.grps(pts = bg,
                                pts.grp = partitions$bg.grp,
                                envs = envs.bg) +
-    ggplot2::ggtitle(paste0("Spatial ", partition.type, "Partitions: Background"))
+    ggplot2::ggtitle(paste0("Spatial ", partition.type, " Partitions: Background"))
 
   occs.z <- cbind(coords, raster::extract(envs.fg, coords))
   bg.z <- cbind(bg, raster::extract(envs.fg, bg))
@@ -546,7 +546,6 @@ plot_partitions <- function(envs.fg,
 #'                                            "LQHP",
 #'                                            "LQHPT")
 #'                        categoricals = NULL,
-#'                        agg.factor = 2,
 #'                        algorithm = "maxent.jar")
 runENMeval <- function(env.list,
                        bg,
@@ -561,7 +560,6 @@ runENMeval <- function(env.list,
                                            "LQHP",
                                            "LQHPT"),
                        categoricals = NULL,
-                       agg.factor = 2,
                        algorithm = "maxent.jar"
                        ){
 

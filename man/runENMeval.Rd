@@ -13,7 +13,6 @@ runENMeval(
   RMvalues = seq(0.5, 4, 0.5),
   feature.classes = c("L", "LQ", "H", "LQH", "LQHP", "LQHPT"),
   categoricals = NULL,
-  agg.factor = 2,
   algorithm = "maxent.jar"
 )
 }
@@ -62,6 +61,5 @@ eval.par <- runENMeval(env.list = envList,
                                            "LQHP",
                                            "LQHPT")
                        categoricals = NULL,
-                       agg.factor = 2,
                        algorithm = "maxent.jar")
 }

@@ -29,11 +29,6 @@ bg <- partition_raster_bg(env.list = envList,
 saveRDS(bg, file = file.path(dataDIR, "Robjects", "bg.rds"))
 saveRDS(envList, file = file.path(dataDIR, "Robjects", "envList.rds"))
 
-envs.fg <- envList[[1]]
-coords <- envList[[3]]
-rm(envList)
-gc()
-
 bg <- readRDS(file.path(dataDIR, "Robjects", "bg.rds"))
 
 # Give rJava more memory. Otherwise it will throw an error.
@@ -44,7 +39,7 @@ options(java.parameters = "-Xmx4g")
 # Run ENMeval.
 # Adjust parameters as needed.
 # See ENMeval vignette
-eval.par <- runENMeval(envs.fg = envs.fg,
+eval.par <- runENMeval(env.list = envList,
                        bg = bg,
                        parallel = TRUE,
                        categoricals = c("a_crop_nlcd2011_resampled"),

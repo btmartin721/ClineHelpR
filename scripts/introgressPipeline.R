@@ -9,10 +9,10 @@
 library("ClinePlotR")
 
 # Obtained from https://worldclim.org; finest resolution available.
-rasterDIR <- "exampleData/ENMeval_bioclim/"
+rasterDIR <- "../clinehelpr_analysis/data/exampleData/ENMeval_bioclim/"
 
 # Introrgress input data directory
-dataDIR <- "exampleData/introgress"
+dataDIR <- "../clinehelpr_analysis/data/exampleData/introgress"
 
 # Object saved in run_enmevalPipeline.R script
 # See ClinePlotR/scripts directory
@@ -31,7 +31,7 @@ for (i in 1:length(rasterPoint.list)) {
     file.path(
       dataDIR,
       "extractedRasterValues",
-      paste0("rasterPoints_",
+      paste0("rasterPoints_tutorial",
              colnames(rasterPoint.list[[i]][4]),
              ".csv")
     ),
@@ -49,10 +49,10 @@ for (i in 1:length(rasterPoint.list)) {
 # can be lowered to e.g., 0.7 or 0.6, which will include
 # more SNPs.
 eatt <- runIntrogress(
-  p1.file = file.path(dataDIR, "inputFiles", "EATT_p1data.txt"),
-  p2.file = file.path(dataDIR, "inputFiles", "EATT_p2data.txt"),
-  admix.file = file.path(dataDIR, "inputFiles", "EATT_admix.txt"),
-  loci.file = file.path(dataDIR, "inputFiles", "EATT_loci.txt"),
+  p1.input = file.path(dataDIR, "inputFiles", "EATT_p1data.txt"),
+  p2.input = file.path(dataDIR, "inputFiles", "EATT_p2data.txt"),
+  admix.input = file.path(dataDIR, "inputFiles", "EATT_admix.txt"),
+  loci.input = file.path(dataDIR, "inputFiles", "EATT_loci.txt"),
   clineLabels = c("EA", "Het", "TT"),
   minDelt = 0.8,
   prefix = "EATT",
