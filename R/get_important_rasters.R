@@ -822,7 +822,7 @@ summarize_ENMeval <- function(eval.par,
   }
 
   # Let's see how model complexity changes the predictions in our example
-  pdf(file = file.path(plotDIR, "modelPredictions.pdf"),
+  pdf(file = file.path(plotDIR, "model_Eval_and_Predictions.pdf"),
       width = plot.width,
       height = plot.height,
       onefile = TRUE)
