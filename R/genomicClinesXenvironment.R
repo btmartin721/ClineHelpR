@@ -84,24 +84,11 @@ runIntrogress <- function(p1.input,
   # Create outputDIR if doesn't exist.
   dir.create(outputDIR, showWarnings = FALSE)
 
-  if (file.exists(admix.input) &&
-      file.exists(loci.input) &&
-      file.exists(p1.input) &&
-      file.exists(p2.input)){
-
-    # Read in the data from files
-    gen.data <- read.table(file = admix.input, header = FALSE, sep = sep)
-    loci.data <- read.table(file = loci.input, header = TRUE, sep = sep)
-    p1 <- read.table(file = p1.input, header = FALSE, sep = sep)
-    p2 <- read.table(file = p2.input, header = FALSE, sep = sep)
-
-  } else {
-    # Read in the objects
-    gen.data <- admix.input
-    loci.data <- loci.input
-    p1 <- p1.input
-    p2 <- p2.input
-  }
+  # Read in the data from files
+  gen.data <- read.table(file = admix.input, header = FALSE, sep = sep)
+  loci.data <- read.table(file = loci.input, header = TRUE, sep = sep)
+  p1 <- read.table(file = p1.input, header = FALSE, sep = sep)
+  p2 <- read.table(file = p2.input, header = FALSE, sep = sep)
 
   # Set the filenames of the PDF outfiles generated in script
   # This first block is for the permutation genomic cline method
