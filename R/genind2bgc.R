@@ -159,9 +159,11 @@ getRefAlt<-function(genotypes){
 #' @return DataFrame A filtered DataFrame where loci with missing data > prop are removed.
 #' @noRd
 filter_missingByLoc<-function(gen, prop=0.5){
-	missing<-adegenet::propTyped(gen, by="loc")
-	#print(genind[loc=c(missing>prop)])
-	return(gen[loc=c(missing>prop)])
+  propTyped<-adegenet::propTyped(gen, by="loc")
+  #print(missing)
+  #print(missing>prop)
+  #print(genind[loc=c(missing>prop)])
+  return(gen[loc=c(propTyped>prop)])
 }
 
 #' Utility function to filter missing data by individual.
@@ -171,9 +173,11 @@ filter_missingByLoc<-function(gen, prop=0.5){
 #' @return DataFrame Individuals with missing data > prop filtered out.
 #' @noRd
 filter_missingByInd<-function(gen, prop=0.5, drop=TRUE){
-	missing<-adegenet::propTyped(gen, by="ind")
-	#print(missing>prop)
-	return(gen[c(missing>prop), drop=drop])
+  propTyped<-adegenet::propTyped(gen, by="ind")
+  print(propTyped)
+  #print(prop)
+  print(propTyped)
+  return(gen[c(propTyped>prop), drop=drop])
 }
 
 #' Utility function to randomly subset loci.
