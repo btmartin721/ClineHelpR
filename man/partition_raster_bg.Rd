@@ -6,6 +6,7 @@
 \usage{
 partition_raster_bg(
   env.list,
+  categoricals = NULL,
   number.bg.points = 10000,
   bg.raster = 1,
   plotDIR = "./plots",
@@ -15,6 +16,8 @@ partition_raster_bg(
 }
 \arguments{
 \item{env.list}{Object output from prepare_rasters() function}
+
+\item{categoricals}{Character vector of categorical layer names}
 
 \item{number.bg.points}{Number of background points to generate}
 

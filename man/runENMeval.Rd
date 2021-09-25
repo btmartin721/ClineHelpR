@@ -5,9 +5,8 @@
 \title{Function to run ENMeval and MAXENT on the raster layers.}
 \usage{
 runENMeval(
-  envs.fg,
+  env.list,
   bg,
-  coords,
   partition.method,
   parallel = FALSE,
   np = 2,
@@ -19,11 +18,10 @@ runENMeval(
 )
 }
 \arguments{
-\item{envs.fg}{First element of envs.list returned from prepare_raster_bg()}
+\item{env.list}{Object output from prepare_rasters() function}
 
-\item{bg}{Object with background points; generated from partition_raster_bg}
-
-\item{coords}{Data.Frame with (lon,lat). 3rd element of envs.list}
+\item{bg}{Object with background points; generated from partition_raster_bg.
+If NULL, the background layer will be calculated for you.}
 
 \item{partition.method}{Method used for background point partitioning}
 
@@ -39,9 +37,6 @@ Higher values impose a stronger penalty on model complexity}
 \item{categoricals}{Vector indicating which (if any) of the input
 environmental layers are categorical.}
 
-\item{agg.factor}{Aggregation factor(s) for checkerboard
-partitioning method.}
-
 \item{algorithm}{Character vector. Defaults to dismo's maxent.jar}
 }
 \value{
@@ -55,9 +50,8 @@ methods will look by viewing the PDF output from partition_raster_bg.
 See ?partition_raster_bg for more info.
 }
 \examples{
-eval.par <- runENMeval(envs.fg = envList[[1]],
+eval.par <- runENMeval(env.list = envList,
                        bg = bg,
-                       coords = envList[[3]],
                        partition.method = "checkerboard1",
                        parallel = FALSE,
                        RMvalues = seq(0.5, 4, 0.5),

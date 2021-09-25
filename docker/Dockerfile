@@ -116,7 +116,8 @@ ENV PATH="${PROJECT_DIR}/bin:${PROJECT_DIR}/env/bin:${PATH}"
 #####################################
 
 # Install INTROGRESS R package and ClineHelpR API, and setup R for use with Jupyter notebooks
-RUN R -e "install.packages('introgress', dependencies=TRUE, repos='http://cran.us.r-project.org')" && \
+RUN echo "fixing enmeval" && \
+    R -e "install.packages('introgress', dependencies=TRUE, repos='http://cran.us.r-project.org')" && \
     R -e "install.packages('IRkernel', repos='http://cran.us.r-project.org')" && \
     R -e "IRkernel::installspec(user = TRUE)" && \
     R -e "devtools::install_github('btmartin721/ClineHelpR')" && \

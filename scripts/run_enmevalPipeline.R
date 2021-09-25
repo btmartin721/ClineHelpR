@@ -7,22 +7,23 @@
 
 library("ClineHelpR")
 
-dataDIR <- ".../../../../clinehelpr_analysis/data/exampleData/ENMeval_bioclim"
+dataDIR <- "../clinehelpr_analysis/data/exampleData/ENMeval_bioclim"
+plotDIR <- "../testplots"
 
 envList <-
   prepare_rasters(
-    raster.dir = file.path(dataDIR, "rasterLayers", "cropped"),
+    raster.dir = file.path(dataDIR, "rasterLayers", "subset"),
     sample.file = file.path( dataDIR,
                             "localityInfo",
                             "sample_localities_maxent_southeast_noNA.csv"),
     header = TRUE,
     bb.buffer = 0.5,
-    plotDIR = file.path(dataDIR, "outputFiles", "plots")
+    plotDIR = plotDIR
   )
 
 bg <- partition_raster_bg(env.list = envList,
-                          plotDIR = file.path(dataDIR,
-                                              "plots"))
+                          plotDIR = plotDIR, number.bg.points = 500,
+                          showPLOTS = TRUE)
 
 # Saved to file and reloaded because rJava ran out of memory
 saveRDS(bg, file = file.path(dataDIR, "Robjects", "bg.rds"))
@@ -45,13 +46,14 @@ options(java.parameters = "-Xmx4g")
 # See ENMeval vignette
 eval.par <- runENMeval(envs.fg = envs.fg,
                        bg = bg,
-                       parallel = FALSE,
+                       parallel = TRUE,
                        categoricals = c("a_crop_nlcd2011_resampled"),
                        partition.method = "checkerboard1",
-                       coords = coords)
+                       coords = coords,
+                       np = 4)
 
 # Save ENMeval results to R object file.
-saveRDS(eval.par, file.path(dataDIR, "Robjects", "enm_eval.rds"))
+saveRDS(eval.par, file.path(dataDIR, "Robjects", "enm_eval_test.rds"))
 
 # Adjust coordinate bounds as needed.
 summarize_ENMeval(
