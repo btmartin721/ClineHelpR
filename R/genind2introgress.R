@@ -11,7 +11,7 @@
 #' @param missingPerLoc Proportion of missing genotypes allowed to retain a locus
 #' @param subset An optional parameter defining a number of loci to randomly retain
 #' @param drop Boolean value defining whether or not to remove monomorphic loci
-#' @return A list of data.frames (each data.frame is an introgress input)
+#' @param prefix Prefix for output Introgress files (default="introgress")
 #' @export
 #' @examples
 #' introgress_input <- genind2introgress(genind, p1=c("PopA", "PopB"),
@@ -33,7 +33,8 @@ genind2introgress <- function(
 	missingPerLoc=0.5,
 	missingPerInd=0.5,
 	subset=NULL,
-	drop=TRUE
+	drop=TRUE,
+	prefix="introgress"
 ){
 
 	ret<-list()
@@ -49,12 +50,12 @@ genind2introgress <- function(
 	# drop individuals having more than missingPerInd missing data
 	# NOTE: Also dropping loci that become monomorphic
 	sub<-filter_missingByInd(sub, prop=missingPerInd, drop=drop)
-
+  #print(sub)
 	# if necessary, randomly subset loci to the number requested
 	if (!is.null(subset)){
 		sub<-filter_randomSubsetLoci(sub, sample=subset)
 	}
-
+  #print(sub)
 	# begin parsing remaining data to create inputs for introgress
 	# set up loci information table ()
 	loci.data<-data.frame(cbind(c(names(sub$loc.n.all)), sub$type), stringsAsFactors = FALSE)
@@ -82,10 +83,40 @@ genind2introgress <- function(
 	admix.data[is.na(admix.data)] <- "NA/NA"
 	admix.data <- rbind(pop, row.names(admix.data), admix.data)
 
-	# aggregate dataframes and return
-	df.list <- list(loci.data, p1.data, p2.data, admix.data)
-	names(df.list) <- c("loci.data", "p1.data", "p2.data", "admix.data")
-	return(df.list)
+	# write output files 
+	print(paste0("Writing outputs with prefix: ", prefix))
+	if (file.exists(paste0(prefix, "_p1data.csv"))) {
+	  # Delete file if it exists
+	  file.remove(paste0(prefix, "_p1data.csv"))
+	}
+	write.table(p1.data, file=paste0(prefix, "_p1data.csv"), 
+	            sep=",", col.names=FALSE, row.names=FALSE, 
+	            quote = FALSE)
+
+	if (file.exists(paste0(prefix, "_p2data.csv"))) {
+	  # Delete file if it exists
+	  file.remove(paste0(prefix, "_p2data.csv"))
+	}
+	write.table(p2.data, file=paste0(prefix, "_p2data.csv"), 
+	            sep=",", col.names=FALSE, row.names=FALSE, 
+	            quote = FALSE)
+	
+	if (file.exists(paste0(prefix, "_loci.txt"))) {
+	  # Delete file if it exists
+	  file.remove(paste0(prefix, "_loci.txt"))
+	}
+	#l<-as.data.frame(t(loci.data))
+  write.table(loci.data, file=paste0(prefix, "_loci.txt"), 
+            sep=",", col.names=TRUE, row.names=FALSE, 
+            quote = FALSE)
+  
+  if (file.exists(paste0(prefix, "_admix.csv"))) {
+    # Delete file if it exists
+    file.remove(paste0(prefix, "_admix.csv"))
+  }
+  write.table(admix.data, file=paste0(prefix, "_admix.csv"), 
+              sep=",", col.names=FALSE, row.names=FALSE, 
+              quote = FALSE)
 }
 
 ###############################################
@@ -95,9 +126,11 @@ genind2introgress <- function(
 #' @return DataFrame A filtered DataFrame where loci with missing data > prop are removed.
 #' @noRd
 filter_missingByLoc<-function(gen, prop=0.5){
-	missing<-adegenet::propTyped(gen, by="loc")
+  propTyped<-adegenet::propTyped(gen, by="loc")
+	#print(missing)
+	#print(missing>prop)
 	#print(genind[loc=c(missing>prop)])
-	return(gen[loc=c(missing>prop)])
+	return(gen[loc=c(propTyped>prop)])
 }
 
 #' Utility function to filter missing data by individual.
@@ -107,9 +140,11 @@ filter_missingByLoc<-function(gen, prop=0.5){
 #' @return DataFrame Individuals with missing data > prop filtered out.
 #' @noRd
 filter_missingByInd<-function(gen, prop=0.5, drop=TRUE){
-	missing<-adegenet::propTyped(gen, by="ind")
-	#print(missing>prop)
-	return(gen[c(missing>prop), drop=drop])
+	propTyped<-adegenet::propTyped(gen, by="ind")
+	print(propTyped)
+	#print(prop)
+	print(propTyped)
+	return(gen[c(propTyped>prop), drop=drop])
 }
 
 #' Utility function to randomly subset loci.
