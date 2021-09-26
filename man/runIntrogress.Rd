@@ -5,10 +5,10 @@
 \title{Functions to run INTROGRESS and correlate genomic clines X environment}
 \usage{
 runIntrogress(
-  p1.input,
-  p2.input,
-  admix.input,
-  loci.input,
+  p1.file,
+  p2.file,
+  admix.file,
+  loci.file,
   clineLabels = c("P1", "Het", "P2"),
   minDelt = 0.8,
   prefix = "population1",
@@ -21,9 +21,13 @@ runIntrogress(
 )
 }
 \arguments{
-\item{p1.input}{Character string or genind2introgress object;
-File path for INTROGRESS p1 input file or
-p1 object from genind2introgress}
+\item{p1.file}{Character string; File path for INTROGRESS p1 input file}
+
+\item{p2.file}{Character string; File path for INTROGRESS p2 input file}
+
+\item{admix.file}{Character string; File path for INTROGRESS admixed file}
+
+\item{loci.file}{Character string; File path for INTROGRESS loci file}
 
 \item{clineLabels}{Character vector of length == 3 for c(P1, Het, P2)
 populations}
@@ -46,18 +50,6 @@ See ?prepare.data in introgress R pacakge}
 See ?prepare.data in introgress R package}
 
 \item{fixed}{Boolean; TRUE if input data are fixed SNPs}
-
-\item{p2.file}{Character string or genind2introgress object;
-File path for INTROGRESS p2 input file or p2 object from
-genind2introgress}
-
-\item{admix.file}{Character string or genind2introgress object;
-File path for INTROGRESS admixed file or admix object
-from genind2intrgoress}
-
-\item{loci.file}{Character string or genind2introgress object;
-File path for INTROGRESS loci file or
-loci object from genind2introgress}
 }
 \value{
 List object containing genomic cline output

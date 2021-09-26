@@ -7,18 +7,10 @@
 #' ?runENMeval, ?summarize_ENMeval, and ?extractPointValues.
 #'
 #' Function to run INTROGRESS
-#' @param p1.input Character string or genind2introgress object;
-#'                 File path for INTROGRESS p1 input file or
-#'                 p1 object from genind2introgress
-#' @param p2.file Character string or genind2introgress object;
-#'                 File path for INTROGRESS p2 input file or p2 object from
-#'                 genind2introgress
-#' @param admix.file Character string or genind2introgress object;
-#'                   File path for INTROGRESS admixed file or admix object
-#'                   from genind2intrgoress
-#' @param loci.file Character string or genind2introgress object;
-#'                  File path for INTROGRESS loci file or
-#'                  loci object from genind2introgress
+#' @param p1.file Character string; File path for INTROGRESS p1 input file
+#' @param p2.file Character string; File path for INTROGRESS p2 input file
+#' @param admix.file Character string; File path for INTROGRESS admixed file
+#' @param loci.file Character string; File path for INTROGRESS loci file
 #' @param clineLabels Character vector of length == 3 for c(P1, Het, P2)
 #'                    populations
 #' @param minDelt Numeric; Minimum allele frequency delta to retain loci for
@@ -47,10 +39,10 @@
 #'                       pop.id = FALSE,
 #'                       ind.id = FALSE,
 #'                       fixed = FALSE)
-runIntrogress <- function(p1.input,
-                          p2.input,
-                          admix.input,
-                          loci.input,
+runIntrogress <- function(p1.file,
+                          p2.file,
+                          admix.file,
+                          loci.file,
                           clineLabels = c("P1", "Het", "P2"),
                           minDelt = 0.8,
                           prefix = "population1",
@@ -85,10 +77,10 @@ runIntrogress <- function(p1.input,
   dir.create(outputDIR, showWarnings = FALSE)
 
   # Read in the data from files
-  gen.data <- read.table(file = admix.input, header = FALSE, sep = sep)
-  loci.data <- read.table(file = loci.input, header = TRUE, sep = sep)
-  p1 <- read.table(file = p1.input, header = FALSE, sep = sep)
-  p2 <- read.table(file = p2.input, header = FALSE, sep = sep)
+  gen.data <- read.table(file = admix.file, header = FALSE, sep = sep)
+  loci.data <- read.table(file = loci.file, header = TRUE, sep = sep)
+  p1 <- read.table(file = p1.file, header = FALSE, sep = sep)
+  p2 <- read.table(file = p2.file, header = FALSE, sep = sep)
 
   # Set the filenames of the PDF outfiles generated in script
   # This first block is for the permutation genomic cline method
