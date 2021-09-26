@@ -87,20 +87,22 @@ genind2introgress <- function(
 
 	# write output files
 	print(paste0("Writing outputs with prefix: ", prefix))
-	if (file.exists(paste0(prefix, "_p1data.csv"))) {
+	if (file.exists(paste0(prefix, "_p1data.txt"))) {
 	  # Delete file if it exists
-	  file.remove(paste0(prefix, "_p1data.csv"))
+	  file.remove(paste0(prefix, "_p1data.txt"))
 	}
-	write.table(p1.data, file=paste0(prefix, "_p1data.csv"),
-	            sep=",", col.names=FALSE, row.names=FALSE,
+	write.table(data.table::transpose(p1.data),
+	            file=paste0(prefix, "_p1data.csv"),
+	            sep="\t", col.names=FALSE, row.names=FALSE,
 	            quote = FALSE)
 
-	if (file.exists(paste0(prefix, "_p2data.csv"))) {
+	if (file.exists(paste0(prefix, "_p2data.txt"))) {
 	  # Delete file if it exists
-	  file.remove(paste0(prefix, "_p2data.csv"))
+	  file.remove(paste0(prefix, "_p2data.txt"))
 	}
-	write.table(p2.data, file=paste0(prefix, "_p2data.csv"),
-	            sep=",", col.names=FALSE, row.names=FALSE,
+	write.table(data.table::transpose(p2.data),
+	            file=paste0(prefix, "_p2data.csv"),
+	            sep="\t", col.names=FALSE, row.names=FALSE,
 	            quote = FALSE)
 
 	if (file.exists(paste0(prefix, "_loci.txt"))) {
@@ -109,15 +111,16 @@ genind2introgress <- function(
 	}
 	#l<-as.data.frame(t(loci.data))
   write.table(loci.data, file=paste0(prefix, "_loci.txt"),
-            sep=",", col.names=TRUE, row.names=FALSE,
+            sep="\t", col.names=TRUE, row.names=FALSE,
             quote = FALSE)
 
-  if (file.exists(paste0(prefix, "_admix.csv"))) {
+  if (file.exists(paste0(prefix, "_admix.txt"))) {
     # Delete file if it exists
-    file.remove(paste0(prefix, "_admix.csv"))
+    file.remove(paste0(prefix, "_admix.txt"))
   }
-  write.table(admix.data, file=paste0(prefix, "_admix.csv"),
-              sep=",", col.names=FALSE, row.names=FALSE,
+  write.table(data.table::transpose(admix.data),
+              file=paste0(prefix, "_admix.txt"),
+              sep="\t", col.names=FALSE, row.names=FALSE,
               quote = FALSE)
 }
 
