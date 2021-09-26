@@ -42,21 +42,43 @@ for (i in 1:length(rasterPoint.list)) {
   )
 }
 
+plotDIR <- "../clinehelpr_analysis/notebooks/plots"
+
+genind <- adegenet::read.structure(
+  file = "../clinehelpr_analysis/data/exampleData/bgc/bgc_structureFiles/eatt.str",
+  n.ind = 101,
+  n.loc = 233,
+  onerowperind = FALSE,
+  col.lab = 1,
+  col.pop = 2,
+  row.marknames = 1,
+  NA.char = -9,
+  ask = FALSE)
+
+genind2introgress(gen = genind,
+                  p1 = "2",
+                  p2 = "3",
+                  admix = "1",
+                  missingPerLoc = 0.5,
+                  missingPerInd = 0.9,
+                  prefix=file.path(plotDIR, "eatt"))
+
 # Run introgress.
 # There are many parameters that can be used to fine-tune the analysis.
 # E.g. minDelt determines the allele frequency threshold (delta)
 # required for a locus to be tested in Introgress.
 # can be lowered to e.g., 0.7 or 0.6, which will include
 # more SNPs.
+
 eatt <- runIntrogress(
-  p1.input = file.path(dataDIR, "inputFiles", "EATT_p1data.txt"),
-  p2.input = file.path(dataDIR, "inputFiles", "EATT_p2data.txt"),
-  admix.input = file.path(dataDIR, "inputFiles", "EATT_admix.txt"),
-  loci.input = file.path(dataDIR, "inputFiles", "EATT_loci.txt"),
+  p1.file = file.path(plotDIR, "eatt_p1data.txt"),
+  p2.file = file.path(plotDIR, "eatt_p2data.txt"),
+  admix.file = file.path(plotDIR, "eatt_admix.txt"),
+  loci.file = file.path(plotDIR, "eatt_loci.txt"),
   clineLabels = c("EA", "Het", "TT"),
   minDelt = 0.8,
   prefix = "EATT",
-  outputDIR = file.path(dataDIR, "outputFiles", "introgress_plots"),
+  outputDIR = plotDIR,
   sep = "\t",
   fixed = FALSE,
   pop.id = FALSE,
