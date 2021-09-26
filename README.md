@@ -35,7 +35,7 @@ ClineHelpR can be run in a container from our pre-built image. The image has all
 
 First, pull the docker image. 
 
-TODO
+``` sudo docker pull btmartin721/clinehelpr```
 
 #### Docker Step 2: Run the Image
 
