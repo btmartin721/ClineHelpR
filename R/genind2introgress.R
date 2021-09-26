@@ -92,7 +92,7 @@ genind2introgress <- function(
 	  file.remove(paste0(prefix, "_p1data.txt"))
 	}
 	write.table(data.table::transpose(p1.data),
-	            file=paste0(prefix, "_p1data.csv"),
+	            file=paste0(prefix, "_p1data.txt"),
 	            sep="\t", col.names=FALSE, row.names=FALSE,
 	            quote = FALSE)
 
@@ -101,7 +101,7 @@ genind2introgress <- function(
 	  file.remove(paste0(prefix, "_p2data.txt"))
 	}
 	write.table(data.table::transpose(p2.data),
-	            file=paste0(prefix, "_p2data.csv"),
+	            file=paste0(prefix, "_p2data.txt"),
 	            sep="\t", col.names=FALSE, row.names=FALSE,
 	            quote = FALSE)
 
