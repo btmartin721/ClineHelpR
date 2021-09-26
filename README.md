@@ -39,7 +39,12 @@ TODO
 
 #### Docker Step 2: Run the Image
 
-Once you have the image, then you can run the docker image in a container. If you aren't familiar with docker, it basically runs a pre-built image in a "container", which is like a virtual machine that is isolated from your operating system. In this case, that virtual machine runs Ubuntu 18.04 and has all the necessary dependencies and software pre-installed and in your path. 
+Once you have the image, then you can run the docker image in a container. If you aren't familiar with docker, it basically runs a pre-built image in a "container", which is like a virtual machine that is isolated from your operating system. In this case, that virtual machine runs Ubuntu 18.04 and has all the necessary dependencies and software pre-installed and in your path.
+
+If you are using Windows, you can run the container in Windows Subsystem for Linux (fully tested with WSL version 2).
+
+Once you generate the container, copy and paste the link that contains the IP address into your browser, 
+and you can then run our scripts, BGC, INTROGRESS, ENMeval, and ClineHelpR from a Jupyter notebook!  
 
 We have provided a BASH script to run the docker image in a container. The script has command-line arguments that allow you to choose between running a shell environment or a Jupyter Notebook.
 
