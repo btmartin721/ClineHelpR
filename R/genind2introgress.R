@@ -44,7 +44,7 @@ genind2introgress <- function(
 	missingPerLoc = 1.0 - missingPerLoc
 	missingPerInd = 1.0 - missingPerInd
 	# drop individuals not in selected pops
-	sub<-gen[pop(gen) %in% all_pops,]
+	sub<-gen[adegenet::pop(gen) %in% all_pops,]
 
 	# drop loci having more than missingPerLoc missing data
 	sub<-filter_missingByLoc(sub, prop=missingPerLoc)
@@ -66,58 +66,58 @@ genind2introgress <- function(
 	loci.data[loci.data["type"]=="dom", "type"]<-"D"
 
 	# genotype table for p1
-	p1_genind<-sub[pop(sub) %in% p1,]
+	p1_genind<-sub[adegenet::pop(sub) %in% p1,]
 	p1.data<-adegenet::genind2df(p1_genind, sep="/")
 	p1.data<-subset(p1.data, select=-c(pop))
 	p1.data[is.na(p1.data)] <- "NA/NA"
 
 	# genotype table for p2
-	p2_genind<-sub[pop(sub) %in% p2,]
+	p2_genind<-sub[adegenet::pop(sub) %in% p2,]
 	p2.data<-adegenet::genind2df(p2_genind, sep="/")
 	p2.data<-subset(p2.data, select=-c(pop))
 	p2.data[is.na(p2.data)] <- "NA/NA"
 
 	# genotype table for admix population
-	admix_genind<-sub[pop(sub) %in% admix,]
+	admix_genind<-sub[adegenet::pop(sub) %in% admix,]
 	admix.data<-adegenet::genind2df(admix_genind, sep="/")
 	pop<-admix.data$pop
 	admix.data<-subset(admix.data, select=-c(pop))
 	admix.data[is.na(admix.data)] <- "NA/NA"
 	admix.data <- rbind(pop, row.names(admix.data), admix.data)
 
-	# write output files 
+	# write output files
 	print(paste0("Writing outputs with prefix: ", prefix))
 	if (file.exists(paste0(prefix, "_p1data.csv"))) {
 	  # Delete file if it exists
 	  file.remove(paste0(prefix, "_p1data.csv"))
 	}
-	write.table(p1.data, file=paste0(prefix, "_p1data.csv"), 
-	            sep=",", col.names=FALSE, row.names=FALSE, 
+	write.table(p1.data, file=paste0(prefix, "_p1data.csv"),
+	            sep=",", col.names=FALSE, row.names=FALSE,
 	            quote = FALSE)
 
 	if (file.exists(paste0(prefix, "_p2data.csv"))) {
 	  # Delete file if it exists
 	  file.remove(paste0(prefix, "_p2data.csv"))
 	}
-	write.table(p2.data, file=paste0(prefix, "_p2data.csv"), 
-	            sep=",", col.names=FALSE, row.names=FALSE, 
+	write.table(p2.data, file=paste0(prefix, "_p2data.csv"),
+	            sep=",", col.names=FALSE, row.names=FALSE,
 	            quote = FALSE)
-	
+
 	if (file.exists(paste0(prefix, "_loci.txt"))) {
 	  # Delete file if it exists
 	  file.remove(paste0(prefix, "_loci.txt"))
 	}
 	#l<-as.data.frame(t(loci.data))
-  write.table(loci.data, file=paste0(prefix, "_loci.txt"), 
-            sep=",", col.names=TRUE, row.names=FALSE, 
+  write.table(loci.data, file=paste0(prefix, "_loci.txt"),
+            sep=",", col.names=TRUE, row.names=FALSE,
             quote = FALSE)
-  
+
   if (file.exists(paste0(prefix, "_admix.csv"))) {
     # Delete file if it exists
     file.remove(paste0(prefix, "_admix.csv"))
   }
-  write.table(admix.data, file=paste0(prefix, "_admix.csv"), 
-              sep=",", col.names=FALSE, row.names=FALSE, 
+  write.table(admix.data, file=paste0(prefix, "_admix.csv"),
+              sep=",", col.names=FALSE, row.names=FALSE,
               quote = FALSE)
 }
 
