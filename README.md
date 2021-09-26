@@ -187,3 +187,33 @@ The vcf2bgc.py script requires:
 ## Pipeline
 
 There are R and python scripts in the ClineHelpR/scripts directory that allow you to run our whole pipeline. All the steps from below can be run by modifying and using those scripts. We also demonstrate each step in our Jupyter Notebook tutorial in the ClineHelpR/tutorials directory.
+
+## References
+
+Kass, J. M., Muscarella, R., Galante, P. J., Bohl, C. L., Pinilla‐Buitrago, G. E., Boria, R. A., Soley-Guardia, M., Anderson, R. P. 2021. ENMeval 2.0: redesigned for customizable and reproducible modeling of species’ niches and distributions. Methods in Ecology and Evolution, 12: 1602-1608.
+
+Phillips, S.J., Anderson, R.P., Schapire, R.E. 2006. Maximum entropy modeling of species geographic distributions. Ecological Modelling, 190: 231-259.
+
+Phillips, S.J., Dudík, M., Schapire, R.E. 2004. A maximum entropy approach to species distribution modeling. In Proceedings of the Twenty-First International Conference on Machine Learning, pp. 655-662.
+
+Gauthier J., de Silva D.L., Gompert Z., Whibley A., Houssin C., Le Poul Y., McClure, M., Lemaitre, C., Legeai, F., Mallet, J., Elias, M. 2020. Contrasting genomic and phenotypic outcomes of hybridization between pairs of mimetic butterfly taxa across a suture zone. Molecular Ecology, 29: 1328–1343.
+
+Gompert Z., Buerkle C.A.. 2009. A powerful regression-based method for admixture mapping of isolation across the genome of hybrids. Molecular Ecology, 18: 1207–1224.
+
+Gompert, Z., Buerkle, C.A. 2010. INTROGRESS: A software package for mapping components of isolation in hybrids. Molecular Ecology Resources, 10(2): 378-384.
+
+Gompert Z., Buerkle C.A. 2012. BGC: Software for Bayesian estimation of genomic clines. Molecular Ecology Resourses, 12: 1168–1176.
+
+Gompert Z., Buerkle C.A. 2011. Bayesian estimation of genomic clines. Molecular Ecology, 20: 2111–2127.
+
+Gompert Z., Lucas L.K., Nice C.C., Fordyce J.A., Forister M.L., Buerkle C.A. 2012. Genomic regions with a history of divergent selection affect fitness of hybrids between two butterfly species. Evolution, 66: 2167–2181.
+
+Gompert Z., Parchman T.L., Buerkle C.A. 2012. Genomics of isolation in hybrids. Philosophical Transactions of the Royal Society B Biological Sciences. 367: 439–450.
+
+Gompert Z., Mandeville E.G., Buerkle CA. 2017. Analysis of population genomic data from hybrid zones. Annual Review of Ecology & Evolution, 48: 207–229.
+
+Hao, Z., Lv, D., Ge, Y., Shi, J., Weijers, D., Yu, G., Chen, J. 2020. RIdeogram: Drawing SVG graphics to visualize and map genome-wide data on the idiograms. PeerJ Computer Science, 6: e251.
+
+Li, H. 2018. Minimap2: Pairwise alignment for nucleotide sequences. Bioinformatics, 34(18): 3094-3100.
+
+Martin, B.T., Douglas, M.R., Chafin, T.K., Placyk, J.S. Jr., Birkhead, R.D., Phillips, C.A., Douglas, M.E. 2020. Contrasting signatures of introgression in North American box turtle (*Terrapene* spp.) contact zones. Molecular Ecology, 29(21): 4186-4202.
