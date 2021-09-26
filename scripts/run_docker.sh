@@ -66,7 +66,7 @@ if [ "$METHOD" -eq 0 ]; then
 		--volume ${PROJECT_DIR}/notebooks:/home/user/app/notebooks \
 		--volume ${PROJECT_DIR}/results:/home/user/app/results \
 		--publish 8888:8888 \
-		clinehelpr:1.0 \
+		clinehelpr:1.1 \
 		/bin/bash;
 else
 	sudo docker container run --rm --tty \
@@ -74,6 +74,6 @@ else
                 --volume ${PROJECT_DIR}/notebooks:/home/user/app/notebooks \
                 --volume ${PROJECT_DIR}/results:/home/user/app/results \
                 --publish 8888:8888 \
-                clinehelpr:1.0;
+                clinehelpr:1.1;
 fi
 
