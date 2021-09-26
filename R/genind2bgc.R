@@ -37,7 +37,9 @@ genind2bgc <- function(
 ){
 
 	ret<-list()
-
+	missingPerLoc = 1.0 - missingPerLoc
+	missingPerInd = 1.0 - missingPerInd
+	
 	all_pops<-c(p1, p2, admix)
 
 	# drop individuals not in selected pops
@@ -174,9 +176,9 @@ filter_missingByLoc<-function(gen, prop=0.5){
 #' @noRd
 filter_missingByInd<-function(gen, prop=0.5, drop=TRUE){
   propTyped<-adegenet::propTyped(gen, by="ind")
-  print(propTyped)
+  #print(propTyped)
   #print(prop)
-  print(propTyped)
+  #print(propTyped)
   return(gen[c(propTyped>prop), drop=drop])
 }
 
