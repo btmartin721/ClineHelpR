@@ -7,10 +7,18 @@
 #' ?runENMeval, ?summarize_ENMeval, and ?extractPointValues.
 #'
 #' Function to run INTROGRESS
-#' @param p1.file Character string; File path for INTROGRESS p1 input file
-#' @param p2.file Character string; File path for INTROGRESS p2 input file
-#' @param admix.file Character string; File path for INTROGRESS admixed file
-#' @param loci.file Character string; File path for INTROGRESS loci file
+#' @param p1.input Character string or genind2introgress object;
+#'                 File path for INTROGRESS p1 input file or
+#'                 p1 object from genind2introgress
+#' @param p2.file Character string or genind2introgress object;
+#'                 File path for INTROGRESS p2 input file or p2 object from
+#'                 genind2introgress
+#' @param admix.file Character string or genind2introgress object;
+#'                   File path for INTROGRESS admixed file or admix object
+#'                   from genind2intrgoress
+#' @param loci.file Character string or genind2introgress object;
+#'                  File path for INTROGRESS loci file or
+#'                  loci object from genind2introgress
 #' @param clineLabels Character vector of length == 3 for c(P1, Het, P2)
 #'                    populations
 #' @param minDelt Numeric; Minimum allele frequency delta to retain loci for
@@ -39,10 +47,10 @@
 #'                       pop.id = FALSE,
 #'                       ind.id = FALSE,
 #'                       fixed = FALSE)
-runIntrogress <- function(p1.file,
-                          p2.file,
-                          admix.file,
-                          loci.file,
+runIntrogress <- function(p1.input,
+                          p2.input,
+                          admix.input,
+                          loci.input,
                           clineLabels = c("P1", "Het", "P2"),
                           minDelt = 0.8,
                           prefix = "population1",
@@ -76,11 +84,24 @@ runIntrogress <- function(p1.file,
   # Create outputDIR if doesn't exist.
   dir.create(outputDIR, showWarnings = FALSE)
 
-  # Read in the data
-  gen.data <- read.table(file = admix.file, header = FALSE, sep = sep)
-  loci.data <- read.table(file = loci.file, header = TRUE, sep = sep)
-  p1 <- read.table(file = p1.file, header = FALSE, sep = sep)
-  p2 <- read.table(file = p2.file, header = FALSE, sep = sep)
+  if (file.exists(admix.input) &&
+      file.exists(loci.input) &&
+      file.exists(p1.input) &&
+      file.exists(p2.input)){
+
+    # Read in the data from files
+    gen.data <- read.table(file = admix.input, header = FALSE, sep = sep)
+    loci.data <- read.table(file = loci.input, header = TRUE, sep = sep)
+    p1 <- read.table(file = p1.input, header = FALSE, sep = sep)
+    p2 <- read.table(file = p2.input, header = FALSE, sep = sep)
+
+  } else {
+    # Read in the objects
+    gen.data <- admix.input
+    loci.data <- loci.input
+    p1 <- p1.input
+    p2 <- p2.input
+  }
 
   # Set the filenames of the PDF outfiles generated in script
   # This first block is for the permutation genomic cline method
@@ -109,8 +130,8 @@ runIntrogress <- function(p1.file,
   # If fixed == TRUE this will be plotted.
   triPlotPDF <- file.path(outputDIR, paste0(prefix, "_trianglePlot.pdf"))
 
-  # Set the delta value for keeping only loci with allele frequency differentials
-  # > minDelt
+  # Set the delta value for keeping only loci with allele frequency
+  # differentials > minDelt
   minDelt <- minDelt
 
   # Prep data for analysis
@@ -183,29 +204,19 @@ runIntrogress <- function(p1.file,
                                  pdf = FALSE,
                                  labels = clineLabels)
 
-    introgress::mk.image(
-      introgress.data = count.matrix,
-      loci.data = loci.data,
-      hi.index = hi.index,
-      loci.touse = which(deltas > minDelt),
-      pdf = FALSE
-    )
+    # There was a bug with the mk.image feature, so I removed it.
+    # Not sure what was wrong with it.
   }
 
-  #Plot genomic clines
+  # Plot genomic clines
   introgress::composite.clines(perm_clines,
                    pdf = TRUE,
                    out.file = compositePDF,
                    labels = clineLabels)
 
-  introgress::mk.image(
-    introgress.data = count.matrix,
-    loci.data = loci.data,
-    hi.index = hi.index,
-    loci.touse = which(deltas > minDelt),
-    pdf = TRUE,
-    out.file = imagePDF
-  )
+
+  # There was a bug with the mk.image feature, so I removed it.
+  # Not sure what was wrong with it.
 
   # Pvalues for genomic clines.
   pValues <- perm_clines$Summary.data[,4]
