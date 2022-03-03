@@ -104,7 +104,7 @@ If you don't want to use a jupyter notebook with docker, e.g. if you are on a hi
 
 #### Conda Environment File
 
-You can use it by typing ```conda install --file environment.yml``` into a terminal that has anaconda3 or miniconda3 installed. The ```environment.yml``` file is located in the root ClineHelpR GitHub directory. 
+You can use it by typing ```conda env create --file environment.yml``` into a terminal that has anaconda3 or miniconda3 installed. The ```environment.yml``` file is located in the root ClineHelpR GitHub directory. 
 
 #### Full Manual Installation with Conda
 
