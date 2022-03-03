@@ -67,10 +67,10 @@ combine_bgc_output <- function(results.dir,
   }
   
   if (!is.null(thin)){
-    writeLines(paste0("\n\nThinning MCMC samples with frequency: ", thin, ""))
+    writeLines(paste0("\n\nThinning MCMC samples with frequency: ", thin))
   }
   if (!is.null(discard)){
-    writeLines(paste0("\n\nDiscarding samples as burnin: ", thin, ""))
+    writeLines(paste0("\n\nDiscarding samples as burnin: ", discard))
   }
     
   # Aggregate the BGC runs into one data.frame
