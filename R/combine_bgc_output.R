@@ -89,7 +89,6 @@ combine_bgc_output <- function(results.dir,
   
   writeLines(paste0("\n\n # MCMC samples = ", ncol(lnl.df)))
   
-}
 
 writeLines(paste0("\n\nDone! Found ", length(lnl), " BGC runs.\n\n"))
 
