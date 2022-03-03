@@ -17,6 +17,7 @@
 #' @param both.outlier.tests If TRUE, outliers = both overlap.zero and
 #'                           qn.interval
 #' @param line.size Size of regression lines in plot. Default = 0.25
+#' @param line.alpha Opacity of regression lines. Default = 0.5
 #' @param saveToFile If specified, saves plots to file. The value
 #'                   for saveToFile should be the prefix for the filename
 #'                   you want to save to
@@ -77,6 +78,7 @@ phiPlot <- function(outlier.list,
                     qn.interval = TRUE,
                     both.outlier.tests = FALSE,
                     line.size = 0.25,
+                    line.alpha = 0.5,
                     saveToFile = NULL,
                     plotDIR = "./plots",
                     showPLOTS = FALSE,
@@ -311,7 +313,8 @@ phiPlot <- function(outlier.list,
       method = "lm",
       formula = y ~ poly(x, 5),
       se = FALSE,
-      size = line.size
+      size = line.size, 
+      alpha = line.alpha
     ) +
     ggplot2::xlab(label = "Hybrid Index") +
     ggplot2::ylab(label = expression("Prob. P1 Ancestry (" * Phi * ")")) +
