@@ -37,6 +37,8 @@
 #' @param padding Padding to add to X and Y axes. Default=0.1
 #' @param alpha_limits Limits (e.g., c(1,1) for plotting alpha. Default = NULL
 #' @param beta_limits Limits (e.g., c(1,1) for plotting beta. Default = NULL
+#' @param point_alpha Alpha (opacity) for plotting points, passed to geom_point. Default = 1.0
+#' @param point_size Size for plotting points, passed to geom_point. Default = 1
 #' @export
 #' @examples
 #' alphaBetaPlot(outlier.list = outliers, saveToFile = "pop1_phiPlot",
@@ -68,7 +70,9 @@ alphaBetaPlot <- function(outlier.list,
                     text.size = 18,
                     dpi = 300,
                     alpha_limits=NULL,
-                    beta_limits=NULL){
+                    beta_limits=NULL,
+                    point_alpha=1.0, 
+                    point_size=1){
 
   # To use the dplyr pipe.
   `%>%` <- dplyr::`%>%`
@@ -173,7 +177,7 @@ alphaBetaPlot <- function(outlier.list,
         plot.margin = ggplot2::unit(margins,
                                     margin.units)
     ) +
-    ggplot2::geom_point(ggplot2::aes(x=alpha, y=beta, col=fill_color), size=2) +
+    ggplot2::geom_point(ggplot2::aes(x=alpha, y=beta, col=fill_color), size=point_size, alpha=point_alpha) +
     ggplot2::scale_colour_identity()
 
 
