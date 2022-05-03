@@ -6,20 +6,26 @@
 \usage{
 partition_raster_bg(
   env.list,
+  categoricals = NULL,
   number.bg.points = 10000,
   bg.raster = 1,
   plotDIR = "./plots",
+  showPLOTS = FALSE,
   agg.factor = 2
 )
 }
 \arguments{
 \item{env.list}{Object output from prepare_rasters() function}
 
+\item{categoricals}{Character vector of categorical layer names}
+
 \item{number.bg.points}{Number of background points to generate}
 
 \item{bg.raster}{Raster to use for background points}
 
 \item{plotDIR}{Directory to save the plots to}
+
+\item{showPLOTS}{Boolean; Whether to print plots to screen}
 
 \item{agg.factor}{A vector of 1 or 2 numbers for the checkerboard
 methods}
@@ -36,5 +42,6 @@ bg <- partition_raster_bg(env.list = envList,
                           number.bg.points = 10000,
                           bg.raster = 1,
                           plotDIR = "./plots",
+                          showPLOTS = TRUE,
                           agg.factor = 2)
 }

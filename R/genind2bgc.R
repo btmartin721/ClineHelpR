@@ -1,17 +1,18 @@
-#!/usr/local/bin/R
-#'Generate inputs for BGC without genotype uncertainty
+#' Generate inputs for BGC from genind object. Does not use genotype uncertainty.
 #'
-#' This function parses a genind object to create input data frames for 
-#' running genomic cline analysis in BGC
+#' This function parses a genind object to create input data frames for
+#' running genomic cline analysis in BGC. It writes the appropriate output files as:
+#' <prefix>_p0in.txt, <prefix>_p1in.txt, and <prefix>_admixedin.txt
 #'
 #' @param gen Genind object containing data for parental and admixed populations
 #' @param p1 Character or vector containing population names for the p1 group
 #' @param p2 Character or vector containing population names for the p2 group
 #' @param admix Character or vector containing population names for the admixed individuals
-#' @param missingPerInd Proportion of missing genotypes allowed to retain an individual 
+#' @param missingPerInd Proportion of missing genotypes allowed to retain an individual
 #' @param missingPerLoc Proportion of missing genotypes allowed to retain a locus
 #' @param subset An optional parameter defining a number of loci to randomly retain
 #' @param prefix A string giving the prefix for bgc input file names
+#' @export
 #' @examples
 #' bgc_input <- genind2bgc(genind, p1=c("PopA", "PopB"),
 #'                                         p2="PopC", admix=c("PopD1", "PopD2"))
@@ -34,51 +35,53 @@ genind2bgc <- function(
 	drop=TRUE,
 	prefix='bgc'
 ){
-	
+
 	ret<-list()
+	missingPerLoc = 1.0 - missingPerLoc
+	missingPerInd = 1.0 - missingPerInd
 	
 	all_pops<-c(p1, p2, admix)
-	
-	#drop individuals not in selected pops
+
+	# drop individuals not in selected pops
 	sub<-gen[pop(gen) %in% all_pops,]
-	
-	#drop loci having more than missingPerLoc missing data
+
+	# drop loci having more than missingPerLoc missing data
 	sub<-filter_missingByLoc(sub, prop=missingPerLoc)
-	
-	#drop individuals having more than missingPerInd missing data
-	#NOTE: Also dropping loci that become monomorphic
+
+	# drop individuals having more than missingPerInd missing data
+	# NOTE: Also dropping loci that become monomorphic
 	sub<-filter_missingByInd(sub, prop=missingPerInd, drop=drop)
-	
-	#if necessary, randomly subset loci to the number requested
+
+	# if necessary, randomly subset loci to the number requested
 	if (!is.null(subset)){
 		sub<-filter_randomSubsetLoci(sub, sample=subset)
 	}
-	
-	#get locus names 
+
+	# get locus names
 	loci.data<-data.frame(cbind(c(names(sub$loc.n.all))), stringsAsFactors = FALSE)
 	colnames(loci.data)<-c("locus")
-	
-	#genotype table for p1
+
+	# genotype table for p1
 	p1_genind<-sub[pop(sub) %in% p1,]
 	p1.data<-adegenet::genind2df(p1_genind, sep="/")
 	p1.data<-subset(p1.data, select=-c(pop))
 	#print(p1.data)
-	
-	#genotype table for p2
+
+	# genotype table for p2
 	p2_genind<-sub[pop(sub) %in% p2,]
 	p2.data<-adegenet::genind2df(p2_genind, sep="/")
 	p2.data<-subset(p2.data, select=-c(pop))
 
-	# #genotype table for admix population
+	# genotype table for admix population
 	admix_genind<-sub[pop(sub) %in% admix,]
 	admix.data<-adegenet::genind2df(admix_genind, sep="/")
 	pops<-unique(admix.data$pop)
 
-	#loop through and gather allele counts 
+	# loop through and gather allele counts
 	p1.out <- list()
 	p2.out <- list()
 	admix.out <- list()
-	
+
 	for (l in 1:length(loci.data$locus)){
 	  #print(loci.data$locus[l])
 	  alleles <- getRefAlt(c(p1.data[,l], p2.data[,l], admix.data[,l+1]))
@@ -86,19 +89,19 @@ genind2bgc <- function(
 	    print(paste0("Locus ", loci.data$locus[l], " not biallelic. Skipping."))
 	    next
 	  }
-	  #append locus names
+	  # append locus names
 	  locnum <- paste0("locus_", gsub("L", "", loci.data$locus[l]))
 	  p1.out <- c(p1.out, locnum)
 	  p2.out <- c(p2.out, locnum)
 	  admix.out <- c(admix.out, locnum)
-	  
-	  #get allele counts for parental pops
+
+	  # get allele counts for parental pops
 	  p1.g <- unlist(lapply(p1.data[,l], function(x) strsplit(x, "/")))
 	  p1.out <- c(p1.out, paste(getCounts(p1.g, alleles), collapse=" "))
 	  p2.g <- unlist(lapply(p2.data[,l], function(x) strsplit(x, "/")))
 	  p2.out <- c(p2.out, paste(getCounts(p2.g, alleles), collapse=" "))
-	  
-	  #get genotypes for admix pops
+
+	  # get genotypes for admix pops
 	  for (p in pops){
 	    admix.out <- c(admix.out, paste0("pop_", p))
 	    pop_dat <- admix.data[admix.data$pop==p,l+1]
@@ -109,20 +112,20 @@ genind2bgc <- function(
 	  }
 
 	}
-  #write output files
+  # write output files
 	print(paste0("Writing outputs with prefix: ", prefix))
 	if (file.exists(paste0(prefix, "_p0in.txt"))) {
-	  #Delete file if it exists
+	  # Delete file if it exists
 	  file.remove(paste0(prefix, "_p0in.txt"))
 	}
 	t<- lapply(p1.out, write, paste0(prefix, "_p0in.txt"), append=TRUE)
 	if (file.exists(paste0(prefix, "_p1in.txt"))) {
-	  #Delete file if it exists
+	  # Delete file if it exists
 	  file.remove(paste0(prefix, "_p1in.txt"))
 	}
 	t<- lapply(p2.out, write, paste0(prefix, "_p1in.txt"), append=TRUE)
 	if (file.exists(paste0(prefix, "_admixedin.txt"))) {
-	  #Delete file if it exists
+	  # Delete file if it exists
 	  file.remove(paste0(prefix, "_admixedin.txt"))
 	}
 	t<-lapply(admix.out, write, paste0(prefix, "_admixedin.txt"), append=TRUE)
@@ -130,7 +133,11 @@ genind2bgc <- function(
 }
 
 ###############################################
-#Utility functions
+#' Function to get allele counts for one population.
+#' @param genotypes DataFrame of genotypes
+#' @param alleles Vector of alleles for one population.
+#' @return DataFrame of allele counts.
+#' @noRd
 getCounts<-function(genotypes, alleles){
   counts<-summary(as.factor(genotypes))
   ret <-c(as.numeric(counts[alleles[1]]), as.numeric(counts[alleles[2]]))
@@ -138,24 +145,48 @@ getCounts<-function(genotypes, alleles){
   return(ret)
 }
 
+#' Function to get reference and alternate alleles.
+#' @param genotypes DataFrame of genotypes.
+#' @return Reference and alternate alleles.
+#' @noRd
 getRefAlt<-function(genotypes){
   l <- unlist(lapply(genotypes[!is.na(genotypes)], function(x) strsplit(x, "/")))
   n <- names(sort(summary(as.factor(l)), decreasing=T))
   return(n)
 }
 
+#' Utility function to filter missing data by locus.
+#' @param gen DataFrame Genotypes to filter.
+#' @param prop Float Missing data threshold for which to filter loci.
+#' @return DataFrame A filtered DataFrame where loci with missing data > prop are removed.
+#' @noRd
 filter_missingByLoc<-function(gen, prop=0.5){
-	missing<-adegenet::propTyped(gen, by="loc")
-	#print(genind[loc=c(missing>prop)])
-	return(gen[loc=c(missing>prop)])
+  propTyped<-adegenet::propTyped(gen, by="loc")
+  #print(missing)
+  #print(missing>prop)
+  #print(genind[loc=c(missing>prop)])
+  return(gen[loc=c(propTyped>prop)])
 }
 
+#' Utility function to filter missing data by individual.
+#' @param gen DataFrame Genotypes to filter.
+#' @param prop Float Proportion of missing data threshold.
+#' @param drop Boolean Whether to drop monomorphic loci.
+#' @return DataFrame Individuals with missing data > prop filtered out.
+#' @noRd
 filter_missingByInd<-function(gen, prop=0.5, drop=TRUE){
-	missing<-adegenet::propTyped(gen, by="ind")
-	#print(missing>prop)
-	return(gen[c(missing>prop), drop=drop])
+  propTyped<-adegenet::propTyped(gen, by="ind")
+  #print(propTyped)
+  #print(prop)
+  #print(propTyped)
+  return(gen[c(propTyped>prop), drop=drop])
 }
 
+#' Utility function to randomly subset loci.
+#' @param gen DataFrame Genotypes to randomly subset.
+#' @param sample Integer Number of loci to subset.
+#' @return DataFrame Random subset of genotypes.
+#' @noRd
 filter_randomSubsetLoci<-function(gen, sample){
 	loc<-adegenet::nLoc(gen)
 	if (sample < loc){

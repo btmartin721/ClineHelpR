@@ -10,6 +10,7 @@ clinesXenvironment(
   rastersToUse = NULL,
   clineLabels = c("P1, Het", "P2"),
   outputDIR = "./plots",
+  showPLOTS = FALSE,
   clineMethod = "permutation",
   prefix = "population1",
   cor.method = "auto"
@@ -29,6 +30,8 @@ rasters}
 names for c(P1, Het, P2)}
 
 \item{outputDIR}{File path to directory for outputting plots}
+
+\item{showPLOTS}{Boolean; Whether to print the plots to the screen}
 
 \item{clineMethod}{Character string indicating desired method for generating
 genomic clines. Must be either "permutation" or

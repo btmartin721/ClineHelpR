@@ -10,7 +10,8 @@ prepare_rasters(
   sample.file,
   header = TRUE,
   bb.buffer = 10,
-  plotDIR = "./plots"
+  plotDIR = "./plots",
+  showPLOTS = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ prepare_rasters(
 bb.buffer = bb.buffer * resolution (in arc-seconds)}
 
 \item{plotDIR}{Directory to save plots to}
+
+\item{showPLOTS}{Boolean; Whether to print plots to screen}
 }
 \value{
 List with cropped rasters and other info
@@ -52,5 +55,6 @@ envList <- prepare_rasters(raster.dir = "uncroppedLayers",
                            "sample_localities_maxent_southeast_noNA.csv"),
                            header = TRUE,
                            bb.buffer = 10,
-                           plotDIR = "./plots")
+                           plotDIR = "./plots",
+                           showPLOTS = TRUE)
 }

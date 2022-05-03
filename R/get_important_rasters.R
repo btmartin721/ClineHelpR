@@ -21,6 +21,7 @@
 #' @param bb.buffer Integer; Buffer around sample bounding box.
 #'                  bb.buffer = bb.buffer * resolution (in arc-seconds)
 #' @param plotDIR Directory to save plots to
+#' @param showPLOTS Boolean; Whether to print plots to screen
 #' @return List with cropped rasters and other info
 #' @export
 #' @examples
@@ -31,12 +32,14 @@
 #'                            "sample_localities_maxent_southeast_noNA.csv"),
 #'                            header = TRUE,
 #'                            bb.buffer = 10,
-#'                            plotDIR = "./plots")
+#'                            plotDIR = "./plots",
+#'                            showPLOTS = TRUE)
 prepare_rasters <- function(raster.dir,
                             sample.file,
                             header = TRUE,
                             bb.buffer = 10,
-                            plotDIR = "./plots"){
+                            plotDIR = "./plots",
+                            showPLOTS = FALSE){
 
   if (!requireNamespace("raster", quietly = TRUE)){
     warning("The raster package must be installed to use this functionality")
@@ -154,6 +157,15 @@ prepare_rasters <- function(raster.dir,
     }
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    for (i in 1:raster::nlayers(envs.backg)){
+      writeLines(paste0("Saving raster plot ", i, " to disk..."))
+      raster::plot(envs.backg[[i]])
+      dismo::points(coords, pch=21, bg=pops)
+      counter <- counter+1
+    }
+  }
+
   envList <- list(envs.cropped, envs.backg, coords, p, pops, samples[,1])
 
   rm(envs, p, bb, bb.buf, envs.buf, envs.cropped, envs.backg)
@@ -167,11 +179,13 @@ prepare_rasters <- function(raster.dir,
 #' This function uses the output from prepare_raster() and makes
 #' background partitions using several methods.
 #' @param env.list Object output from prepare_rasters() function
+#' @param categoricals Character vector of categorical layer names
 #' @param number.bg.points Number of background points to generate
 #' @param bg.raster Raster to use for background points
 #' @param agg.factor A vector of 1 or 2 numbers for the checkerboard
 #'                           methods
 #' @param plotDIR Directory to save the plots to
+#' @param showPLOTS Boolean; Whether to print plots to screen
 #' @return Object with background points
 #' @export
 #' @examples
@@ -179,11 +193,14 @@ prepare_rasters <- function(raster.dir,
 #'                           number.bg.points = 10000,
 #'                           bg.raster = 1,
 #'                           plotDIR = "./plots",
+#'                           showPLOTS = TRUE,
 #'                           agg.factor = 2)
 partition_raster_bg <- function(env.list,
+                                categoricals = NULL,
                                 number.bg.points = 10000,
                                 bg.raster = 1,
                                 plotDIR = "./plots",
+                                showPLOTS = FALSE,
                                 agg.factor = 2){
 
   if (!requireNamespace("raster", quietly = TRUE)){
@@ -223,7 +240,7 @@ partition_raster_bg <- function(env.list,
   inds <- env.list[[6]]
 
   rm(env.list)
-  gc(verbose = FALSE)
+  invisible(gc(verbose = FALSE))
 
   writeLines(paste0("\n\nGenerating ", number.bg.points, " random points..."))
 
@@ -237,83 +254,262 @@ partition_raster_bg <- function(env.list,
 
   # Change column names.
   colnames(coords) <- c("lng", "lat")
+  colnames(bg) <- colnames(coords)
 
   rm(pops)
-  gc(verbose = FALSE)
+  invisible(gc())
 
   writeLines("\nSaving background partition plots...")
   writeLines("\nPerforming block method...")
   ### Block Method
   blocks <- ENMeval::get.block(coords, bg)
-  pdf(file = file.path(plotDIR, "bgPartitions_blocks.pdf"),
-      width = 7,
-      height = 7,
-      onefile = TRUE)
-    raster::plot(envs.backg[[bg.raster]], col="gray",
-         main = "Partitions into Training and Test Data",
-         sub="Block Method",
-         xlab = "Longitude",
-         ylab = "Latitude")
-    dismo::points(coords, pch=21, bg=blocks$occ.grp)
-  dev.off()
+  plot_partitions(envs.fg = envs.cropped,
+                  envs.bg = envs.backg,
+                  bg = bg,
+                  coords = coords,
+                  partition = blocks,
+                  partition.type = "Block",
+                  categoricals = categoricals,
+                  plotDIR = plotDIR,
+                  showPLOTS = showPLOTS)
+  # pdf(file = file.path(plotDIR, "bgPartitions_blocks.pdf"),
+  #     width = 7,
+  #     height = 7,
+  #     onefile = TRUE)
+
+    # p1 <- ENMeval::evalplot.grps(pts = coords,
+    #                        pts.grp = blocks$occs.grp,
+    #                        envs = envs.backg) +
+    #   ggplot2::ggtitle("Spatial Block Partitions: Occurrences")
+
 
   rm(blocks)
-  gc(verbose = FALSE)
+  invisible(gc(verbose = FALSE))
 
   writeLines("Performing checkerboard1 method...")
   ### Checkerboard1 Method
   check1 <- ENMeval::get.checkerboard1(coords,
-                                       envs.cropped,
+                                       envs.backg,
                                        bg,
                                        aggregation.factor = agg.factor)
-    pdf(file = file.path(plotDIR, "bgPartitions_checkerboard1.pdf"),
-        width = 7,
-        height = 7,
-        onefile = TRUE)
-      raster::plot(
-        envs.backg[[bg.raster]],
-        col="gray",
-        main = "Partitions into Training and Test Data (Aggregation Factor=5)",
-        sub="Checkerboard1 Method",
-        xlab = "Longitude",
-        ylab = "Latitude"
-        )
-      dismo::points(bg, pch=21, bg=check1$occ.grp)
-    dev.off()
+
+  plot_partitions(envs.fg = envs.cropped,
+                  envs.bg = envs.backg,
+                  bg = bg,
+                  coords = coords,
+                  partition = check1,
+                  partition.type = "Checkerboard1",
+                  categoricals = categoricals,
+                  plotDIR = plotDIR,
+                  showPLOTS = showPLOTS)
+    # pdf(file = file.path(plotDIR, "bgPartitions_checkerboard1.pdf"),
+    #     width = 7,
+    #     height = 7,
+    #     onefile = TRUE)
+      # raster::plot(
+      #   envs.backg[[bg.raster]],
+      #   col="gray",
+      #   main = "Partitions into Training and Test Data (Aggregation Factor=5)",
+      #   sub="Checkerboard1 Method",
+      #   xlab = "Longitude",
+      #   ylab = "Latitude"
+      #   )
+    #   dismo::points(bg, pch=21, bg=check1$occ.grp)
+    # dev.off()
+
+    # if (isTRUE(showPLOTS)) {
+    #   raster::plot(
+    #     envs.backg[[bg.raster]],
+    #     col="gray",
+    #     main = "Partitions into Training and Test Data (Aggregation Factor=5)",
+    #     sub="Checkerboard1 Method",
+    #     xlab = "Longitude",
+    #     ylab = "Latitude"
+    #   )
+    #   dismo::points(bg, pch=21, bg=check1$occ.grp)
+    # }
 
     rm(check1)
-    gc(verbose = FALSE)
+    invisible(gc(verbose = FALSE))
 
     writeLines("Performing checkerboard2 method...")
     ### Using the Checkerboard2 method.
     check2 <-
       ENMeval::get.checkerboard2(coords,
-                                 envs.cropped,
+                                 envs.backg,
                                  bg,
                                  aggregation.factor = c(agg.factor,
                                                       agg.factor))
-    pdf(file = file.path(plotDIR, "bgPartitions_checkerboard2.pdf"),
-        width = 7,
-        height = 7,
-        onefile = TRUE)
-    raster::plot(envs.backg[[bg.raster]], col="gray",
-         main = "Partitions into Training and Test Data",
-         sub="Checkerboard2 Method",
-         xlab = "Longitude",
-         ylab = "Latitude")
-    dismo::points(bg, pch=21, bg=check2$bg.grp)
-    dismo::points(coords, pch=21,
-                  bg=check2$occ.grp,
-                  col="white",
-                  cex=1.5)
-  dev.off()
+
+    plot_partitions(envs.fg = envs.cropped,
+                    envs.bg = envs.backg,
+                    bg = bg,
+                    coords = coords,
+                    partition = check2,
+                    partition.type = "Checkerboard2",
+                    categoricals = categoricals,
+                    plotDIR = plotDIR,
+                    showPLOTS = showPLOTS)
+  #   pdf(file = file.path(plotDIR, "bgPartitions_checkerboard2.pdf"),
+  #       width = 7,
+  #       height = 7,
+  #       onefile = TRUE)
+  #   raster::plot(envs.backg[[bg.raster]], col="gray",
+  #        main = "Partitions into Training and Test Data",
+  #        sub="Checkerboard2 Method",
+  #        xlab = "Longitude",
+  #        ylab = "Latitude")
+  #   dismo::points(bg, pch=21, bg=check2$bg.grp)
+  #   dismo::points(coords, pch=21,
+  #                 bg=check2$occ.grp,
+  #                 col="white",
+  #                 cex=1.5)
+  # dev.off()
+
+  # if (isTRUE(showPLOTS)) {
+  #   raster::plot(envs.backg[[bg.raster]], col="gray",
+  #                main = "Partitions into Training and Test Data",
+  #                sub="Checkerboard2 Method",
+  #                xlab = "Longitude",
+  #                ylab = "Latitude")
+  #   dismo::points(bg, pch=21, bg=check2$bg.grp)
+  #   dismo::points(coords, pch=21,
+  #                 bg=check2$occ.grp,
+  #                 col="white",
+  #                 cex=1.5)
+  # }
 
   rm(check2)
-  gc(verbose = FALSE)
+  invisible(gc())
 
   writeLines("\nDone!")
 
   return(bg)
+}
+
+#' Function to plot partitions and environmental differences and similarities
+#' @param envs.fg Raster stack object (envList[[1]])
+#' @param envs.bg Background points on raster object (envList[[2]])
+#' @param bg Background object
+#' @param coords DataFrame of coordinates (occs) (envList[[3]])
+#' @param partitions Partition object
+#' @param partition.type string; Type of partition being used
+#' @param categoricals Character vector; names of categorical layers
+#' @param plotDIR Directory to save plots
+#' @param showPLOTS Whether to print plots to the screen.
+#' @noRd
+plot_partitions <- function(envs.fg,
+                            envs.bg,
+                            bg,
+                            coords,
+                            partitions,
+                            partition.type,
+                            categoricals = NULL,
+                            plotDIR = "./",
+                            showPLOTS = FALSE){
+
+  # Plot partitioning of points.
+  p1 <- ENMeval::evalplot.grps(pts = coords,
+                               pts.grp = partitions$occs.grp,
+                               envs = envs.bg) +
+    ggplot2::ggtitle(paste0("Spatial ", partition.type, " Partitions: Occurrences"))
+
+  #bg <- bg[[which(!is.na(envs.bg[[1]]@data@values))]]
+
+  p2 <- ENMeval::evalplot.grps(pts = bg,
+                               pts.grp = partitions$bg.grp,
+                               envs = envs.bg) +
+    ggplot2::ggtitle(paste0("Spatial ", partition.type, " Partitions: Background"))
+
+  occs.z <- cbind(coords, raster::extract(envs.fg, coords))
+  bg.z <- cbind(bg, raster::extract(envs.fg, bg))
+
+  p3 <- ENMeval::evalplot.envSim.hist(sim.type = "mess",
+                                      ref.data = "occs",
+                                      occs.z = occs.z,
+                                      bg.z = bg.z,
+                                      occs.grp = partitions$occs.grp,
+                                      bg.grp = partitions$bg.grp,
+                                      categoricals = categoricals)
+
+  p4 <- ENMeval::evalplot.envSim.hist(sim.type = "most_diff",
+                                      ref.data = "occs",
+                                      occs.z = occs.z,
+                                      bg.z = bg.z,
+                                      occs.grp = partitions$occs.grp,
+                                      bg.grp = partitions$bg.grp,
+                                      categoricals = categoricals)
+
+  p5 <- ENMeval::evalplot.envSim.hist(sim.type = "most_sim",
+                                      ref.data = "occs",
+                                      occs.z = occs.z,
+                                      bg.z = bg.z,
+                                      occs.grp = partitions$occs.grp,
+                                      bg.grp = partitions$bg.grp,
+                                      categoricals = categoricals)
+
+
+  ggplot2::ggsave(filename = file.path(plotDIR, paste0("bgPartitions_",
+                                    partition.type,
+                                    "_occurrences.pdf")),
+                  plot = p1,
+                  device = "pdf",
+                  width = 7,
+                  height = 7,
+                  units = "in")
+
+  ggplot2::ggsave(filename = file.path(plotDIR, paste0("bgPartitions_",
+                                                       partition.type,
+                                                       "_background.pdf")),
+                  plot = p2,
+                  device = "pdf",
+                  width = 7,
+                  height = 7,
+                  units = "in")
+
+  ggplot2::ggsave(filename = file.path(plotDIR, paste0("bgPartitions_",
+                                    partition.type,
+                                    "_multivar_envSimilarity.pdf")),
+                  plot = p3,
+                  device = "pdf",
+                  width = 7,
+                  height = 10,
+                  units = "in")
+
+  ggplot2::ggsave(filename = file.path(plotDIR, paste0("bgPartitions_",
+                                    partition.type,
+                                    "_most_different.pdf")),
+                  plot = p4,
+                  device = "pdf",
+                  width = 7,
+                  height = 10,
+                  units = "in")
+
+  ggplot2::ggsave(filename = file.path(plotDIR, paste0("bgPartitions_",
+                                    partition.type,
+                                    "_most_similar.pdf")),
+                  plot = p5,
+                  device = "pdf",
+                  width = 7,
+                  height = 10,
+                  units = "in")
+
+  # raster::plot(envs.backg[[bg.raster]], col="gray",
+  #      main = "Partitions into Training and Test Data",
+  #      sub="Block Method",
+  #      xlab = "Longitude",
+  #      ylab = "Latitude")
+  # dismo::points(coords, pch=21, bg=blocks$occ.grp)
+  # dev.off()
+
+  if (isTRUE(showPLOTS)) {
+    # Plot partitioning of points.
+    print(p1)
+    print(p2)
+    print(p3)
+    print(p4)
+    print(p5)
+  }
 }
 
 #' Function to run ENMeval and MAXENT on the raster layers.
@@ -323,9 +519,9 @@ partition_raster_bg <- function(env.list,
 #' (see ENMeval documentation). You can visualize how the partitioning
 #' methods will look by viewing the PDF output from partition_raster_bg.
 #' See ?partition_raster_bg for more info.
-#' @param envs.fg First element of envs.list returned from prepare_raster_bg()
-#' @param bg Object with background points; generated from partition_raster_bg
-#' @param coords Data.Frame with (lon,lat). 3rd element of envs.list
+#' @param env.list Object output from prepare_rasters() function
+#' @param bg Object with background points; generated from partition_raster_bg.
+#'           If NULL, the background layer will be calculated for you.
 #' @param partition.method Method used for background point partitioning
 #' @param parallel If TRUE, ENMeval is run parallelized with np CPU cores
 #' @param np Number of parallel cores to use if parallel = TRUE
@@ -334,15 +530,12 @@ partition_raster_bg <- function(env.list,
 #' @param feature.classes Character vector of feature classes to be used
 #' @param categoricals Vector indicating which (if any) of the input
 #'                     environmental layers are categorical.
-#' @param agg.factor Aggregation factor(s) for checkerboard
-#'                           partitioning method.
 #' @param algorithm Character vector. Defaults to dismo's maxent.jar
 #' @return ENMeval object
 #' @export
 #' @examples
-#' eval.par <- runENMeval(envs.fg = envList[[1]],
+#' eval.par <- runENMeval(env.list = envList,
 #'                        bg = bg,
-#'                        coords = envList[[3]],
 #'                        partition.method = "checkerboard1",
 #'                        parallel = FALSE,
 #'                        RMvalues = seq(0.5, 4, 0.5),
@@ -353,11 +546,9 @@ partition_raster_bg <- function(env.list,
 #'                                            "LQHP",
 #'                                            "LQHPT")
 #'                        categoricals = NULL,
-#'                        agg.factor = 2,
 #'                        algorithm = "maxent.jar")
-runENMeval <- function(envs.fg,
+runENMeval <- function(env.list,
                        bg,
-                       coords,
                        partition.method,
                        parallel = FALSE,
                        np = 2,
@@ -369,7 +560,6 @@ runENMeval <- function(envs.fg,
                                            "LQHP",
                                            "LQHPT"),
                        categoricals = NULL,
-                       agg.factor = 2,
                        algorithm = "maxent.jar"
                        ){
 
@@ -398,42 +588,43 @@ runENMeval <- function(envs.fg,
     return(NULL)
   }
 
-  if (partition.method == "checkerboard2"){
-    agg.factor <- c(agg.factor, agg.factor)
+  if (isTRUE(parallel)){
+    numCores <- np
+  } else if (isFALSE(parallel)) {
+    numCores = 1
+  } else {
+    stop("parallel argument must be either TRUE or FALSE")
   }
 
-  if (parallel == TRUE){
-    eval.par <-
-      ENMeval::ENMevaluate(
-        occ = coords,
-        env = envs.fg,
-        bg.coords = bg,
-        method = partition.method,
-        RMvalues = RMvalues,
-        fc = feature.classes,
-        parallel = parallel,
-        algorithm = algorithm,
-        categoricals = categoricals,
-        aggregation.factor = agg.factor,
-        numCores = np
-      )
-  } else if (parallel == FALSE){
-    eval.par <-
-      ENMeval::ENMevaluate(
-        occ = coords,
-        env = envs.fg,
-        bg.coords = bg,
-        method = partition.method,
-        RMvalues = RMvalues,
-        fc = feature.classes,
-        parallel = parallel,
-        algorithm = algorithm,
-        categoricals = categoricals,
-        aggregation.factor = agg.factor
-      )
-  } else {
-    stop("Parallel must be either TRUE or FALSE")
-  }
+  envs.fg <- env.list[[1]]
+  coords <- env.list[[3]]
+
+  rm(env.list)
+  invisible(gc())
+
+  # NOTE: Had to make some changes when ENVeval switched to version 2.0.0.
+  # Some arguments were deprecated, others were changed.
+  # occ changed to occs
+  # env changed to envs
+  # bg.coords changed to bg
+  # NOTE: If bg is NULL, it calculates the random points for you.
+  # feature.classes and RMvalues got combined into a named list.
+  # methods became partitions
+  # categoricals no longer supports integer to choose categorical layers;
+  # Now have to specify a character vector of the layer name.
+  # aggregation.factor was deprecated.
+  eval.par <-
+    ENMeval::ENMevaluate(
+      occs = coords,
+      envs = envs.fg,
+      bg = bg,
+      tune.args = list(fc = feature.classes, rm = RMvalues),
+      partitions = partition.method,
+      parallel = parallel,
+      algorithm = algorithm,
+      categoricals = categoricals,
+      numCores = np
+    )
 
   return(eval.par)
 }
@@ -446,9 +637,13 @@ runENMeval <- function(envs.fg,
 #' @param maxLon Maximum longitude to plot for predictions
 #' @param examine.predictions Character vector of feature classes to examine
 #'                            how complexity affects predictions
+#' @param examine.stats Character vector of stats to evaluate
 #' @param RMvalues Vector of non-negative RM values to examine how
 #'                 complexity affects predictions
+#' @param nullmodel.iter Integer; Number of iterations to perform with null
+#'                       model.
 #' @param plotDIR Directory to save plots to
+#' @param showPLOTS Boolean; Whether to print plots to screen
 #' @param niche.overlap Boolean. If TRUE, calculates pairwise niche overlap
 #'                      matrix
 #' @param plot.width Integer. Specify plot widths
@@ -470,6 +665,7 @@ runENMeval <- function(envs.fg,
 #'                                          "LQHPT"),
 #'                  RMvalues = seq(0.5, 4, 0.5),
 #'                  plotDIR = "./plots",
+#'                  showPLOTS = TRUE,
 #'                  niche.overlap = FALSE,
 #'                  plot.width = 7,
 #'                  plot.height = 7,
@@ -485,8 +681,15 @@ summarize_ENMeval <- function(eval.par,
                                                       "LQH",
                                                       "LQHP",
                                                       "LQHPT"),
+                              examine.stats = c("auc.val",
+                                                "auc.diff",
+                                                "cbi.val",
+                                                "or.mtp",
+                                                "or.10p"),
                               RMvalues = seq(0.5, 4, 0.5),
+                              nullmodel.iter = 100,
                               plotDIR = "./plots",
+                              showPLOTS = FALSE,
                               niche.overlap = FALSE,
                               plot.width = 7,
                               plot.height = 7,
@@ -494,6 +697,7 @@ summarize_ENMeval <- function(eval.par,
 
   dir.create(plotDIR, showWarnings = FALSE)
 
+  `%>%` <- dplyr::`%>%`
 
   if (!requireNamespace("raster", quietly = TRUE)){
     warning("The raster package must be installed to use this functionality")
@@ -534,8 +738,6 @@ summarize_ENMeval <- function(eval.par,
                                                    "ENMeval_results.csv"))
 
   # Get best model.
-  eval.par@results[which(eval.par@results$delta.AICc==0),]
-  eval.par@results[which(eval.par@results$delta.AICc==0),]
   bestAICc <- eval.par@results[which(eval.par@results$delta.AICc==0),]
 
   # Write to file.
@@ -552,6 +754,11 @@ summarize_ENMeval <- function(eval.par,
                main="Relative Occurrence Rate")
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    raster::plot(eval.par@predictions[[which(eval.par@results$delta.AICc==0)]],
+                 main="Relative Occurrence Rate")
+  }
+
   # Look at the model object for our "AICc optimal" model:
   aic.opt <- eval.par@models[[which(eval.par@results$delta.AICc==0)]]
 
@@ -560,9 +767,14 @@ summarize_ENMeval <- function(eval.par,
             file = file.path(plotDIR,
                              "ENMeval_maxentModel_aicOptimal.csv"))
 
-  # Get a data.frame of two variable importance metrics:
-  # percent contribution and permutation importance.
-  varImportance <- ENMeval::var.importance(aic.opt)
+  # Get a data.frame of two variable importance metrics,
+  # percent contribution and permutation importance:
+  # For the model with AICc == 0.
+  # NOTE: var.importance is a deprecated function
+  # It is now saved as an object inside the results list.
+  # This was a change with ENMeval version 2.0.0
+  varImportance <-
+    eval.par@variable.importance[[which(eval.par@results$delta.AICc==0)]]
 
   # Write them to file.
   write.csv(varImportance, file = file.path(plotDIR,
@@ -578,42 +790,158 @@ summarize_ENMeval <- function(eval.par,
       width = plot.width,
       height = plot.height,
       onefile = TRUE)
-    ENMeval::eval.plot(eval.par@results)
-    ENMeval::eval.plot(eval.par@results, 'avg.test.AUC',
-                       variance ='var.test.AUC')
-    ENMeval::eval.plot(eval.par@results, "avg.diff.AUC",
-                       variance="var.diff.AUC")
+    p1 <- ENMeval::evalplot.stats(e = eval.par,
+                            stats = examine.stats,
+                            color = "fc", x.var = "rm")
+
+    p2 <- ENMeval::evalplot.stats(e = eval.par,
+                                  stats = examine.stats,
+                                  color = "rm", x.var = "fc")
+
+    print(p1)
+    print(p2)
 
     # Plot permutation importance.
-    df <- ENMeval::var.importance(aic.opt)
+    df <- varImportance
     par(mar=imp.margins)
-    raster::barplot(df$permutation.importance,
+    p3 <- raster::barplot(df$permutation.importance,
                     names.arg = df$variable,
                     las = 2,
                     ylab = "Permutation Importance")
+
+    print(p3)
+
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    print(p1)
+    print(p2)
+    print(p3)
+  }
+
   # Let's see how model complexity changes the predictions in our example
-  pdf(file = file.path(plotDIR, "modelPredictions.pdf"),
+  pdf(file = file.path(plotDIR, "model_Eval_and_Predictions.pdf"),
       width = plot.width,
       height = plot.height,
       onefile = TRUE)
+
+    res <- ENMeval::eval.results(eval.par)
+
+    opt.aicc <- res %>% dplyr::filter(delta.AICc == 0)
+
+    opt.seq <- res %>%
+      dplyr::filter(or.10p.avg == min(or.10p.avg)) %>%
+      dplyr::filter(auc.val.avg == max(auc.val.avg))
+
+    mod.seq <- ENMeval::eval.models(eval.par)[[opt.seq$tune.args]]
+    raster::plot(mod.seq)
+
+    # View the response curves
+    #mod.seq <- dismo::response(ENMeval::eval.models(eval.par)[[opt.seq$tune.args]])
+    #raster::plot(mod.seq, main="MAXENT Response Curves")
+    #dev.off()
+
+    # Assess predictions for optimal model
+    pred.seq <- ENMeval::eval.predictions(eval.par)[[opt.seq$tune.args]]
+
+    # Plot predictions for optimal model
+    raster::plot(pred.seq, main=paste0("Optimal Model Prediction (",
+                                       opt.seq$tune.args,
+                                       ")"))
+
+    # Plot binned background points
+    points(ENMeval::eval.bg(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.bg.grp(eval.par))
+
+    # Plot occurence points on top
+    points(ENMeval::eval.occs(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.occs.grp(eval.par))
+
+  # Plot predictions for all models
     for (i in 1:length(examine.predictions)){
       for (j in 1:length(RMvalues)){
-        raster::plot(eval.par@predictions[[paste(examine.predictions[i],
-                                                    RMvalues[j],
-                                                    sep = "_")]],
-                       ylim=c(minLat,maxLat),
-                       xlim=c(minLon, maxLon),
-                       main=paste0(examine.predictions[i],
-                                   "_",
-                                   RMvalues[j],
-                                   " Prediction"),
+        raster::plot(ENMeval::eval.predictions(eval.par)[[paste0(
+          "fc.",
+          examine.predictions[i],
+          "_rm.",
+          RMvalues[j])]],
+                     ylim=c(minLat,maxLat),
+                     xlim=c(minLon, maxLon),
+                     main=paste0("fc.",
+                                  examine.predictions[i],
+                                  "_rm.",
+                                  RMvalues[j],
+                                 " Prediction"),
         )
       }
     }
 
+    ### Compare against null models for significance
+    mod.null <- ENMeval::ENMnulls(e = eval.par,
+                                  mod.settings = list(fc = "LQ",
+                                                      rm = tail(RMvalues, n=1)),
+                                  no.iter = nullmodel.iter,
+                                  eval.stats = examine.stats)
+
+    pnull.hist <- ENMeval::evalplot.nulls(mod.null,
+                                     stats = examine.stats,
+                                     plot.type = "histogram")
+
+    # Violin plot
+    pnull.violin <- ENMeval::evalplot.nulls(mod.null,
+                                            stats = examine.stats,
+                                            plot.type = "violin")
+
+    print(pnull.hist)
+    print(pnull.violin)
+
   dev.off()
+
+  if (isTRUE(showPLOTS)){
+    raster::plot(mod.seq, main="MAXENT Response Curves")
+    #dismo::response(ENMeval::eval.models(eval.par)[[opt.seq$tune.args]])
+
+    # Plot predictions
+    # Plot predictions for optimal model
+    raster::plot(pred.seq, main=paste0("Optimal Model Prediction (",
+                                       opt.seq$tune.args,
+                                       ")"))
+
+    # Plot binned background points
+    points(ENMeval::eval.bg(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.bg.grp(eval.par))
+
+    # Plot occurence points on top
+    points(ENMeval::eval.occs(eval.par),
+           pch = 21,
+           bg = ENMeval::eval.occs.grp(eval.par))
+
+    # Plot predictions for all models
+    for (i in 1:length(examine.predictions)){
+      for (j in 1:length(RMvalues)){
+        raster::plot(ENMeval::eval.predictions(eval.par)[[paste0(
+          "fc.",
+          examine.predictions[i],
+          "_rm.",
+          RMvalues[j])]],
+          ylim=c(minLat,maxLat),
+          xlim=c(minLon, maxLon),
+          main=paste0("fc.",
+                      examine.predictions[i],
+                      "_rm.",
+                      RMvalues[j],
+                      " Prediction"),
+        )
+      }
+    }
+
+    print(pnull.hist)
+    print(pnull.violin)
+
+  }
 }
 
 #' Function to extract raster values at each sample point for raster stack

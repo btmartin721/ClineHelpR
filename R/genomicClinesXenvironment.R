@@ -17,6 +17,7 @@
 #'                INTROGRESS
 #' @param prefix Character string; Population prefix for input and output files
 #' @param outputDIR Character string; File path for INTROGRESS output
+#' @param showPLOTS Boolean; Whether to print the plots to the screen
 #' @param sep Character string; Column delimiter for INTROGRESS input files
 #' @param pop.id Boolean; Value for INTROGRESS parameter pop.id.
 #'               See ?prepare.data in introgress R pacakge
@@ -46,6 +47,7 @@ runIntrogress <- function(p1.file,
                           minDelt = 0.8,
                           prefix = "population1",
                           outputDIR = "./plots",
+                          showPLOTS = FALSE,
                           sep = "\t",
                           pop.id = FALSE,
                           ind.id = FALSE,
@@ -74,7 +76,7 @@ runIntrogress <- function(p1.file,
   # Create outputDIR if doesn't exist.
   dir.create(outputDIR, showWarnings = FALSE)
 
-  # Read in the data
+  # Read in the data from files
   gen.data <- read.table(file = admix.file, header = FALSE, sep = sep)
   loci.data <- read.table(file = loci.file, header = TRUE, sep = sep)
   p1 <- read.table(file = p1.file, header = FALSE, sep = sep)
@@ -107,8 +109,8 @@ runIntrogress <- function(p1.file,
   # If fixed == TRUE this will be plotted.
   triPlotPDF <- file.path(outputDIR, paste0(prefix, "_trianglePlot.pdf"))
 
-  # Set the delta value for keeping only loci with allele frequency differentials
-  # > minDelt
+  # Set the delta value for keeping only loci with allele frequency
+  # differentials > minDelt
   minDelt <- minDelt
 
   # Prep data for analysis
@@ -128,15 +130,26 @@ runIntrogress <- function(p1.file,
                       loci.data = loci.data,
                       fixed = fixed)
 
-  # Plot distribution of hybrid incices
+  # Plot distribution of hybrid indices
   pdf(hIndex_histPDF)
     hist(hi.index$h,breaks = 20)
   dev.off()
+
+  if (isTRUE(showPLOTS)){
+    print(hist(hi.index$h,breaks = 20))
+  }
 
   if (fixed){
     # Plot H.index x interspecifit heterozygosity
     int.h <- introgress::calc.intersp.het(introgress.dat = count.matrix)
     par(mfrow = c(1, 1))
+
+    if (isTRUE(showPLOTS)){
+      introgress::triangle.plot(hi.index = hi.index,
+                                int.het = int.h,
+                                pdf = FALSE)
+    }
+
     introgress::triangle.plot(hi.index = hi.index,
                   int.het = int.h,
                   pdf = TRUE,
@@ -153,7 +166,7 @@ runIntrogress <- function(p1.file,
                          count.matrix$Parental2.allele.freq[i, 1:2])
     }
 
-  # Esimate genomic clines ONLY for loci with high delta distance between
+   # Estimate genomic clines ONLY for loci with high delta distance between
   # Parent1 and Parent2
   perm_clines <- introgress::genomic.clines(
     introgress.data = count.matrix,
@@ -164,20 +177,25 @@ runIntrogress <- function(p1.file,
     loci.touse = which(deltas > minDelt)
   )
 
-  #Plot genomic clines
+  if (isTRUE(showPLOTS)) {
+    #Plot genomic clines
+    introgress::composite.clines(perm_clines,
+                                 pdf = FALSE,
+                                 labels = clineLabels)
+
+    # There was a bug with the mk.image feature, so I removed it.
+    # Not sure what was wrong with it.
+  }
+
+  # Plot genomic clines
   introgress::composite.clines(perm_clines,
                    pdf = TRUE,
                    out.file = compositePDF,
                    labels = clineLabels)
 
-  introgress::mk.image(
-    introgress.data = count.matrix,
-    loci.data = loci.data,
-    hi.index = hi.index,
-    loci.touse = which(deltas > minDelt),
-    pdf = TRUE,
-    out.file = imagePDF
-  )
+
+  # There was a bug with the mk.image feature, so I removed it.
+  # Not sure what was wrong with it.
 
   # Pvalues for genomic clines.
   pValues <- perm_clines$Summary.data[,4]
@@ -186,6 +204,18 @@ runIntrogress <- function(p1.file,
               file.path(outputDIR, paste0(prefix, "_pvalues.csv")),
               quote = FALSE,
               row.names = FALSE)
+
+  if (isTRUE(showPLOTS)) {
+    # Plot the clines.
+    introgress::clines.plot(
+      cline.data = perm_clines,
+      rplots = 3,
+      cplots = 3,
+      pdf = FALSE,
+      quantiles = TRUE,
+      cd = clineLabels
+    )
+  }
 
   # Plot the clines.
   introgress::clines.plot(
@@ -209,6 +239,25 @@ runIntrogress <- function(p1.file,
     loci.touse = which(deltas > minDelt),
     method = "parametric"
   )
+
+  if (isTRUE(showPLOTS)) {
+    # Plot parametric composite clines
+    introgress::composite.clines(
+      parametric_clines,
+      pdf = FALSE,
+      labels = clineLabels
+    )
+
+    # Plot parametric clines.
+    introgress::clines.plot(
+      cline.data = parametric_clines,
+      rplots = 3,
+      cplots = 3,
+      pdf = FALSE,
+      quantiles = TRUE,
+      cd = clineLabels
+    )
+  }
 
   # Plot parametric composite clines
   introgress::composite.clines(
@@ -278,6 +327,7 @@ runIntrogress <- function(p1.file,
 #' @param clineLabels Character vector of length == 3 designating population
 #'                    names for c(P1, Het, P2)
 #' @param outputDIR File path to directory for outputting plots
+#' @param showPLOTS Boolean; Whether to print the plots to the screen
 #' @param clineMethod Character string indicating desired method for generating
 #'                    genomic clines. Must be either "permutation" or
 #'                    "parametric". See ?introgress
@@ -298,6 +348,7 @@ clinesXenvironment <- function(clineList,
                                rastersToUse = NULL,
                                clineLabels = c("P1, Het", "P2"),
                                outputDIR = "./plots",
+                               showPLOTS = FALSE,
                                clineMethod = "permutation",
                                prefix = "population1",
                                cor.method = "auto"){
@@ -378,6 +429,36 @@ clinesXenvironment <- function(clineList,
   )
   dev.off()
 
+  if (isTRUE(showPLOTS)) {
+    print(plot_lm_clines(
+      l$h,
+      clines$Fitted.AA,
+      "Latitude",
+      paste0("Genomic Clines (", clineLabels[1], " X ", clineLabels[3], ")")
+    ))
+
+    print(plot_lm_hindex(
+      l$h,
+      hi$h,
+      "Latitude",
+      paste0("Hybrid Index (", clineLabels[1], " X ", clineLabels[3], ")")
+    ))
+
+    print(plot_lm_clines(
+      lon$h,
+      clines$Fitted.AA,
+      "Longitude",
+      paste0("Genomic Clines (", clineLabels[1], " X ", clineLabels[3], ")")
+    ))
+
+    print(plot_lm_hindex(
+      lon$h,
+      hi$h,
+      "Longitude",
+      paste0("Hybrid Index (", clineLabels[1], " X ", clineLabels[3], ")")
+    ))
+  }
+
   #### Now do environments (e.g. temp, precip) on X-axis ####
 
   # If subset not specified, use all raster layers
@@ -450,6 +531,31 @@ clinesXenvironment <- function(clineList,
     )
   }
   dev.off()
+
+  if (isTRUE(showPLOTS)) {
+    for (i in 1:length(importantLayers)) {
+      env <- importantLayers[[i]][,4]
+
+      # Genomic Clines ~ Environment
+      print(plot_lm_clines(
+        env,
+        clines$Fitted.AA,
+        paste("Raster Layer", colnames(importantLayers[[i]][4]), sep = " "),
+        paste0("Genomic Clines (",
+               clineLabels[1],
+               " X ",
+               clineLabels[3], ")")
+      ))
+
+      # HybridIndex ~ Environment
+      print(plot_lm_hindex(
+        env,
+        hi$h,
+        paste("Raster Layer", colnames(importantLayers[[i]][4]), sep = " "),
+        paste0("Hybrid Index (", clineLabels[1], " X ", clineLabels[3], ")")
+      ))
+    }
+  }
 
   for (i in 1:length(importantLayers)) {
     env <- importantLayers[[i]][,4]

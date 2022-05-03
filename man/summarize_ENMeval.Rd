@@ -11,8 +11,11 @@ summarize_ENMeval(
   minLon = -110,
   maxLon = -40,
   examine.predictions = c("L", "LQ", "H", "LQH", "LQHP", "LQHPT"),
+  examine.stats = c("auc.val", "auc.diff", "cbi.val", "or.mtp", "or.10p"),
   RMvalues = seq(0.5, 4, 0.5),
+  nullmodel.iter = 100,
   plotDIR = "./plots",
+  showPLOTS = FALSE,
   niche.overlap = FALSE,
   plot.width = 7,
   plot.height = 7,
@@ -33,10 +36,17 @@ summarize_ENMeval(
 \item{examine.predictions}{Character vector of feature classes to examine
 how complexity affects predictions}
 
+\item{examine.stats}{Character vector of stats to evaluate}
+
 \item{RMvalues}{Vector of non-negative RM values to examine how
 complexity affects predictions}
 
+\item{nullmodel.iter}{Integer; Number of iterations to perform with null
+model.}
+
 \item{plotDIR}{Directory to save plots to}
+
+\item{showPLOTS}{Boolean; Whether to print plots to screen}
 
 \item{niche.overlap}{Boolean. If TRUE, calculates pairwise niche overlap
 matrix}
@@ -65,6 +75,7 @@ summarize_ENMeval(eval.par = eval.par,
                                          "LQHPT"),
                  RMvalues = seq(0.5, 4, 0.5),
                  plotDIR = "./plots",
+                 showPLOTS = TRUE,
                  niche.overlap = FALSE,
                  plot.width = 7,
                  plot.height = 7,

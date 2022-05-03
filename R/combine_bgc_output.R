@@ -27,111 +27,75 @@ combine_bgc_output <- function(results.dir,
                                prefix,
                                thin = NULL,
                                discard = NULL){
-
+  
   writeLines(paste0("\n\nLoading input files with prefix ", prefix, "...\n"))
-
+  
   lnl <- list.files(path = results.dir,
                     pattern = paste0(prefix, ".*LnL_\\d+$"),
                     full.names = TRUE)
   check_if_files(lnl)
-
+  
   a0 <- list.files(path = results.dir,
                    pattern = paste0(prefix, ".*a0_\\d+$"),
                    full.names = TRUE)
   check_if_files(a0)
-
+  
   b0 <- list.files(path = results.dir,
                    pattern = paste0(prefix, ".*b0_\\d+$"),
                    full.names = TRUE)
   check_if_files(b0)
-
+  
   qa <- list.files(path = results.dir,
                    pattern = paste0(prefix, ".*qa_\\d+$"),
                    full.names = TRUE)
   check_if_files(qa)
-
+  
   qb <- list.files(path = results.dir,
                    pattern = paste0(prefix, ".*qb_\\d+$"),
                    full.names = TRUE)
   check_if_files(qb)
-
+  
   hi <- list.files(path = results.dir,
                    pattern = paste0(prefix, ".*hi_\\d+$"),
                    full.names = TRUE)
   check_if_files(hi)
-
+  
   gc()
-
+  
   if (!countBGCruns(list(lnl, a0, b0, qa, qb, hi))){
     stop("Error: All parameters must have the same number of BGC runs!")
   }
-
-  if (!is.null(discard) & !is.null(thin)){
-    stop("Error: The thin and discard parameters cannot both be defined")
-  }
-
+  
   if (!is.null(thin)){
-    # Aggregate the BGC runs into one data.frame
-    lnl.df <- bind_bgc_runs(lnl, thin = thin)
-    gc()
-    a0.df <- bind_bgc_runs(a0, thin = thin)
-    gc()
-    b0.df <- bind_bgc_runs(b0, thin = thin)
-    gc()
-    qa.df <- bind_bgc_runs(qa, thin = thin)
-    gc()
-    qb.df <- bind_bgc_runs(qb, thin = thin)
-    gc()
-    hi.df <- bind_bgc_runs(hi, thin = thin)
-    gc()
-
-    writeLines(paste0("\n\nEvery ", thin, " sample being used because "))
-    writeLines(paste0("thin parameter was set. # MCMC samples = ",
-                      ncol(lnl.df)))
-
-  } else if (!is.null(discard)){
-    lnl.df <- bind_bgc_runs(lnl, discard = discard)
-    gc()
-    a0.df <- bind_bgc_runs(a0, discard = discard)
-    gc()
-    b0.df <- bind_bgc_runs(b0, discard = discard)
-    gc()
-    qa.df <- bind_bgc_runs(qa, discard = discard)
-    gc()
-    qb.df <- bind_bgc_runs(qb, discard = discard)
-    gc()
-    hi.df <- bind_bgc_runs(hi, discard = discard)
-    gc()
-
-    writeLines(paste0("\n\nThe first ", discard, " samples of each run "))
-    writeLines(paste0("being discarded. # MCMC samples = ",
-                      ncol(lnl.df)))
-
-  } else{
-
-    lnl.df <- bind_bgc_runs(lnl)
-    gc()
-    a0.df <- bind_bgc_runs(a0)
-    gc()
-    b0.df <- bind_bgc_runs(b0)
-    gc()
-    qa.df <- bind_bgc_runs(qa)
-    gc()
-    qb.df <- bind_bgc_runs(qb)
-    gc()
-    hi.df <- bind_bgc_runs(hi)
-    gc()
-
-    writeLines(paste0("\n\n # MCMC samples = ", ncol(lnl.df)))
-
+    writeLines(paste0("\n\nThinning MCMC samples with frequency: ", thin))
   }
+  if (!is.null(discard)){
+    writeLines(paste0("\n\nDiscarding samples as burnin: ", discard))
+  }
+  
+  # Aggregate the BGC runs into one data.frame
+  lnl.df <- bind_bgc_runs(lnl, thin = thin, discard = discard)
+  gc()
+  a0.df <- bind_bgc_runs(a0, thin = thin, discard = discard)
+  gc()
+  b0.df <- bind_bgc_runs(b0, thin = thin, discard = discard)
+  gc()
+  qa.df <- bind_bgc_runs(qa, thin = thin, discard = discard)
+  gc()
+  qb.df <- bind_bgc_runs(qb, thin = thin, discard = discard)
+  gc()
+  hi.df <- bind_bgc_runs(hi, thin = thin, discard = discard)
+  gc()
+  
+  writeLines(paste0("\n\n # MCMC samples = ", ncol(lnl.df)))
+  
 
-  writeLines(paste0("\n\nDone! Found ", length(lnl), " BGC runs.\n\n"))
+writeLines(paste0("\n\nDone! Found ", length(lnl), " BGC runs.\n\n"))
 
-  df.list <-
-    list(lnl=lnl.df, a0=a0.df, b0=b0.df, qa=qa.df, qb=qb.df, hi=hi.df)
+df.list <-
+  list(lnl=lnl.df, a0=a0.df, b0=b0.df, qa=qa.df, qb=qb.df, hi=hi.df)
 
-  return(df.list)
+return(df.list)
 }
 
 #' Validates that input files were found
@@ -151,18 +115,18 @@ check_if_files <- function(files){
 #' @param thin Boolean. If TRUE, thins MCMC to every nth sample
 #' @noRd
 bind_bgc_runs <- function(files, thin = NULL, discard = NULL){
-
+  
   data_list <- lapply(files, data.table::fread, stringsAsFactors = FALSE)
-
+  
   if (!is.null(thin)){
     data_list <- lapply(data_list, function(x) thin_MCMC(x, thin))
   }
   if (!is.null(discard)){
     data_list <- lapply(data_list, function(x) discardNsamples(x, discard))
   }
-
+  
   df <- dplyr::bind_cols(data_list)
-
+  
   rm(data_list)
   gc()
   return(df)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/genind2introgress.R
 \name{genind2introgress}
 \alias{genind2introgress}
-\title{Generate inputs for Introgress}
+\title{Generate inputs for Introgress from genind object}
 \usage{
 genind2introgress(
   gen,
@@ -12,7 +12,8 @@ genind2introgress(
   missingPerLoc = 0.5,
   missingPerInd = 0.5,
   subset = NULL,
-  drop = TRUE
+  drop = TRUE,
+  prefix = "introgress"
 )
 }
 \arguments{
@@ -31,9 +32,8 @@ genind2introgress(
 \item{subset}{An optional parameter defining a number of loci to randomly retain}
 
 \item{drop}{Boolean value defining whether or not to remove monomorphic loci}
-}
-\value{
-A list of data.frames (each data.frame is an introgress input)
+
+\item{prefix}{Prefix for output Introgress files (default="introgress")}
 }
 \description{
 This function parses a genind object to create input data frames for

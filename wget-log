@@ -1,18 +1,0 @@
-Will not apply HSTS. The HSTS database must be a regular and non-world-writable file.
-ERROR: could not open HSTS store at '/home/btm002/.wget-hsts'. HSTS will be disabled.
---2021-09-16 15:10:01--  https://sites.google.com/site/bgcsoftware/home/bgcdist1.03.tar.gz?attredirects=0
-Resolving sites.google.com (sites.google.com)... 142.251.45.78, 2607:f8b0:4000:81b::200e
-Connecting to sites.google.com (sites.google.com)|142.251.45.78|:443... connected.
-HTTP request sent, awaiting response... 302 Moved Temporarily
-Location: https://404528b4-a-62cb3a1a-s-sites.googlegroups.com/site/bgcsoftware/home/bgcdist1.03.tar.gz?attachauth=ANoY7cqSFchw6QIG1wU8U9WbnSy-Imz5NSABGhbfvyly1kgRzcoe8FtIxAYoFUHsgEeAgCrYmQ7D9NdMY3ciAiMQYbmrCPxnRioNIJoHT0uEJy9FwJBmROrmUvccvXUVvDkwvBlOiiyYrozDjSt1wh6VV3Aw-SQhmipIbQFHC-cJgvB1djHPMS2m4TxJhNdPl5AmqwxbmNOUCAYuB1n7kyQ2nYIqFnVxMsfTeX2pCJ_YcuQPeCHJafc%3D&attredirects=0 [following]
---2021-09-16 15:10:01--  https://404528b4-a-62cb3a1a-s-sites.googlegroups.com/site/bgcsoftware/home/bgcdist1.03.tar.gz?attachauth=ANoY7cqSFchw6QIG1wU8U9WbnSy-Imz5NSABGhbfvyly1kgRzcoe8FtIxAYoFUHsgEeAgCrYmQ7D9NdMY3ciAiMQYbmrCPxnRioNIJoHT0uEJy9FwJBmROrmUvccvXUVvDkwvBlOiiyYrozDjSt1wh6VV3Aw-SQhmipIbQFHC-cJgvB1djHPMS2m4TxJhNdPl5AmqwxbmNOUCAYuB1n7kyQ2nYIqFnVxMsfTeX2pCJ_YcuQPeCHJafc%3D&attredirects=0
-Resolving 404528b4-a-62cb3a1a-s-sites.googlegroups.com (404528b4-a-62cb3a1a-s-sites.googlegroups.com)... 142.250.114.137, 2607:f8b0:4023:1002::89
-Connecting to 404528b4-a-62cb3a1a-s-sites.googlegroups.com (404528b4-a-62cb3a1a-s-sites.googlegroups.com)|142.250.114.137|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1904578 (1.8M) [application/x-gzip]
-Saving to: ‘bgcdist1.03.tar.gz?attredirects=0’
-
-bgcdist1.03.tar.gz?attredirects   0%[                                                     ]       0  --.-KB/s               bgcdist1.03.tar.gz?attredirects  35%[=================>                                   ] 664.16K  3.24MB/s               bgcdist1.03.tar.gz?attredirects 100%[====================================================>]   1.82M  5.12MB/s    in 0.4s    
-
-2021-09-16 15:10:02 (5.12 MB/s) - ‘bgcdist1.03.tar.gz?attredirects=0’ saved [1904578/1904578]
-

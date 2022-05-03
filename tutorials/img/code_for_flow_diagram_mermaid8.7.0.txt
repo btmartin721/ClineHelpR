@@ -1,0 +1,29 @@
+graph TB
+    di{Run BGC} -.Save to HDF5<br>Include zeta and gamma quantiles<br>Extract with estpost<br>Use options -s 2 -w 0<br><br>If using ideogram,<br>run for two alignments:<br>Transcriptome and unknown scaffolds.->ro1("Combine multiple BGC runs<br>combine_bgc_runs()")
+    subgraph bgcPlotter [bgcPlotter Functions]
+
+        ro1-->ro2("Plot LnL and parameter races<br>plot_traces()")
+        ro2 -.Runs didn't converge<br>Remove samples as burn-in.->ro1
+    end
+    subgraph bgcPlotter [bgcPlotter Functions]
+        ro2 -.Runs didn't converge<br>Run BGC again.->di
+        ro2-->ro3("Identify BGC outliers<br>get_bgc_outliers()")
+        ro3-->od1>"Make Phi X hybrid index plot<br>phiPlot()"]
+        ro3-->od2>"Make alpha X beta contour plot<br>alphaBetaPlot()"]
+    end
+    subgraph ideogram [Chromosome Plot]
+        ro4("Read and parse GFF file<br>parseGFF()")-->ro5("Join GFF annotation w/ BGC outlier data<br>join_bgc_gff()")
+        ro5-->od3>"Make the chromosome plot<br>plot_outlier_ideogram()"]
+    end
+    ro3-->ro5
+    subgraph introgress [INTROGRESS Functions]
+        ro6("Prepare rasters for INTROGRESS<br>prepare_rasters()")-- If some rasters different,<br>try the prepareDifferentRasters.R script -->ro7("Extract raster value at sampling sites<br>")
+        ro7-. Optional<br>Select most important rasters .->ro8("Make background partitions<br>for model training<br>partition_raster_bg()")
+        ro8-.->ro9("Run MAXENT with ENMaval<br>runENMeval()")
+        ro9-.->ro10("Summarize ENMeval results<br>summarize_ENMeval()")
+        ro10-- Select features using Permutation Importance -->ro11("Run INTROGRESS<br>runIntrogress()")
+        ro11-->od4>"Correlate clines with environment/space<br>clinesXenvironment()"]
+    end
+
+    classDef green fill:#97E47E,stroke:#333,stroke-width:4px;
+    class di green

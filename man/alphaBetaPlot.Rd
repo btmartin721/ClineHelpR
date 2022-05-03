@@ -11,6 +11,7 @@ alphaBetaPlot(
   both.outlier.tests = FALSE,
   saveToFile = NULL,
   plotDIR = "./plots",
+  showPLOTS = FALSE,
   device = "pdf",
   neutral.color = "gray",
   alpha.color = "blue",
@@ -46,6 +47,8 @@ you want to save to}
 
 \item{plotDIR}{Directory path. If saveToFile is specified, plots are
 saved in this directory}
+
+\item{showPLOTS}{Boolean Whether to print the plots to the screen.}
 
 \item{device}{File format to save plot. Supports ggplot2::ggsave devices}
 
@@ -96,7 +99,7 @@ plotDIR = "./bgc_plots", device = "png")
 
 phiPlot(outlier.list = gene.outliers, ,
 line.size = 0.1, qn.interval = FALSE, overlap.zero = FALSE,
-both.outlier.tests = TRUE, saveToFile = "mus_phiPlot")
+both.outlier.tests = TRUE, saveToFile = "mus_phiPlot", showPLOTS=TRUE)
 
 phiPlot(outlier.list = full.outliers,  overlap.zero = FALSE)
 }

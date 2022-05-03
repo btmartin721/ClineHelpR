@@ -20,6 +20,7 @@
 #'                   you want to save to
 #' @param plotDIR Directory path. If saveToFile is specified, plots are
 #'                saved in this directory
+#' @param showPLOTS Boolean Whether to print the plots to the screen.
 #' @param device File format to save plot. Supports ggplot2::ggsave devices
 #' @param neutral.color Color for non-outlier loci. Default = "gray"
 #' @param alpha.color Color for alpha outlier loci. Default = "blue"
@@ -36,6 +37,8 @@
 #' @param padding Padding to add to X and Y axes. Default=0.1
 #' @param alpha_limits Limits (e.g., c(1,1) for plotting alpha. Default = NULL
 #' @param beta_limits Limits (e.g., c(1,1) for plotting beta. Default = NULL
+#' @param point_alpha Alpha (opacity) for plotting points, passed to geom_point. Default = 1.0
+#' @param point_size Size for plotting points, passed to geom_point. Default = 1
 #' @export
 #' @examples
 #' alphaBetaPlot(outlier.list = outliers, saveToFile = "pop1_phiPlot",
@@ -43,7 +46,7 @@
 #'
 #' phiPlot(outlier.list = gene.outliers, ,
 #' line.size = 0.1, qn.interval = FALSE, overlap.zero = FALSE,
-#' both.outlier.tests = TRUE, saveToFile = "mus_phiPlot")
+#' both.outlier.tests = TRUE, saveToFile = "mus_phiPlot", showPLOTS=TRUE)
 #'
 #' phiPlot(outlier.list = full.outliers,  overlap.zero = FALSE)
 alphaBetaPlot <- function(outlier.list,
@@ -52,6 +55,7 @@ alphaBetaPlot <- function(outlier.list,
                     both.outlier.tests = FALSE,
                     saveToFile = NULL,
                     plotDIR = "./plots",
+                    showPLOTS=FALSE,
                     device = "pdf",
                     neutral.color = "gray",
                     alpha.color = "blue",
@@ -66,7 +70,9 @@ alphaBetaPlot <- function(outlier.list,
                     text.size = 18,
                     dpi = 300,
                     alpha_limits=NULL,
-                    beta_limits=NULL){
+                    beta_limits=NULL,
+                    point_alpha=1.0, 
+                    point_size=1){
 
   # To use the dplyr pipe.
   `%>%` <- dplyr::`%>%`
@@ -171,7 +177,7 @@ alphaBetaPlot <- function(outlier.list,
         plot.margin = ggplot2::unit(margins,
                                     margin.units)
     ) +
-    ggplot2::geom_point(ggplot2::aes(x=alpha, y=beta, col=fill_color), size=2) +
+    ggplot2::geom_point(ggplot2::aes(x=alpha, y=beta, col=fill_color), size=point_size, alpha=point_alpha) +
     ggplot2::scale_colour_identity()
 
 
@@ -219,9 +225,11 @@ alphaBetaPlot <- function(outlier.list,
       units = dim.units
     )
 
-  } else{
-    # If saveToFile is not specified by user.
-    print(ab.plot)
+  }
+
+  if (isTRUE(showPLOTS)) {
+      # If showPLOTS is TRUE.
+      print(ab.plot)
   }
 
 }

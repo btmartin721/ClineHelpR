@@ -53,11 +53,31 @@ if [ -z "$PROJECT_DIR" ]; then
 	PROJECT_DIR=${PWD};
 fi
 
+if [ "$PROJECT_DIR" = '.' ]; then
+	PROJECT_DIR=${PWD};
+fi
+
+if [ "$PROJECT_DIR" = './' ]; then
+        PROJECT_DIR=${PWD};
+fi
+
 if [ ! -d "$PROJECT_DIR" ]; then
 	echo "Specified project directory does not exist!"
-	echo "Usage: run_docker.sh <0 or 1> <PROJECT_DIRECTORY_PATH>"
+	echo "Usage: run_docker.sh -s <0 or 1> -p <PROJECT_DIRECTORY_PATH>"
 	Help
 	exit 2;
+fi
+
+if [ ! -d "$PROJECT_DIR/data" ]; then
+	mkdir ${PROJECT_DIR}/data;
+fi
+
+if [ ! -d "$PROJECT_DIR/notebooks" ]; then
+        mkdir ${PROJECT_DIR}/notebooks;
+fi
+
+if [ ! -d "$PROJECT_DIR/results" ]; then
+        mkdir ${PROJECT_DIR}/results;
 fi
 
 if [ "$METHOD" -eq 0 ]; then
@@ -66,7 +86,7 @@ if [ "$METHOD" -eq 0 ]; then
 		--volume ${PROJECT_DIR}/notebooks:/home/user/app/notebooks \
 		--volume ${PROJECT_DIR}/results:/home/user/app/results \
 		--publish 8888:8888 \
-		clinehelpr:1.0 \
+		btmartin721/clinehelpr:1.1 \
 		/bin/bash;
 else
 	sudo docker container run --rm --tty \
@@ -74,6 +94,6 @@ else
                 --volume ${PROJECT_DIR}/notebooks:/home/user/app/notebooks \
                 --volume ${PROJECT_DIR}/results:/home/user/app/results \
                 --publish 8888:8888 \
-                clinehelpr:1.0;
+                btmartin721/clinehelpr:1.1;
 fi
 

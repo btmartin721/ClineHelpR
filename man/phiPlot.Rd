@@ -13,6 +13,7 @@ phiPlot(
   line.size = 0.25,
   saveToFile = NULL,
   plotDIR = "./plots",
+  showPLOTS = FALSE,
   device = "pdf",
   neutral.color = "gray",
   neutral.line.color = "black",
@@ -62,6 +63,8 @@ you want to save to}
 
 \item{plotDIR}{Directory path. If saveToFile is specified, plots are
 saved in this directory}
+
+\item{showPLOTS}{Boolean Whether to print the plots to the screen}
 
 \item{device}{File format to save plot. Supports ggplot2::ggsave devices}
 
