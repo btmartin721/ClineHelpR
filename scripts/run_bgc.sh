@@ -177,7 +177,7 @@ echo "Running estpost; Results will be located in the ${RESULTS_DIR}/ directory"
 
 # Get log-likelihood
 ${ESTPOST_PATH}/estpost -i ${RESULTS_DIR}/${prefix}_mcmcout_${run}.hdf5 \
-	-p LnL -o ${RESULTS_DIR}/${prefix}_stat_ln1_${run} -s 2 -w 0
+	-p LnL -o ${RESULTS_DIR}/${prefix}_stat_lnl_${run} -s 2 -w 0
 
 # Get alpha
 ${ESTPOST_PATH}/estpost -i ${RESULTS_DIR}/${prefix}_mcmcout_${run}.hdf5 \
