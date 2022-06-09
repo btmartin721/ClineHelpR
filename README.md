@@ -35,9 +35,9 @@ ClineHelpR can be run in a container from our pre-built image. The image has all
 
 First, pull the docker image. 
 
-``` sudo docker pull btmartin721/clinehelpr:1.1```
+``` sudo docker pull btmartin721/clinehelpr:latest```
 
-Make sure the tag, ```:1.1```, is included.
+Make sure the tag, ```:latest```, is included.
 
 #### Docker Step 2: Run the Image
 
@@ -189,6 +189,14 @@ The vcf2bgc.py script requires:
 ## Pipeline
 
 There are R and python scripts in the ClineHelpR/scripts directory that allow you to run our whole pipeline. All the steps from below can be run by modifying and using those scripts. We also demonstrate each step in our Jupyter Notebook tutorial in the ClineHelpR/tutorials directory.
+
+## Change Log
+
++ 06/08/2022 - Updated Docker image with:
+    + Added tutorial jupyter notebooks to container
+    + Fixed bug where run_bgc.sh would name the lnl file incorrectly
+    + Added support for stacks VCF files with vcf2bgc.py
+    + Changed docker tag to ```btmartin721/clinehelpr:latest```
 
 ## References
 
