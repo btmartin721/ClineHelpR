@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 LABEL maintainer="evobio721@gmail.com" \
-      version="1.0" \
+      version="1.1.1" \
       github="https://github.com/btmartin721/ClineHelpR" \
       description="Docker image for ClineHelpR that includes all required dependencies" \
       code_source="https://towardsdatascience.com/conda-pip-and-docker-ftw-d64fe638dc45"
@@ -13,7 +13,7 @@ ARG username=user
 ARG uid=1000
 ARG gid=100
 ARG IMAGE_NAME=clinehelpr
-ARG IMAGE_TAG=1.0
+ARG IMAGE_TAG=1.1.1
 ENV USER $username
 ENV UID $uid
 ENV GID $gid
@@ -28,6 +28,7 @@ ENV PROJECT_DIR $HOME/app
 ENV ENV_PREFIX $PROJECT_DIR/env
 ENV SRC_DIR $PROJECT_DIR/src
 ENV BIN_DIR $PROJECT_DIR/bin
+ENV TUTORIAL_DIR $PROJECT_DIR/tutorials
 
 # Add a user so that they aren't executing as root
 # Then install dependencies for BGC and tools for downloadin files using apt-get
@@ -126,6 +127,9 @@ RUN echo "Updated genind2introgress functio" && \
 
 # Copy ClineHelpR scripts to container path
 COPY scripts $SRC_DIR/scripts
+
+# Copy tutorial Jupyter notebooks to tutorials directory
+COPY tutorials $TUTORIAL_DIR
 
 WORKDIR $SRC_DIR/tkchafin
 
