@@ -176,7 +176,7 @@ get_bgc_outliers <- function(df.list,
   if (is.null(loci.file)){
     clean=TRUE
     spoof<-data.frame("#CHROM" = 0:((nrow(df.list[[2]][,1])-1)), "POS"=0:((nrow(df.list[[2]][,1])-1)))
-    readr::write_delim(spoof, "loci_map.txt", delim="\t", col_names=TRUE)
+    readr::write_delim(spoof, "loci_map.txt", delim=" ", col_names=TRUE)
     loci.file="loci_map.txt"
   }
 
