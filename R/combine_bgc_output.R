@@ -31,7 +31,7 @@ combine_bgc_output <- function(results.dir,
   writeLines(paste0("\n\nLoading input files with prefix ", prefix, "...\n"))
   
   lnl <- list.files(path = results.dir,
-                    pattern = paste0(prefix, ".*LnL_\\d+$"),
+                    pattern = paste0(prefix, ".*lnl_\\d+$"),
                     full.names = TRUE)
   check_if_files(lnl)
   
