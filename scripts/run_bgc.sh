@@ -199,6 +199,14 @@ $ESTPOST_PATH/estpost -i ${RESULTS_DIR}/${prefix}_mcmcout_${run}.hdf5 \
 $ESTPOST_PATH/estpost -i ${RESULTS_DIR}/${prefix}_mcmcout_${run}.hdf5 \
 	-p zeta-quantile -o ${RESULTS_DIR}/${prefix}_stat_qb_${run} -s 2 -w 0
 
+# Get tau-alpha (ta)
+$ESTPOST_PATH/estpost -i ${RESULTS_DIR}/${prefix}_mcmcout_${run}.hdf5 \
+	-p tau-alpha -o ${RESULTS_DIR}/${prefix}_stat_ta_${run} -s 2 -w 0
+
+# Get tau-beta (tb)
+$ESTPOST_PATH/estpost -i ${RESULTS_DIR}/${prefix}_mcmcout_${run}.hdf5 \
+	-p tau-beta -o ${RESULTS_DIR}/${prefix}_stat_tb_${run} -s 2 -w 0
+
 echo "Done with estpost!"
 
 exit 0

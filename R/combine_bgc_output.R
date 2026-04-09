@@ -60,9 +60,19 @@ combine_bgc_output <- function(results.dir,
                    full.names = TRUE)
   check_if_files(hi)
   
+  ta <- list.files(path = results.dir,
+                   pattern = paste0(prefix, ".*ta_\\d+$"),
+                   full.names = TRUE)
+  check_if_files(ta)
+  
+  tb <- list.files(path = results.dir,
+                   pattern = paste0(prefix, ".*tb_\\d+$"),
+                   full.names = TRUE)
+  check_if_files(tb)
+  
   gc()
   
-  if (!countBGCruns(list(lnl, a0, b0, qa, qb, hi))){
+  if (!countBGCruns(list(lnl, a0, b0, qa, qb, hi, ta, tb))){
     stop("Error: All parameters must have the same number of BGC runs!")
   }
   
@@ -86,6 +96,10 @@ combine_bgc_output <- function(results.dir,
   gc()
   hi.df <- bind_bgc_runs(hi, thin = thin, discard = discard)
   gc()
+  ta.df <- bind_bgc_runs(ta, thin = thin, discard = discard)
+  gc()
+  tb.df <- bind_bgc_runs(tb, thin = thin, discard = discard)
+  gc()
   
   writeLines(paste0("\n\n # MCMC samples = ", ncol(lnl.df)))
   
@@ -93,7 +107,7 @@ combine_bgc_output <- function(results.dir,
 writeLines(paste0("\n\nDone! Found ", length(lnl), " BGC runs.\n\n"))
 
 df.list <-
-  list(lnl=lnl.df, a0=a0.df, b0=b0.df, qa=qa.df, qb=qb.df, hi=hi.df)
+  list(lnl=lnl.df, a0=a0.df, b0=b0.df, qa=qa.df, qb=qb.df, hi=hi.df, ta=ta.df, tb=tb.df)
 
 return(df.list)
 }

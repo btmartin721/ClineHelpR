@@ -50,6 +50,18 @@ plot_traces <- function(df.list, prefix, plotDIR = "./plots", showPLOTS=FALSE){
                 prefix = prefix,
                 plotDIR = plotDIR,
                 showPLOTS=showPLOTS)
+  plotBGCparams(df = df.list[[7]],
+                ylab = "Tau-alpha",
+                bgc_param = "ta",
+                prefix = prefix,
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
+  plotBGCparams(df = df.list[[8]],
+                ylab = "Tau-beta",
+                bgc_param = "tb",
+                prefix = prefix,
+                plotDIR = plotDIR,
+                showPLOTS=showPLOTS)
 
   writeLines(paste("Saved trace plots to", plotDIR))
 

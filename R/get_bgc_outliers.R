@@ -40,7 +40,7 @@ get_cis <- function(df){
 #' @param qn Upper quantile interval value
 #' @return data.frame containing SNP outlier info
 #' @noRd
-get_ab_outliers <- function(a.out, b.out, qa.out, qb.out, loci, qn){
+get_ab_outliers <- function(a.out, b.out, qa.out, qb.out, loci, qn, ta, tb){
   # Get excess ancestry and outliers for alpha and beta parameters.
   names(a.out)[3:4] <- c('lb','ub')
   names(b.out)[3:4] <- c('lb','ub')
@@ -62,8 +62,8 @@ get_ab_outliers <- function(a.out, b.out, qa.out, qb.out, loci, qn){
   # Add in quantiles
   a.out$q <- qa.out$mean
   b.out$q <- qb.out$mean
-
-  # qnorm takes SD, so take the square root of the quantile estimate.
+  
+  # qnorm takes SD, so take square root of the reciprocal of tau.
   # This basically generates the interval to check if alpha and beta are
   # outliers.
   # The interval is defined by qn = n/2 and qn = 1-n/2.
@@ -72,12 +72,13 @@ get_ab_outliers <- function(a.out, b.out, qa.out, qb.out, loci, qn){
   # By default, qn is set to 0.025 and 0.975
   qn_lower <- 1 - qn
 
-  a.out$qlb <- qnorm(qn_lower,0,sqrt(a.out$q))
-  a.out$qub <- qnorm(qn,0,sqrt(a.out$q))
-
-  b.out$qlb <- qnorm(qn_lower,0,sqrt(b.out$q))
-  b.out$qub <- qnorm(qn,0,sqrt(b.out$q))
-
+  a.out$qlb <- qnorm(qn_lower,0,sqrt(1/ta))
+  a.out$qub <- qnorm(qn,0,sqrt(1/ta))
+  
+  b.out$qlb <- qnorm(qn_lower,0,sqrt(1/tb))
+  b.out$qub <- qnorm(qn,0,sqrt(1/tb))
+  
+  
   # Check if median falls outside qn interval.
   a.out$outlier <- NA
   a.out$outlier[a.out$median > a.out$qub] <- 'pos'
@@ -170,6 +171,8 @@ get_bgc_outliers <- function(df.list,
   gc()
   qb <- get_cis(df.list[[5]])
   gc()
+  ta <- mean(unlist(bgc.genes[["ta"]])) # get estimate of Tau-alpha
+  tb <- mean(unlist(bgc.genes[["tb"]])) # get estimate of Tau-beta
 
   clean=FALSE
   #if no loci file provided, make a spoof one here
@@ -189,7 +192,7 @@ get_bgc_outliers <- function(df.list,
   }
 
   # Find SNPs with excess ancestry and outliers SNPs.
-  snps <- get_ab_outliers(a, b, qa, qb, loci.file, qn)
+  snps <- get_ab_outliers(a, b, qa, qb, loci.file, qn, ta, tb)
   gc()
 
   # Get hybrid indexes.
